@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitación sobre Uber</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">Capacitación Uber</div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-item active" onclick="switchTab('view-inicio', this); return false;">Inicio</a></li>
+                <li><a href="#" class="nav-item" onclick="switchTab('view-simulador', this); return false;">Simulador Práctico</a></li>
+                <li><a href="#" class="nav-item" onclick="switchTab('view-recursos', this); return false;">Centro de Recursos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- VISTA: INICIO -->
+        <div id="view-inicio" class="tab-view active">
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Aprenda a usar Uber con Confianza</h1>
+                    <p class="subtitle">Guía paso a paso, fácil y segura para pedir sus viajes desde el celular.</p>
+                </div>
+            </header>
+
+            <section class="hero-section container">
+                <div class="hero-text">
+                    <h2>Bienvenido a su nueva forma de moverse</h2>
+                    <p>Moverse por la ciudad nunca fue tan sencillo. En este curso, aprenderá todo lo necesario para pedir un auto desde la comodidad de su hogar, de manera segura y sin complicaciones.</p>
+                    <button class="btn-primary" onclick="scrollToSection('modulos')">Comenzar Aprendizaje</button>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/uber_training_hero_generic.jpg" alt="Persona usando un celular con confianza" id="heroImg">
+                </div>
+            </section>
+
+            <section class="modules-section container" id="modulos">
+                <h2 class="text-center">Módulos de Aprendizaje</h2>
+                <div class="module-grid">
+                    <!-- Modulo 1 -->
+                    <article class="module-card">
+                        <div class="module-number">1</div>
+                        <h3>Primeros Pasos</h3>
+                        <p>Aprenda qué es Uber, cómo descargar la aplicación en su teléfono y cómo crear su cuenta de usuario de forma segura.</p>
+                        <button class="btn-secondary" onclick="openModal('modal1')">Ver detalles</button>
+                    </article>
+
+                    <!-- Modulo 2 -->
+                    <article class="module-card">
+                        <div class="module-number">2</div>
+                        <h3>Pedir un Viaje</h3>
+                        <p>Instrucciones claras sobre cómo ingresar su destino, elegir el tipo de auto y confirmar su viaje. ¡Es muy fácil!</p>
+                        <button class="btn-secondary" onclick="openModal('modal2')">Ver detalles</button>
+                    </article>
+
+                    <!-- Modulo 3 -->
+                    <article class="module-card">
+                        <div class="module-number">3</div>
+                        <h3>Seguridad y Pagos</h3>
+                        <p>Conozca las herramientas de seguridad que ofrece la aplicación y cómo configurar sus métodos de pago.</p>
+                        <button class="btn-secondary" onclick="openModal('modal3')">Ver detalles</button>
+                    </article>
+                </div>
+            </section>
+
+            <section class="app-preview container">
+                <div class="app-image">
+                    <img src="assets/uber_app_mockup.jpg" alt="Pantalla de la aplicación Uber" id="appImg">
+                </div>
+                <div class="app-text">
+                    <h2>Objetivos de Aprendizaje</h2>
+                    <p>Al finalizar esta capacitación, usted tendrá el conocimiento necesario para utilizar la plataforma de transporte de manera autónoma y segura. Aprenderá a:</p>
+                    <ul class="feature-list">
+                        <li>✔️ Solicitar viajes desde cualquier ubicación hacia su destino.</li>
+                        <li>✔️ Identificar correctamente al conductor y el vehículo asignado.</li>
+                        <li>✔️ Configurar y utilizar distintos métodos de pago.</li>
+                        <li>✔️ Compartir el estado de su viaje con familiares para mayor tranquilidad.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- VISTA: SIMULADOR PRÁCTICO -->
+        <div id="view-simulador" class="tab-view" style="display: none;">
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Simulador Práctico</h1>
+                    <p class="subtitle">Ponga a prueba lo aprendido en un entorno seguro y sin riesgos.</p>
+                </div>
+            </header>
+            <section class="container" style="padding: 60px 24px; text-align: center;">
+                <h2>Interfaz de Simulación</h2>
+                <p style="margin-bottom: 40px; max-width: 600px; margin-inline: auto;">Aquí podrá interactuar con una réplica de la aplicación real. Siga las instrucciones en pantalla para practicar cómo pedir un viaje.</p>
+                <div style="background-color: #E8F0FE; border-radius: 24px; padding: 40px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <!-- Placeholder del simulador -->
+                    <img src="assets/uber_app_mockup.jpg" alt="Simulador Interactivo" style="max-width: 300px; border-radius: 16px; border: 4px solid #333;">
+                    <div style="margin-top: 20px;">
+                        <button class="btn-primary">Iniciar Ejercicio 1: Pedir Viaje</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VISTA: CENTRO DE RECURSOS -->
+        <div id="view-recursos" class="tab-view" style="display: none;">
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Centro de Recursos</h1>
+                    <p class="subtitle">Material de apoyo, manuales y respuestas a preguntas frecuentes.</p>
+                </div>
+            </header>
+            <section class="container" style="padding: 60px 24px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+                    <div class="module-card">
+                        <h3>📚 Manuales Descargables</h3>
+                        <p>Descargue nuestras guías paso a paso en formato PDF para imprimirlas o leerlas más tarde.</p>
+                        <ul style="margin-top: 20px; list-style: none;">
+                            <li style="margin-bottom: 10px;"><a href="#" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Guía Básica de Uber (PDF)</a></li>
+                            <li><a href="#" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Cómo agregar métodos de pago (PDF)</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="module-card">
+                        <h3>🎥 Videos Tutoriales</h3>
+                        <p>Vea de forma visual cómo realizar acciones dentro de la aplicación.</p>
+                        <ul style="margin-top: 20px; list-style: none;">
+                            <li style="margin-bottom: 10px;"><a href="#" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">▶️ Mi primer viaje en Uber</a></li>
+                            <li><a href="#" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">▶️ Funciones de Seguridad</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module-card">
+                        <h3>❓ Preguntas Frecuentes</h3>
+                        <p>Encuentre respuestas rápidas a las dudas más comunes de nuestros usuarios.</p>
+                        <button class="btn-secondary" style="margin-top: 20px;">Ir a la sección FAQ</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>¿Necesita ayuda adicional? Llámenos al <strong>0800-123-UBER</strong></p>
+            <p>&copy; 2026 Programa de Capacitación en Inclusión Digital.</p>
+        </div>
+    </footer>
+
+    <!-- Modals (Solo los 3 módulos del Inicio) -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
+            <h2>Módulo 1: Primeros Pasos</h2>
+            <div class="modal-body">
+                <p>1. Vaya a la tienda de aplicaciones de su celular (Play Store o App Store).</p>
+                <p>2. Busque "Uber" y toque "Instalar".</p>
+                <p>3. Abra la aplicación y siga los pasos para registrarse usando su número de teléfono.</p>
+            </div>
+            <button class="btn-primary" onclick="closeModal('modal1')">Entendido</button>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
+            <h2>Módulo 2: Pedir un Viaje</h2>
+            <div class="modal-body">
+                <p>1. Abra la aplicación de Uber.</p>
+                <p>2. Toque el recuadro que dice "¿A dónde vas?".</p>
+                <p>3. Escriba la dirección de su destino.</p>
+                <p>4. Elija el auto que más le convenga y toque "Confirmar".</p>
+            </div>
+            <button class="btn-primary" onclick="closeModal('modal2')">Entendido</button>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal3')">&times;</span>
+            <h2>Módulo 3: Seguridad y Pagos</h2>
+            <div class="modal-body">
+                <p><strong>Seguridad:</strong> Verifique que la patente y el conductor coincidan con la información en su pantalla antes de subir.</p>
+                <p><strong>Pagos:</strong> Puede pagar en efectivo al finalizar el viaje o registrar una tarjeta de crédito para mayor comodidad.</p>
+            </div>
+            <button class="btn-primary" onclick="closeModal('modal3')">Entendido</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
