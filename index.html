@@ -120,11 +120,10 @@
             <section class="container" style="padding: 60px 24px;">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
                     <div class="module-card">
-                        <h3>📚 Manuales Descargables</h3>
-                        <p>Descargue nuestras guías paso a paso en formato PDF para imprimirlas o leerlas más tarde.</p>
+                        <h3>📚 Guías Paso a Paso</h3>
+                        <p>Guías paso a paso para leer en casa.</p>
                         <ul style="margin-top: 20px; list-style: none;">
-                            <li style="margin-bottom: 10px;"><a href="#" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Guía Básica de Uber (PDF)</a></li>
-                            <li><a href="#" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Cómo agregar métodos de pago (PDF)</a></li>
+                            <li style="margin-bottom: 10px;"><a href="#" onclick="openCanvaModal(); return false;" style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
                         </ul>
                     </div>
                     
@@ -192,6 +191,22 @@
                 <p><strong>Pagos:</strong> Puede pagar en efectivo al finalizar el viaje o registrar una tarjeta de crédito para mayor comodidad.</p>
             </div>
             <button class="btn-primary" onclick="closeModal('modal3')">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Modal Canva: Guía paso a paso -->
+    <div id="modal-canva" class="modal">
+        <div class="modal-content" style="max-width: 900px; width: 95%;">
+            <span class="close-btn" onclick="closeCanvaModal()">&times;</span>
+            <h2>Guía para crear cuenta y solicitar viaje</h2>
+            <div style="position: relative; width: 100%; padding-top: 56.25%; margin-top: 16px; border-radius: 12px; overflow: hidden;">
+                <iframe id="canva-iframe"
+                    src=""
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px;"
+                    allowfullscreen
+                    allow="fullscreen">
+                </iframe>
+            </div>
         </div>
     </div>
 

@@ -82,5 +82,30 @@ document.addEventListener('keydown', function(event) {
                 document.body.style.overflow = 'auto';
             }
         });
+        // Limpiar iframe de Canva si estaba abierto
+        const canvaIframe = document.getElementById('canva-iframe');
+        if (canvaIframe) canvaIframe.src = '';
     }
 });
+
+// Funciones para el modal de Canva
+function openCanvaModal() {
+    const modal = document.getElementById('modal-canva');
+    const iframe = document.getElementById('canva-iframe');
+    if (modal && iframe) {
+        iframe.src = 'https://www.canva.com/design/DAHXiyErU8Y/0weTc1TAs8imeagy-lOP8g/view?embed';
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCanvaModal() {
+    const modal = document.getElementById('modal-canva');
+    const iframe = document.getElementById('canva-iframe');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    // Detener la presentación limpiando el src
+    if (iframe) iframe.src = '';
+}
