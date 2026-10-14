@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capacitación sobre Uber</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
@@ -87,22 +87,294 @@
             </section>
         </div>
 
-        <!-- VISTA: SIMULADOR PRÁCTICO -->
+        <!-- VISTA: SIMULADOR PRÁCTICO INTERACTIVO -->
         <div id="view-simulador" class="tab-view" style="display: none;">
             <header class="header">
                 <div class="container header-content">
-                    <h1>Simulador Práctico</h1>
-                    <p class="subtitle">Ponga a prueba lo aprendido en un entorno seguro y sin riesgos.</p>
+                    <h1>Simulador Práctico Interactivo</h1>
+                    <p class="subtitle">Aprenda a pedir su viaje paso a paso en un celular virtual seguro y sin riesgos.</p>
                 </div>
             </header>
-            <section class="container" style="padding: 60px 24px; text-align: center;">
-                <h2>Interfaz de Simulación</h2>
-                <p style="margin-bottom: 40px; max-width: 600px; margin-inline: auto;">Aquí podrá interactuar con una réplica de la aplicación real. Siga las instrucciones en pantalla para practicar cómo pedir un viaje.</p>
-                <div style="background-color: #E8F0FE; border-radius: 24px; padding: 40px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                    <!-- Placeholder del simulador -->
-                    <img src="assets/uber_app_mockup.jpg" alt="Simulador Interactivo" style="max-width: 300px; border-radius: 16px; border: 4px solid #333;">
-                    <div style="margin-top: 20px;">
-                        <button class="btn-primary">Iniciar Ejercicio 1: Pedir Viaje</button>
+
+            <section class="container simulator-container">
+                <!-- Panel lateral de guía pedagógica -->
+                <div class="sim-guide-panel">
+                    <div class="sim-guide-badge">
+                        <span>Paso <strong id="sim-step-number">1</strong> de 5</span>
+                    </div>
+
+                    <div class="sim-progress-bar">
+                        <div id="sim-progress-fill" style="width: 20%;"></div>
+                    </div>
+
+                    <h3 id="sim-guide-title">Buscar su destino</h3>
+                    <p id="sim-guide-desc">Para comenzar a pedir un auto, toque en el celular la barra que dice <strong>"¿A dónde vas?"</strong>.</p>
+
+                    <div class="sim-hint-box">
+                        <span class="sim-hint-icon">💡</span>
+                        <span id="sim-hint-text">El elemento que debe tocar en la pantalla del celular tiene un resplandor azul parpadeante.</span>
+                    </div>
+
+                    <div class="sim-controls">
+                        <button type="button" id="btn-sim-prev" class="btn-secondary" style="display: none; margin-right: 10px;" onclick="simPrevStep()">← Paso anterior</button>
+                        <button type="button" class="btn-secondary" onclick="restartSimulator()">🔄 Reiniciar ejercicio</button>
+                    </div>
+                </div>
+
+                <!-- Marco del Teléfono Virtual -->
+                <div class="phone-wrapper">
+                    <div class="phone-device" id="sim-phone-device">
+                        <!-- Barra de estado superior del celular -->
+                        <div class="phone-status-bar">
+                            <span class="phone-time">12:30</span>
+                            <div class="phone-notch"></div>
+                            <div class="phone-icons">
+                                <span>📶</span>
+                                <span>🔋</span>
+                            </div>
+                        </div>
+
+                        <!-- Pantalla interactiva (con detector de clics erróneos) -->
+                        <div class="phone-screen" onclick="handlePhoneMisclick(event)">
+                            <!-- Cartel de error flotante en la pantalla -->
+                            <div id="sim-error-badge" class="sim-error-badge" style="display: none;">⚠️ Opción incorrecta</div>
+
+                            <!-- PANTALLA 1: Inicio de Uber -->
+                            <div id="sim-screen-1" class="sim-screen active">
+                                <div class="sim-map sim-map-home">
+                                    <div class="map-grid"></div>
+                                    <div class="map-car" style="top: 30%; left: 30%;">🚗</div>
+                                    <div class="map-car" style="top: 20%; left: 70%;">🚗</div>
+                                    <div class="map-user-pin" style="top: 60%; left: 50%;">
+                                        <div class="user-pulse"></div>
+                                        <div class="user-dot"></div>
+                                    </div>
+                                </div>
+
+                                <div class="uber-home-sheet">
+                                    <h4 style="font-size: 1.15rem; margin-bottom: 12px; font-weight: 700;">Buenas tardes</h4>
+                                    <!-- Botón interactivo con efecto de resalte (Única acción válida del paso 1) -->
+                                    <div class="uber-search-bar sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(2, event)">
+                                        <span style="font-size: 1.2rem;">🔍</span>
+                                        <span style="color: #444; font-weight: 500;">¿A dónde vas?</span>
+                                    </div>
+
+                                    <div class="uber-recent-list">
+                                        <div class="uber-recent-item">
+                                            <span class="recent-icon">🕒</span>
+                                            <div>
+                                                <strong>Hospital Central</strong>
+                                                <p>Av. San Martín 1540</p>
+                                            </div>
+                                        </div>
+                                        <div class="uber-recent-item">
+                                            <span class="recent-icon">🏠</span>
+                                            <div>
+                                                <strong>Casa</strong>
+                                                <p>Av. Rivadavia 2500</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 2: Elegir Destino -->
+                            <div id="sim-screen-2" class="sim-screen" style="display: none;">
+                                <div class="uber-dest-header">
+                                    <button class="sim-back-btn sim-screen-back" onclick="simTriggerStep(1, event)">←</button>
+                                    <span style="font-weight: 700; font-size: 1.05rem;">Escriba su destino</span>
+                                </div>
+
+                                <div class="uber-route-inputs">
+                                    <div class="route-input-row">
+                                        <span class="dot-origin">🟢</span>
+                                        <input type="text" value="Av. Rivadavia 2500 (Ubicación actual)" readonly class="route-field">
+                                    </div>
+                                    <div class="route-input-row">
+                                        <span class="dot-dest">🔴</span>
+                                        <input type="text" placeholder="¿A dónde vas?" value="Hospital Central" readonly class="route-field target-dest">
+                                    </div>
+                                </div>
+
+                                <div class="uber-dest-suggestions">
+                                    <p style="font-size: 0.8rem; color: #666; margin: 12px 0 8px 12px; font-weight: bold; text-transform: uppercase;">Destinos sugeridos para la práctica</p>
+                                    <div class="uber-suggestion-card sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(3, event)">
+                                        <div class="sugg-icon">🏥</div>
+                                        <div class="sugg-info">
+                                            <strong>Hospital Central</strong>
+                                            <p>Av. San Martín 1540 (Destino del ejercicio)</p>
+                                        </div>
+                                        <span class="sugg-arrow">➔</span>
+                                    </div>
+                                    <div class="uber-suggestion-card">
+                                        <div class="sugg-icon">🛒</div>
+                                        <div class="sugg-info">
+                                            <strong>Supermercado Mayor</strong>
+                                            <p>Calle Belgrano 450</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 3: Opciones de Auto y Precio -->
+                            <div id="sim-screen-3" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-route">
+                                    <button class="sim-screen-back" onclick="simTriggerStep(2, event)">← Volver</button>
+                                    <div class="map-grid"></div>
+                                    <div class="map-route-line"></div>
+                                    <div class="map-pin-start" style="top: 70%; left: 40%;">🟢</div>
+                                    <div class="map-pin-end" style="top: 25%; left: 65%;">🔴</div>
+                                </div>
+
+                                <div class="uber-cars-sheet">
+                                    <div class="sheet-drag-handle"></div>
+                                    <h5 style="margin-bottom: 8px; font-weight: 700; font-size: 0.95rem;">Opciones de viaje disponibles</h5>
+
+                                    <!-- Opción UberX recomendada -->
+                                    <div class="uber-car-option selected sim-highlight-pulse sim-valid-action" id="car-uberx" onclick="selectCarOption('uberx', event)">
+                                        <div class="car-info-left">
+                                            <span style="font-size: 1.6rem;">🚗</span>
+                                            <div>
+                                                <strong>UberX</strong>
+                                                <span class="car-time">🕒 3 min de espera</span>
+                                            </div>
+                                        </div>
+                                        <div class="car-info-right">
+                                            <span class="car-price">$1.450</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Opción Comfort -->
+                                    <div class="uber-car-option sim-valid-action" id="car-comfort" onclick="selectCarOption('comfort', event)">
+                                        <div class="car-info-left">
+                                            <span style="font-size: 1.6rem;">🚙</span>
+                                            <div>
+                                                <strong>Comfort</strong>
+                                                <span class="car-time">🕒 5 min de espera</span>
+                                            </div>
+                                        </div>
+                                        <div class="car-info-right">
+                                            <span class="car-price">$2.100</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fila de método de pago estilo original con selector emergente -->
+                                    <div class="uber-payment-row sim-valid-action" onclick="openPaymentSheet(event)">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span id="sim-current-pay-icon" style="font-size: 1.1rem;">💵</span>
+                                            <span id="sim-current-pay-text" style="font-weight: 600; font-size: 0.9rem;">Efectivo</span>
+                                        </div>
+                                        <span class="pay-change-link">Cambiar ➔</span>
+                                    </div>
+
+                                    <!-- Botón de confirmar auto -->
+                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(4, event)">
+                                        Elegir UberX
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Hoja desplegable de selección de método de pago (Bottom Sheet) -->
+                            <div id="sim-payment-sheet" class="sim-phone-bottom-sheet" style="display: none;" onclick="event.stopPropagation()">
+                                <div class="sheet-drag-handle"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <h5 style="margin: 0; font-size: 0.95rem; font-weight: bold;">Seleccionar método de pago</h5>
+                                    <button type="button" class="sheet-close-btn sim-screen-back" onclick="closePaymentSheet(event)">&times;</button>
+                                </div>
+
+                                <div class="payment-modal-option selected sim-valid-action" id="pay-opt-cash" onclick="choosePayment('cash', '💵', 'Efectivo', event)">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 1.4rem;">💵</span>
+                                        <div>
+                                            <strong style="font-size: 0.9rem; display: block;">Efectivo</strong>
+                                            <span style="font-size: 0.75rem; color: #64748B;">Pagar al chofer al finalizar</span>
+                                        </div>
+                                    </div>
+                                    <span class="pay-check-icon" id="pay-check-cash">✓</span>
+                                </div>
+
+                                <div class="payment-modal-option sim-valid-action" id="pay-opt-card" onclick="choosePayment('card', '💳', 'Tarjeta (**** 4321)', event)">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 1.4rem;">💳</span>
+                                        <div>
+                                            <strong style="font-size: 0.9rem; display: block;">Tarjeta de Débito / Crédito</strong>
+                                            <span style="font-size: 0.75rem; color: #64748B;">Visa terminada en 4321</span>
+                                        </div>
+                                    </div>
+                                    <span class="pay-check-icon" id="pay-check-card" style="display: none;">✓</span>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 4: Confirmar Punto de Recogida -->
+                            <div id="sim-screen-4" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-pickup">
+                                    <button class="sim-screen-back" onclick="simTriggerStep(3, event)">← Volver</button>
+                                    <div class="map-grid"></div>
+                                    <div class="pickup-target">
+                                        <div class="pickup-circle"></div>
+                                        <div class="pickup-pin">📍</div>
+                                        <div class="pickup-tag">Subir aquí</div>
+                                    </div>
+                                </div>
+
+                                <div class="uber-pickup-sheet">
+                                    <div class="sheet-drag-handle"></div>
+                                    <h4>Punto de partida</h4>
+                                    <p style="color: #444; font-size: 0.9rem; margin: 4px 0 14px;">Av. Rivadavia 2500 (Frente a su puerta)</p>
+
+                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(5, event)">
+                                        Confirmar punto de partida
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 5: Conductor Asignado / En camino -->
+                            <div id="sim-screen-5" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-driver">
+                                    <div class="map-grid"></div>
+                                    <div class="map-driver-car" style="top: 25%; left: 45%;">🚗</div>
+                                    <div class="map-destination-pin" style="top: 50%; left: 50%;">🟢</div>
+                                </div>
+
+                                <div class="uber-driver-sheet">
+                                    <div class="driver-arrival-header">
+                                        <span class="driver-arrival-time">Llega en 3 min</span>
+                                        <span class="driver-arrival-status">Toyota Corolla Blanco</span>
+                                    </div>
+
+                                    <!-- Tarjeta destacada de la Patente -->
+                                    <div class="license-plate-banner">
+                                        <span class="plate-label">PATENTE DEL AUTO:</span>
+                                        <strong class="plate-number">AA 123 BB</strong>
+                                    </div>
+
+                                    <!-- Datos del conductor -->
+                                    <div class="driver-profile-card">
+                                        <div class="driver-avatar">👨‍✈️</div>
+                                        <div class="driver-details">
+                                            <strong>Carlos</strong>
+                                            <p>⭐ 4.95 (Más de 1.500 viajes)</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones de seguridad recomendados -->
+                                    <div class="driver-actions-row">
+                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Se abriría WhatsApp para compartir su viaje con un familiar.')">
+                                            <span>📤</span> Compartir viaje
+                                        </button>
+                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Llamando al chofer Carlos...')">
+                                            <span>📞</span> Llamar
+                                        </button>
+                                    </div>
+
+                                    <!-- Mensaje final de éxito -->
+                                    <div class="sim-success-card">
+                                        🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </section>

@@ -278,3 +278,226 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
+
+// ========================================================
+// LÓGICA DEL SIMULADOR PRÁCTICO INTERACTIVO
+// ========================================================
+
+const simStepData = {
+    1: {
+        title: "Buscar su destino",
+        desc: "Para comenzar a pedir un auto, toque en el celular la barra que dice <strong>\"¿A dónde vas?\"</strong>.",
+        hint: "El elemento que debe tocar en la pantalla del celular tiene un resplandor azul parpadeante.",
+        progress: 20
+    },
+    2: {
+        title: "Seleccionar el destino",
+        desc: "En este ejercicio iremos al Hospital Central. Toque la tarjeta que dice <strong>'🏥 Hospital Central'</strong>.",
+        hint: "Fíjese en la lista de sugerencias que tiene el resplandor parpadeante.",
+        progress: 40
+    },
+    3: {
+        title: "Elegir auto y método de pago",
+        desc: "Revise las opciones de viaje. Puede seleccionar <strong>Efectivo</strong> o <strong>Tarjeta</strong>, y luego tocar el botón negro <strong>'Elegir UberX'</strong>.",
+        hint: "Toque 'Comfort' o 'Tarjeta' para practicar cómo cambiar opciones.",
+        progress: 60
+    },
+    4: {
+        title: "Confirmar punto de partida",
+        desc: "Verifique que el auto lo pase a buscar por su puerta (Av. Rivadavia 2500) y toque el botón <strong>'Confirmar punto de partida'</strong>.",
+        hint: "En la app real, el pin verde indica exactamente dónde esperará al vehículo.",
+        progress: 80
+    },
+    5: {
+        title: "¡Viaje confirmado! (Seguridad)",
+        desc: "El chofer está en camino. Preste especial atención a la <strong>patente (AA 123 BB)</strong> y el nombre del chofer (Carlos).",
+        hint: "Por seguridad, verifique siempre que la patente y el modelo coincidan antes de abrir la puerta.",
+        progress: 100
+    }
+};
+
+let currentSimStep = 1;
+let simSelectedCar = 'uberx';
+let simSelectedPayment = 'cash';
+let simErrorTimeout = null;
+
+// Manejador inteligente de clics en la pantalla del teléfono virtual
+function handlePhoneMisclick(event) {
+    // Si el clic provino de una acción válida para el paso actual, no es error
+    if (event.target.closest('.sim-valid-action') || 
+        event.target.closest('.sim-screen-back') || 
+        event.target.closest('.sim-phone-bottom-sheet')) {
+        return;
+    }
+    triggerPhoneError();
+}
+
+function triggerPhoneError() {
+    const phone = document.getElementById('sim-phone-device');
+    const screen = document.querySelector('.phone-screen');
+    const errorBadge = document.getElementById('sim-error-badge');
+
+    // Vibración del marco del celular en rojo
+    if (phone) {
+        phone.classList.remove('shake-error');
+        void phone.offsetWidth; // Forzar reflow para reiniciar la animación
+        phone.classList.add('shake-error');
+    }
+
+    // Destello rojo en la pantalla táctil
+    if (screen) {
+        screen.classList.remove('screen-error-flash');
+        void screen.offsetWidth;
+        screen.classList.add('screen-error-flash');
+    }
+
+    // Mostrar cartel de aviso flotante
+    if (errorBadge) {
+        errorBadge.style.display = 'block';
+    }
+
+    // Mensaje de ayuda en el panel lateral
+    const hintEl = document.getElementById('sim-hint-text');
+    if (hintEl) {
+        hintEl.innerHTML = '<strong style="color: #d32f2f;">⚠️ Opción incorrecta:</strong> Toque el elemento resaltado en azul parpadeante para continuar.';
+    }
+
+    // Quitar estados de error tras 1.4 segundos
+    if (simErrorTimeout) clearTimeout(simErrorTimeout);
+    simErrorTimeout = setTimeout(() => {
+        if (phone) phone.classList.remove('shake-error');
+        if (screen) screen.classList.remove('screen-error-flash');
+        if (errorBadge) errorBadge.style.display = 'none';
+        const data = simStepData[currentSimStep];
+        if (data && hintEl) hintEl.textContent = data.hint;
+    }, 1400);
+}
+
+function simTriggerStep(step, event) {
+    if (event) event.stopPropagation(); // Evitar error
+
+    // Cerrar hoja de pago si estaba abierta
+    closePaymentSheet();
+
+    currentSimStep = step;
+
+    // Actualizar pantallas del teléfono virtual
+    for (let i = 1; i <= 5; i++) {
+        const screen = document.getElementById(`sim-screen-${i}`);
+        if (screen) {
+            screen.style.display = (i === step) ? 'flex' : 'none';
+        }
+    }
+
+    // Actualizar panel de guía pedagógico
+    const data = simStepData[step];
+    if (data) {
+        const stepNumEl = document.getElementById('sim-step-number');
+        const progressEl = document.getElementById('sim-progress-fill');
+        const titleEl = document.getElementById('sim-guide-title');
+        const descEl = document.getElementById('sim-guide-desc');
+        const hintEl = document.getElementById('sim-hint-text');
+
+        if (stepNumEl) stepNumEl.textContent = step;
+        if (progressEl) progressEl.style.width = `${data.progress}%`;
+        if (titleEl) titleEl.textContent = data.title;
+        if (descEl) descEl.innerHTML = data.desc;
+        if (hintEl) hintEl.textContent = data.hint;
+    }
+
+    // Mostrar/ocultar botón de paso anterior en el panel lateral
+    const prevBtn = document.getElementById('btn-sim-prev');
+    if (prevBtn) {
+        prevBtn.style.display = (step > 1) ? 'inline-block' : 'none';
+    }
+
+    // Actualizar texto del botón de confirmación en paso 3
+    if (step === 3) {
+        updateCarConfirmButton();
+    }
+}
+
+function simPrevStep() {
+    if (currentSimStep > 1) {
+        simTriggerStep(currentSimStep - 1);
+    }
+}
+
+function restartSimulator() {
+    simSelectedCar = 'uberx';
+    simSelectedPayment = 'cash';
+    selectCarOption('uberx');
+    choosePayment('cash', '💵', 'Efectivo');
+    simTriggerStep(1);
+}
+
+function selectCarOption(type, event) {
+    if (event) event.stopPropagation();
+    simSelectedCar = type;
+
+    const uberxEl = document.getElementById('car-uberx');
+    const comfortEl = document.getElementById('car-comfort');
+
+    if (type === 'uberx') {
+        if (uberxEl) uberxEl.classList.add('selected');
+        if (comfortEl) comfortEl.classList.remove('selected');
+    } else {
+        if (comfortEl) comfortEl.classList.add('selected');
+        if (uberxEl) uberxEl.classList.remove('selected');
+    }
+    updateCarConfirmButton();
+}
+
+// Abrir selector de método de pago (Hoja inferior dentro del celular)
+function openPaymentSheet(event) {
+    if (event) event.stopPropagation();
+    const sheet = document.getElementById('sim-payment-sheet');
+    if (sheet) sheet.style.display = 'block';
+}
+
+function closePaymentSheet(event) {
+    if (event) event.stopPropagation();
+    const sheet = document.getElementById('sim-payment-sheet');
+    if (sheet) sheet.style.display = 'none';
+}
+
+function choosePayment(method, icon, text, event) {
+    if (event) event.stopPropagation();
+    simSelectedPayment = method;
+
+    // Actualizar fila principal
+    const iconEl = document.getElementById('sim-current-pay-icon');
+    const textEl = document.getElementById('sim-current-pay-text');
+    if (iconEl) iconEl.textContent = icon;
+    if (textEl) textEl.textContent = text;
+
+    // Actualizar selección visual en la hoja
+    const optCash = document.getElementById('pay-opt-cash');
+    const optCard = document.getElementById('pay-opt-card');
+    const checkCash = document.getElementById('pay-check-cash');
+    const checkCard = document.getElementById('pay-check-card');
+
+    if (method === 'cash') {
+        if (optCash) optCash.classList.add('selected');
+        if (optCard) optCard.classList.remove('selected');
+        if (checkCash) checkCash.style.display = 'inline';
+        if (checkCard) checkCard.style.display = 'none';
+    } else {
+        if (optCard) optCard.classList.add('selected');
+        if (optCash) optCash.classList.remove('selected');
+        if (checkCard) checkCard.style.display = 'inline';
+        if (checkCash) checkCash.style.display = 'none';
+    }
+
+    updateCarConfirmButton();
+    closePaymentSheet();
+}
+
+function updateCarConfirmButton() {
+    const btnConfirm = document.querySelector('.uber-cars-sheet .uber-confirm-btn');
+    if (btnConfirm) {
+        const carName = (simSelectedCar === 'uberx') ? 'UberX' : 'Comfort';
+        const payName = (simSelectedPayment === 'cash') ? 'Efectivo' : 'Tarjeta';
+        btnConfirm.textContent = `Elegir ${carName} (${payName})`;
+    }
+}

@@ -1,0 +1,79 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <style>
+      .land { fill: #f3f2ee; }
+      .park { fill: #d4ebd2; stroke: #c2dec0; stroke-width: 1.5; }
+      .water { fill: #bde0fe; stroke: #a2cff0; stroke-width: 1.5; }
+      .building { fill: #e5e3dc; stroke: #dbd8d0; stroke-width: 1; }
+      .road-secondary { fill: none; stroke: #ffffff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      .road-secondary-casing { fill: none; stroke: #dedbd4; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+      .road-primary { fill: none; stroke: #ffecb3; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
+      .road-primary-casing { fill: none; stroke: #dfcba5; stroke-width: 17; stroke-linecap: round; stroke-linejoin: round; }
+      .road-highway { fill: none; stroke: #ffd54f; stroke-width: 18; stroke-linecap: round; stroke-linejoin: round; }
+      .road-highway-casing { fill: none; stroke: #cca133; stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
+      .road-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; fill: #78756e; font-weight: 600; }
+      .area-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; fill: #487346; font-weight: 700; letter-spacing: 1px; }
+    </style>
+  </defs>
+
+  <rect width="600" height="600" class="land" />
+
+  <!-- Espacios verdes y parques -->
+  <path d="M 40 40 Q 90 20 160 50 L 180 140 Q 110 160 50 130 Z" class="park" />
+  <text x="75" y="90" class="area-label">PARQUE NORTE</text>
+
+  <path d="M 380 320 Q 450 300 540 330 L 530 460 Q 430 480 370 430 Z" class="park" />
+  <text x="410" y="390" class="area-label">PLAZA CENTRAL</text>
+
+  <!-- Lago o cuerpo de agua -->
+  <path d="M 480 0 Q 520 60 490 120 Q 530 180 600 190 L 600 0 Z" class="water" />
+
+  <!-- Manzanas / Bloques de edificios -->
+  <rect x="70" y="200" width="75" height="60" rx="4" class="building" />
+  <rect x="165" y="200" width="65" height="60" rx="4" class="building" />
+  <rect x="70" y="280" width="75" height="75" rx="4" class="building" />
+  <rect x="165" y="280" width="65" height="75" rx="4" class="building" />
+
+  <rect x="260" y="80" width="85" height="70" rx="4" class="building" />
+  <rect x="365" y="80" width="90" height="70" rx="4" class="building" />
+
+  <rect x="260" y="200" width="85" height="85" rx="4" class="building" />
+  <rect x="260" y="310" width="85" height="95" rx="4" class="building" />
+  <rect x="70" y="380" width="160" height="80" rx="4" class="building" />
+
+  <!-- Red de Calles Secundarias -->
+  <path d="M 0 170 L 600 170" class="road-secondary-casing" />
+  <path d="M 0 270 L 600 270" class="road-secondary-casing" />
+  <path d="M 0 370 L 600 370" class="road-secondary-casing" />
+  <path d="M 0 480 L 600 480" class="road-secondary-casing" />
+
+  <path d="M 155 0 L 155 600" class="road-secondary-casing" />
+  <path d="M 355 0 L 355 600" class="road-secondary-casing" />
+  <path d="M 470 0 L 470 600" class="road-secondary-casing" />
+
+  <path d="M 0 170 L 600 170" class="road-secondary" />
+  <path d="M 0 270 L 600 270" class="road-secondary" />
+  <path d="M 0 370 L 600 370" class="road-secondary" />
+  <path d="M 0 480 L 600 480" class="road-secondary" />
+
+  <path d="M 155 0 L 155 600" class="road-secondary" />
+  <path d="M 355 0 L 355 600" class="road-secondary" />
+  <path d="M 470 0 L 470 600" class="road-secondary" />
+
+  <!-- Avenidas Principales -->
+  <path d="M 245 0 L 245 600" class="road-primary-casing" />
+  <path d="M 0 420 Q 300 390 600 420" class="road-primary-casing" />
+  <path d="M 0 550 L 550 0" class="road-highway-casing" />
+
+  <path d="M 245 0 L 245 600" class="road-primary" />
+  <path d="M 0 420 Q 300 390 600 420" class="road-primary" />
+  <path d="M 0 550 L 550 0" class="road-highway" />
+
+  <!-- Nombres de calles -->
+  <text x="250" y="30" class="road-label" transform="rotate(90 250 30)">Av. Rivadavia</text>
+  <text x="250" y="320" class="road-label" transform="rotate(90 250 320)">Av. Rivadavia</text>
+  <text x="20" y="415" class="road-label">Av. San Martín</text>
+  <text x="20" y="165" class="road-label">Calle Belgrano</text>
+  <text x="20" y="265" class="road-label">Calle Mitre</text>
+  <text x="360" y="265" class="road-label">Calle Moreno</text>
+</svg>
