@@ -88,12 +88,14 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Funciones para el modal de Canva
-function openCanvaModal() {
+// Funciones para el modal de Canva (reutilizable)
+function openCanvaModal(url, title) {
     const modal = document.getElementById('modal-canva');
     const iframe = document.getElementById('canva-iframe');
+    const heading = modal ? modal.querySelector('h2') : null;
     if (modal && iframe) {
-        iframe.src = 'https://www.canva.com/design/DAHXiyErU8Y/0weTc1TAs8imeagy-lOP8g/view?embed';
+        if (heading && title) heading.textContent = title;
+        iframe.src = url;
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
