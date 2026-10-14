@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capacitación sobre Uber</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
@@ -122,7 +122,7 @@
                         <h3>📚 Guías Paso a Paso</h3>
                         <p>Guías paso a paso para leer en casa.</p>
                         <ul style="margin-top: 20px; list-style: none;">
-                            <li style="margin-bottom: 10px;"><a href="#" onclick="openCanvaModal('https://www.canva.com/design/DAHXiyErU8Y/0weTc1TAs8imeagy-lOP8g/view?embed', 'Guía para crear cuenta y solicitar viaje'); return false;" style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
+                            <li style="margin-bottom: 10px;"><a href="assets/Guía para crear cuenta y solicitar viaje.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
                         </ul>
                     </div>
                     
@@ -138,7 +138,7 @@
                     <div class="module-card">
                         <h3>❓ Preguntas Frecuentes</h3>
                         <p>Encuentre respuestas rápidas a las dudas más comunes de nuestros usuarios.</p>
-                        <button class="btn-secondary" style="margin-top: 20px;">Ir a la sección FAQ</button>
+                        <button class="btn-secondary" style="margin-top: 20px;" onclick="openFaqSidebar()">Ir a la sección FAQ</button>
                     </div>
                 </div>
             </section>
@@ -148,7 +148,6 @@
 
     <footer class="footer">
         <div class="container text-center">
-            <p>¿Necesita ayuda adicional? Llámenos al <strong>0800-123-UBER</strong></p>
             <p>&copy; 2026 Programa de Capacitación en Inclusión Digital.</p>
         </div>
     </footer>
@@ -195,19 +194,181 @@
 
     <!-- Modal Canva: Guía paso a paso -->
     <div id="modal-canva" class="modal">
-        <div class="modal-content" style="max-width: 900px; width: 95%;">
+        <div class="modal-content modal-canva-content">
             <span class="close-btn" onclick="closeCanvaModal()">&times;</span>
-            <h2>Guía para crear cuenta y solicitar viaje</h2>
-            <div style="position: relative; width: 100%; padding-top: 56.25%; margin-top: 16px; border-radius: 12px; overflow: hidden;">
+            <div class="modal-canva-header">
+                <h2 id="canva-modal-title">Guía para crear cuenta y solicitar viaje</h2>
+            </div>
+            <div class="canva-wrapper">
                 <iframe id="canva-iframe"
                     src=""
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px;"
                     allowfullscreen
                     allow="fullscreen">
                 </iframe>
             </div>
+            <div class="modal-canva-footer">
+                <button class="btn-primary" onclick="finalizarCanvaModal()">Finalizar ✓</button>
+            </div>
         </div>
     </div>
+
+    <!-- Modal Encuesta (Paso a paso) -->
+    <div id="modal-encuesta" class="modal">
+        <div class="modal-content encuesta-modal-content">
+            <span class="close-btn" onclick="closeEncuesta()">&times;</span>
+            <div class="encuesta-header">
+                <h2>📝 Evaluación de Comprensión</h2>
+                <div class="encuesta-progress-container">
+                    <span id="encuesta-step-text">Pregunta 1 de 4</span>
+                    <div class="encuesta-progress-bar">
+                        <div id="encuesta-progress-fill" style="width: 25%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="form-encuesta">
+                <!-- Paso 1 -->
+                <div class="encuesta-step" data-step="1">
+                    <p class="encuesta-pregunta-titulo"><strong>1. ¿Qué tan clara fue la información presentada?</strong></p>
+                    <div class="encuesta-opciones">
+                        <label><input type="radio" name="p1" value="a"> Muy clara</label>
+                        <label><input type="radio" name="p1" value="b"> Clara</label>
+                        <label><input type="radio" name="p1" value="c"> Poco clara</label>
+                        <label><input type="radio" name="p1" value="d"> No la entendí</label>
+                    </div>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="encuesta-step" data-step="2" style="display: none;">
+                    <p class="encuesta-pregunta-titulo"><strong>2. ¿Pudo comprender los pasos explicados en la presentación?</strong></p>
+                    <div class="encuesta-opciones">
+                        <label><input type="radio" name="p2" value="a"> Sí, completamente</label>
+                        <label><input type="radio" name="p2" value="b"> Sí, en su mayoría</label>
+                        <label><input type="radio" name="p2" value="c"> Solo algunos pasos</label>
+                        <label><input type="radio" name="p2" value="d"> No pude comprenderlos</label>
+                    </div>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="encuesta-step" data-step="3" style="display: none;">
+                    <p class="encuesta-pregunta-titulo"><strong>3. ¿Qué parte le resultó más útil?</strong></p>
+                    <div class="encuesta-opciones">
+                        <label><input type="radio" name="p3" value="a"> Las instrucciones paso a paso</label>
+                        <label><input type="radio" name="p3" value="b"> Las imágenes explicativas</label>
+                        <label><input type="radio" name="p3" value="c"> Los ejemplos prácticos</label>
+                        <label><input type="radio" name="p3" value="d"> Todas por igual</label>
+                    </div>
+                </div>
+
+                <!-- Paso 4 -->
+                <div class="encuesta-step" data-step="4" style="display: none;">
+                    <p class="encuesta-pregunta-titulo"><strong>4. ¿Se siente preparado/a para realizar esta acción en la aplicación?</strong></p>
+                    <div class="encuesta-opciones">
+                        <label><input type="radio" name="p4" value="a"> Sí, completamente</label>
+                        <label><input type="radio" name="p4" value="b"> Creo que sí</label>
+                        <label><input type="radio" name="p4" value="c"> Necesito practicar más</label>
+                        <label><input type="radio" name="p4" value="d"> No me siento preparado/a</label>
+                    </div>
+                </div>
+
+                <div id="encuesta-error" style="display: none; color: #d32f2f; margin-top: 14px; font-weight: 500; font-size: 1rem;">
+                    ⚠️ Por favor seleccione una opción para continuar.
+                </div>
+
+                <!-- Botones de navegación -->
+                <div class="encuesta-nav-buttons">
+                    <button type="button" id="btn-encuesta-prev" class="btn-secondary" style="display: none;" onclick="prevEncuestaStep()">← Anterior</button>
+                    <button type="button" id="btn-encuesta-next" class="btn-primary" onclick="nextEncuestaStep()">Siguiente →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Backdrop de barra lateral FAQ -->
+    <div id="faq-overlay" class="sidebar-overlay" onclick="closeFaqSidebar()"></div>
+
+    <!-- Barra lateral derecha: FAQ y Preguntas de usuarios -->
+    <aside id="faq-sidebar" class="faq-sidebar">
+        <div class="faq-sidebar-header">
+            <div>
+                <h3>❓ Preguntas Frecuentes</h3>
+                <p>Consulte dudas o envíe su pregunta.</p>
+            </div>
+            <button class="close-sidebar-btn" onclick="closeFaqSidebar()" aria-label="Cerrar">&times;</button>
+        </div>
+
+        <div class="faq-sidebar-content">
+            <!-- Formulario para hacer una pregunta -->
+            <div class="faq-form-card">
+                <h4>Hacer una pregunta</h4>
+                <p style="font-size: 0.95rem; color: #555; margin-bottom: 12px;">Escriba su consulta y un facilitador le responderá.</p>
+                <form id="faq-question-form" onsubmit="enviarPreguntaUsuario(event)">
+                    <div style="margin-bottom: 10px;">
+                        <input type="text" id="faq-user-name" placeholder="Su nombre (opcional)" class="faq-input">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <textarea id="faq-user-question" placeholder="Escriba su pregunta aquí..." rows="3" class="faq-textarea" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0; padding: 12px 20px; font-size: 1rem;">Enviar pregunta</button>
+                </form>
+                <div id="faq-form-success" class="faq-success-msg" style="display: none;">
+                    ✅ ¡Su pregunta fue enviada con éxito! La responderemos a la brevedad.
+                </div>
+            </div>
+
+            <!-- Preguntas frecuentes habituales -->
+            <div class="faq-list-section">
+                <h4>Preguntas habituales</h4>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Es seguro viajar en Uber?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí. Antes de subir, siempre verifique la patente, el modelo del auto y la foto del conductor que figuran en la aplicación.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Puedo pagar en efectivo?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí, al momento de pedir el viaje puede elegir "Efectivo" como método de pago y abonar al chofer al finalizar el trayecto.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Puedo pedir un viaje para otra persona?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí, puede ingresar la dirección de recogida donde se encuentra su familiar o conocido y compartirle los datos del viaje.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Qué hago si olvido algo en el auto?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>En el menú "Actividad" o "Viajes" de la app, seleccione el viaje y toque la opción "Encontrar objeto perdido" para contactar al conductor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preguntas enviadas por el usuario -->
+            <div id="user-questions-section" style="display: none;">
+                <h4>Sus preguntas enviadas</h4>
+                <div id="user-questions-list"></div>
+            </div>
+        </div>
+    </aside>
 
     <script src="script.js"></script>
 </body>
