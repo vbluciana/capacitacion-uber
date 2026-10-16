@@ -643,6 +643,10 @@ section {
     margin-top: 0;
 }
 
+.encuesta-nav-buttons #btn-encuesta-prev {
+    margin-right: auto;
+}
+
 /* Barra lateral (Sidebar) FAQ */
 .sidebar-overlay {
     position: fixed;
