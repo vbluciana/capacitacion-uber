@@ -1177,50 +1177,89 @@ section {
     animation: simPulseAnim 2s infinite;
 }
 
-.map-route-line {
-    position: absolute;
-    top: 30%;
-    left: 45%;
-    width: 45%;
-    height: 40%;
-    border-left: 4px dashed #000;
-    border-bottom: 4px dashed #000;
-}
-
 .map-pin-start, .map-pin-end, .map-destination-pin {
     position: absolute;
     font-size: 1.2rem;
     transform: translate(-50%, -50%);
 }
 
-/* Punto de recogida */
-.pickup-target {
+/* Marcadores de ubicación y recogida */
+.pickup-current-location,
+.pickup-marker {
     position: absolute;
     top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
 }
 
-.pickup-pin {
+.pickup-current-location {
+    left: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.pickup-current-dot {
+    width: 20px;
+    height: 20px;
+    background: var(--secondary-color);
+    border: 4px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 8px rgba(39, 110, 241, 0.2);
+}
+
+.pickup-current-tag {
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: #fff;
+    color: #1E293B;
+    font-size: 0.65rem;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.pickup-marker {
+    left: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    z-index: 5;
+}
+
+.pickup-marker:active {
+    cursor: grabbing;
+}
+
+.pickup-marker-confirmed {
+    filter: drop-shadow(0 0 5px rgba(22, 101, 52, 0.8));
+}
+
+.pickup-marker .pickup-pin {
     font-size: 2.2rem;
-    animation: bounce 1.5s infinite;
+    line-height: 1;
 }
 
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-}
-
-.pickup-tag {
+.pickup-marker .pickup-tag {
     background: #000;
     color: #fff;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: bold;
-    padding: 4px 10px;
+    padding: 4px 8px;
     border-radius: 12px;
     white-space: nowrap;
-    margin-top: 4px;
+}
+
+.pickup-marker-confirmed .pickup-tag {
+    background: #166534;
 }
 
 /* Hojas inferiores de la app de Uber */
@@ -1368,11 +1407,13 @@ section {
 
 .sugg-info {
     flex: 1;
+    min-width: 0;
 }
 
 .sugg-info strong {
     font-size: 0.95rem;
     display: block;
+    overflow-wrap: anywhere;
 }
 
 .sugg-info p {
@@ -1544,6 +1585,11 @@ section {
 
 .uber-confirm-btn:hover {
     background: #333333;
+}
+
+.uber-confirm-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 
 @media (max-width: 480px) {

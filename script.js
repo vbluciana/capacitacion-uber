@@ -91,6 +91,7 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Funciones para el modal de Canva (reutilizable)
+let currentCanvaGuideUrl = '';
 let currentCanvaDemoUrl = '';
 let currentModuleId = null;
 const moduleProgressStorageKey = 'uberTrainingCompletedModules';
@@ -192,10 +193,10 @@ function openCanvaModal(url, title, demoUrl, moduleId) {
     const heading = document.getElementById('canva-modal-title') || (modal ? modal.querySelector('h2') : null);
     if (modal && iframe) {
         if (heading && title) heading.textContent = title;
+        currentCanvaGuideUrl = url;
         currentCanvaDemoUrl = demoUrl || '';
         currentModuleId = moduleId || currentModuleId;
         switchCanvaModalView('guide');
-        iframe.src = url;
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
@@ -214,7 +215,7 @@ function switchCanvaModalView(view) {
 
     if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
     if (demoWrapper) demoWrapper.style.display = showGuide ? 'none' : 'flex';
-    if (canvaIframe && !showGuide) canvaIframe.src = '';
+    if (canvaIframe) canvaIframe.src = showGuide ? currentCanvaGuideUrl : '';
     if (demoIframe) {
         demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
         demoIframe.style.display = showDemoVideo ? 'block' : 'none';
@@ -420,9 +421,9 @@ const simStepData = {
         progress: 20
     },
     2: {
-        title: "Seleccionar el destino",
-        desc: "En este ejercicio iremos al Hospital Central. Toque la tarjeta que dice <strong>'🏥 Hospital Central'</strong>.",
-        hint: "Fíjese en la lista de sugerencias que tiene el resplandor parpadeante.",
+        title: "Escribir su destino",
+        desc: "Escriba en el campo del celular el lugar al que quiere ir y toque <strong>Buscar destino</strong>.",
+        hint: "Puede escribir el nombre de un lugar o una dirección.",
         progress: 40
     },
     3: {
@@ -433,8 +434,8 @@ const simStepData = {
     },
     4: {
         title: "Confirmar punto de partida",
-        desc: "Verifique que el auto lo pase a buscar por su puerta (Av. Rivadavia 2500) y toque el botón <strong>'Confirmar punto de partida'</strong>.",
-        hint: "En la app real, el pin verde indica exactamente dónde esperará al vehículo.",
+        desc: "Arrastre el marcador rojo hasta el punto azul, que indica su ubicación actual. Luego toque <strong>Confirmar punto de partida</strong>.",
+        hint: "Mantenga presionado el marcador rojo y muévalo hasta el punto azul.",
         progress: 80
     },
     5: {
@@ -449,6 +450,138 @@ let currentSimStep = 1;
 let simSelectedCar = 'uberx';
 let simSelectedPayment = 'cash';
 let simErrorTimeout = null;
+let pickupDragPointerId = null;
+let pickupMarkerPosition = { left: 70, top: 50 };
+
+function updateDestinationSearch() {
+    const input = document.getElementById('sim-destination-input');
+    const result = document.getElementById('sim-destination-result');
+    const destination = input ? input.value.trim() : '';
+    if (result) result.textContent = destination ? `Buscar: ${destination}` : 'Buscar destino';
+}
+
+function searchSimulatorDestination(event) {
+    if (event) event.stopPropagation();
+    const input = document.getElementById('sim-destination-input');
+    const destination = input ? input.value.trim() : '';
+    if (!destination) {
+        if (input) input.focus();
+        const hint = document.getElementById('sim-hint-text');
+        if (hint) hint.textContent = 'Escriba primero el nombre de un lugar o una dirección.';
+        return;
+    }
+    const selectedDestination = document.getElementById('sim-selected-destination');
+    if (selectedDestination) selectedDestination.textContent = `Destino: ${destination}`;
+    simTriggerStep(3, event);
+}
+
+function submitDestinationOnEnter(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        searchSimulatorDestination(event);
+    }
+}
+
+function setPickupMarkerPosition(left, top) {
+    const marker = document.getElementById('pickup-marker');
+    if (!marker) return;
+    pickupMarkerPosition = {
+        left: Math.min(92, Math.max(8, left)),
+        top: Math.min(85, Math.max(15, top))
+    };
+    marker.style.left = `${pickupMarkerPosition.left}%`;
+    marker.style.top = `${pickupMarkerPosition.top}%`;
+}
+
+function resetPickupMarker() {
+    const marker = document.getElementById('pickup-marker');
+    const confirmButton = document.getElementById('confirm-pickup-btn');
+    pickupDragPointerId = null;
+    setPickupMarkerPosition(70, 50);
+    if (marker) {
+        marker.classList.remove('pickup-marker-confirmed');
+        marker.querySelector('.pickup-tag').textContent = 'Mover aquí';
+    }
+    if (confirmButton) confirmButton.disabled = true;
+}
+
+function checkPickupMarkerPosition() {
+    const map = document.getElementById('pickup-map');
+    const marker = document.getElementById('pickup-marker');
+    const currentLocation = document.querySelector('.pickup-current-dot');
+    const confirmButton = document.getElementById('confirm-pickup-btn');
+    if (!map || !marker || !currentLocation || !confirmButton) return;
+
+    const mapBounds = map.getBoundingClientRect();
+    const markerBounds = marker.getBoundingClientRect();
+    const locationBounds = currentLocation.getBoundingClientRect();
+    const markerX = markerBounds.left + markerBounds.width / 2;
+    const markerY = markerBounds.top + markerBounds.height / 2;
+    const locationX = locationBounds.left + locationBounds.width / 2;
+    const locationY = locationBounds.top + locationBounds.height / 2;
+    const closeEnough = Math.hypot(markerX - locationX, markerY - locationY) <= Math.max(24, mapBounds.width * 0.09);
+
+    if (closeEnough) {
+        setPickupMarkerPosition(
+            (locationX - mapBounds.left) / mapBounds.width * 100,
+            (locationY - mapBounds.top) / mapBounds.height * 100
+        );
+        marker.classList.add('pickup-marker-confirmed');
+        marker.querySelector('.pickup-tag').textContent = 'Punto confirmado';
+        confirmButton.disabled = false;
+        const hint = document.getElementById('sim-hint-text');
+        if (hint) hint.textContent = '¡Bien hecho! Ya puede confirmar el punto de partida.';
+    } else {
+        marker.classList.remove('pickup-marker-confirmed');
+        marker.querySelector('.pickup-tag').textContent = 'Mover aquí';
+        confirmButton.disabled = true;
+    }
+}
+
+function startPickupDrag(event) {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+    pickupDragPointerId = event.pointerId;
+    event.currentTarget.setPointerCapture(event.pointerId);
+}
+
+function movePickupMarker(event) {
+    if (event.pointerId !== pickupDragPointerId) return;
+    const map = document.getElementById('pickup-map');
+    if (!map) return;
+    event.preventDefault();
+    const bounds = map.getBoundingClientRect();
+    setPickupMarkerPosition(
+        (event.clientX - bounds.left) / bounds.width * 100,
+        (event.clientY - bounds.top) / bounds.height * 100
+    );
+}
+
+function finishPickupDrag(event) {
+    if (event.pointerId !== pickupDragPointerId) return;
+    pickupDragPointerId = null;
+    checkPickupMarkerPosition();
+}
+
+function movePickupMarkerWithKeyboard(event) {
+    const steps = {
+        ArrowUp: [0, -4],
+        ArrowDown: [0, 4],
+        ArrowLeft: [-4, 0],
+        ArrowRight: [4, 0]
+    };
+    const step = steps[event.key];
+    if (!step) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setPickupMarkerPosition(pickupMarkerPosition.left + step[0], pickupMarkerPosition.top + step[1]);
+    checkPickupMarkerPosition();
+}
+
+document.addEventListener('pointermove', movePickupMarker);
+document.addEventListener('pointerup', finishPickupDrag);
+document.addEventListener('pointercancel', finishPickupDrag);
 
 // Manejador inteligente de clics en la pantalla del teléfono virtual
 function handlePhoneMisclick(event) {
@@ -540,6 +673,10 @@ function simTriggerStep(step, event) {
         prevBtn.style.display = (step > 1) ? 'inline-block' : 'none';
     }
 
+    if (step === 4) {
+        resetPickupMarker();
+    }
+
     // Actualizar texto del botón de confirmación en paso 3
     if (step === 3) {
         updateCarConfirmButton();
@@ -555,6 +692,10 @@ function simPrevStep() {
 function restartSimulator() {
     simSelectedCar = 'uberx';
     simSelectedPayment = 'cash';
+    const destinationInput = document.getElementById('sim-destination-input');
+    if (destinationInput) destinationInput.value = '';
+    updateDestinationSearch();
+    resetPickupMarker();
     selectCarOption('uberx');
     choosePayment('cash', '💵', 'Efectivo');
     simTriggerStep(1);

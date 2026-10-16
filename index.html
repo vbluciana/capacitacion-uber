@@ -192,7 +192,7 @@
                             <div id="sim-screen-2" class="sim-screen" style="display: none;">
                                 <div class="uber-dest-header">
                                     <button class="sim-back-btn sim-screen-back" onclick="simTriggerStep(1, event)">←</button>
-                                    <span style="font-weight: 700; font-size: 1.05rem;">Escriba su destino</span>
+                                    <span style="font-weight: 700; font-size: 1.05rem;">¿A dónde va?</span>
                                 </div>
 
                                 <div class="uber-route-inputs">
@@ -202,26 +202,19 @@
                                     </div>
                                     <div class="route-input-row">
                                         <span class="dot-dest">🔴</span>
-                                        <input type="text" placeholder="¿A dónde vas?" value="Hospital Central" readonly class="route-field target-dest">
+                                        <input type="text" id="sim-destination-input" placeholder="Escriba su destino" class="route-field target-dest sim-valid-action" autocomplete="off" oninput="updateDestinationSearch()" onkeydown="submitDestinationOnEnter(event)">
                                     </div>
                                 </div>
 
                                 <div class="uber-dest-suggestions">
-                                    <p style="font-size: 0.8rem; color: #666; margin: 12px 0 8px 12px; font-weight: bold; text-transform: uppercase;">Destinos sugeridos para la práctica</p>
-                                    <div class="uber-suggestion-card sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(3, event)">
-                                        <div class="sugg-icon">🏥</div>
+                                    <p id="sim-destination-prompt" style="font-size: 0.85rem; color: #666; margin: 12px 0 8px 12px;">Escriba el lugar al que quiere ir.</p>
+                                    <div class="uber-suggestion-card sim-highlight-pulse sim-valid-action" onclick="searchSimulatorDestination(event)">
+                                        <div class="sugg-icon">🔍</div>
                                         <div class="sugg-info">
-                                            <strong>Hospital Central</strong>
-                                            <p>Av. San Martín 1540 (Destino del ejercicio)</p>
+                                            <strong id="sim-destination-result">Buscar destino</strong>
+                                            <p>Toque aquí para continuar</p>
                                         </div>
                                         <span class="sugg-arrow">➔</span>
-                                    </div>
-                                    <div class="uber-suggestion-card">
-                                        <div class="sugg-icon">🛒</div>
-                                        <div class="sugg-info">
-                                            <strong>Supermercado Mayor</strong>
-                                            <p>Calle Belgrano 450</p>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +224,6 @@
                                 <div class="sim-map sim-map-route">
                                     <button class="sim-screen-back" onclick="simTriggerStep(2, event)">← Volver</button>
                                     <div class="map-grid"></div>
-                                    <div class="map-route-line"></div>
                                     <div class="map-pin-start" style="top: 70%; left: 40%;">🟢</div>
                                     <div class="map-pin-end" style="top: 25%; left: 65%;">🔴</div>
                                 </div>
@@ -239,6 +231,7 @@
                                 <div class="uber-cars-sheet">
                                     <div class="sheet-drag-handle"></div>
                                     <h5 style="margin-bottom: 8px; font-weight: 700; font-size: 0.95rem;">Opciones de viaje disponibles</h5>
+                                    <p id="sim-selected-destination" style="margin-bottom: 8px; color: #64748B; font-size: 0.8rem;"></p>
 
                                     <!-- Opción UberX recomendada -->
                                     <div class="uber-car-option selected sim-highlight-pulse sim-valid-action" id="car-uberx" onclick="selectCarOption('uberx', event)">
@@ -317,14 +310,17 @@
 
                             <!-- PANTALLA 4: Confirmar Punto de Recogida -->
                             <div id="sim-screen-4" class="sim-screen" style="display: none;">
-                                <div class="sim-map sim-map-pickup">
+                                <div class="sim-map sim-map-pickup" id="pickup-map">
                                     <button class="sim-screen-back" onclick="simTriggerStep(3, event)">← Volver</button>
                                     <div class="map-grid"></div>
-                                    <div class="pickup-target">
-                                        <div class="pickup-circle"></div>
-                                        <div class="pickup-pin">📍</div>
-                                        <div class="pickup-tag">Subir aquí</div>
+                                    <div class="pickup-current-location" aria-label="Su ubicación actual">
+                                        <span class="pickup-current-dot"></span>
+                                        <span class="pickup-current-tag">Su ubicación</span>
                                     </div>
+                                    <button type="button" class="pickup-marker sim-valid-action" id="pickup-marker" aria-label="Arrastre el marcador rojo hasta el punto azul de su ubicación actual" onpointerdown="startPickupDrag(event)" onkeydown="movePickupMarkerWithKeyboard(event)">
+                                        <span class="pickup-pin">📍</span>
+                                        <span class="pickup-tag">Mover aquí</span>
+                                    </button>
                                 </div>
 
                                 <div class="uber-pickup-sheet">
@@ -332,7 +328,7 @@
                                     <h4>Punto de partida</h4>
                                     <p style="color: #444; font-size: 0.9rem; margin: 4px 0 14px;">Av. Rivadavia 2500 (Frente a su puerta)</p>
 
-                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(5, event)">
+                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" id="confirm-pickup-btn" onclick="simTriggerStep(5, event)" disabled>
                                         Confirmar punto de partida
                                     </button>
                                 </div>
