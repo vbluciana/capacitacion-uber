@@ -33,6 +33,9 @@
 
             <section class="hero-section container">
                 <div class="hero-text">
+                    <div class="hero-logo-container">
+                        <img class="hero-logo" src="assets/uber_logo.png" alt="Uber">
+                    </div>
                     <h2>Bienvenido a su nueva forma de moverse</h2>
                     <p>Moverse por la ciudad nunca fue tan sencillo. En este curso, aprenderá todo lo necesario para pedir un auto desde la comodidad de su hogar, de manera segura y sin complicaciones.</p>
                 </div>
@@ -78,6 +81,7 @@
                         <button class="btn-secondary" id="module-3-start" onclick="startModule(3)" disabled>Comenzar</button>
                     </article>
                 </div>
+                <button class="btn-secondary reset-progress-button" type="button" onclick="resetModulesProgress()">Reiniciar</button>
             </section>
 
             <section class="app-preview container">
@@ -430,6 +434,17 @@
     </footer>
 
     <!-- Modals (Solo los 3 módulos del Inicio) -->
+    <div id="modal-reset-progress" class="modal">
+        <div class="modal-content reset-progress-modal-content" role="dialog" aria-modal="true" aria-labelledby="reset-progress-title" aria-describedby="reset-progress-description">
+            <h2 id="reset-progress-title">Reiniciar progreso</h2>
+            <p id="reset-progress-description">¿Está seguro de que desea reiniciar el progreso de todos los módulos? Esta acción no se puede deshacer.</p>
+            <div class="reset-progress-actions">
+                <button class="btn-secondary" type="button" onclick="closeModal('modal-reset-progress')">Cancelar</button>
+                <button class="btn-primary" type="button" onclick="confirmResetModulesProgress()">Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal1" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
@@ -503,75 +518,25 @@
         </div>
     </div>
 
-    <!-- Modal Encuesta (Paso a paso) -->
+    <!-- Modal de evaluación con Google Forms -->
     <div id="modal-encuesta" class="modal">
-        <div class="modal-content encuesta-modal-content">
+        <div class="modal-content encuesta-modal-content" role="dialog" aria-modal="true" aria-labelledby="encuesta-title">
             <span class="close-btn" onclick="closeEncuesta()">&times;</span>
             <div class="encuesta-header">
-                <h2>📝 Evaluación de Comprensión</h2>
-                <div class="encuesta-progress-container">
-                    <span id="encuesta-step-text">Pregunta 1 de 4</span>
-                    <div class="encuesta-progress-bar">
-                        <div id="encuesta-progress-fill" style="width: 25%;"></div>
-                    </div>
-                </div>
+                <h2 id="encuesta-title">📝 Evaluación de Comprensión</h2>
+                <p>Complete y envíe el formulario. Después, seleccione “Ya respondí” para registrar el módulo como completado.</p>
             </div>
-
-            <form id="form-encuesta">
-                <!-- Paso 1 -->
-                <div class="encuesta-step" data-step="1">
-                    <p class="encuesta-pregunta-titulo"><strong>1. ¿Qué tan clara fue la información presentada?</strong></p>
-                    <div class="encuesta-opciones">
-                        <label><input type="radio" name="p1" value="a"> Muy clara</label>
-                        <label><input type="radio" name="p1" value="b"> Clara</label>
-                        <label><input type="radio" name="p1" value="c"> Poco clara</label>
-                        <label><input type="radio" name="p1" value="d"> No la entendí</label>
-                    </div>
-                </div>
-
-                <!-- Paso 2 -->
-                <div class="encuesta-step" data-step="2" style="display: none;">
-                    <p class="encuesta-pregunta-titulo"><strong>2. ¿Pudo comprender los pasos explicados en la presentación?</strong></p>
-                    <div class="encuesta-opciones">
-                        <label><input type="radio" name="p2" value="a"> Sí, completamente</label>
-                        <label><input type="radio" name="p2" value="b"> Sí, en su mayoría</label>
-                        <label><input type="radio" name="p2" value="c"> Solo algunos pasos</label>
-                        <label><input type="radio" name="p2" value="d"> No pude comprenderlos</label>
-                    </div>
-                </div>
-
-                <!-- Paso 3 -->
-                <div class="encuesta-step" data-step="3" style="display: none;">
-                    <p class="encuesta-pregunta-titulo"><strong>3. ¿Qué parte le resultó más útil?</strong></p>
-                    <div class="encuesta-opciones">
-                        <label><input type="radio" name="p3" value="a"> Las instrucciones paso a paso</label>
-                        <label><input type="radio" name="p3" value="b"> Las imágenes explicativas</label>
-                        <label><input type="radio" name="p3" value="c"> Los ejemplos prácticos</label>
-                        <label><input type="radio" name="p3" value="d"> Todas por igual</label>
-                    </div>
-                </div>
-
-                <!-- Paso 4 -->
-                <div class="encuesta-step" data-step="4" style="display: none;">
-                    <p class="encuesta-pregunta-titulo"><strong>4. ¿Se siente preparado/a para realizar esta acción en la aplicación?</strong></p>
-                    <div class="encuesta-opciones">
-                        <label><input type="radio" name="p4" value="a"> Sí, completamente</label>
-                        <label><input type="radio" name="p4" value="b"> Creo que sí</label>
-                        <label><input type="radio" name="p4" value="c"> Necesito practicar más</label>
-                        <label><input type="radio" name="p4" value="d"> No me siento preparado/a</label>
-                    </div>
-                </div>
-
-                <div id="encuesta-error" style="display: none; color: #d32f2f; margin-top: 14px; font-weight: 500; font-size: 1rem;">
-                    ⚠️ Por favor seleccione una opción para continuar.
-                </div>
-
-                <!-- Botones de navegación -->
-                <div class="encuesta-nav-buttons">
-                    <button type="button" id="btn-encuesta-prev" class="btn-secondary" style="display: none;" onclick="prevEncuestaStep()">← Anterior</button>
-                    <button type="button" id="btn-encuesta-next" class="btn-primary" onclick="nextEncuestaStep()">Siguiente →</button>
-                </div>
-            </form>
+            <iframe
+                id="google-form-iframe"
+                class="google-form-iframe"
+                data-src="https://docs.google.com/forms/d/e/1FAIpQLSeieQho6QmV8SViuH9M19vkugeGZhjOflKihs3837WDiZ8EtQ/viewform?embedded=true"
+                title="Formulario de evaluación de comprensión"
+                loading="lazy">
+                Cargando…
+            </iframe>
+            <div class="google-form-actions">
+                <button type="button" class="btn-primary" onclick="enviarEncuesta()">Ya respondí, completar módulo ✓</button>
+            </div>
         </div>
     </div>
 

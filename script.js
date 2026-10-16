@@ -67,6 +67,10 @@ function closeModal(modalId) {
 // Cerrar modal si se hace clic fuera del contenido
 window.onclick = function(event) {
     if (event.target.classList.contains('modal')) {
+        if (event.target.id === 'modal-encuesta') {
+            closeEncuesta();
+            return;
+        }
         event.target.style.display = 'none';
         document.body.style.overflow = 'auto';
         if (event.target.id === 'modal-canva') {
@@ -82,6 +86,10 @@ document.addEventListener('keydown', function(event) {
         const modals = document.querySelectorAll('.modal');
         modals.forEach(modal => {
             if (modal.style.display === 'block') {
+                if (modal.id === 'modal-encuesta') {
+                    closeEncuesta();
+                    return;
+                }
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
@@ -156,6 +164,24 @@ function completeModule(moduleId) {
     updateModulesProgress();
 }
 
+function resetModulesProgress() {
+    openModal('modal-reset-progress');
+    document.querySelector('#modal-reset-progress .reset-progress-actions button')?.focus();
+}
+
+function confirmResetModulesProgress() {
+    try {
+        localStorage.removeItem(moduleProgressStorageKey);
+    } catch (error) {
+        window.alert('No se pudo reiniciar el progreso. Inténtelo nuevamente.');
+        return;
+    }
+
+    completedModules.clear();
+    updateModulesProgress();
+    closeModal('modal-reset-progress');
+}
+
 function startModule(moduleId) {
     if (moduleId === 2 && !completedModules.has(1)) return;
     if (moduleId === 3 && !completedModules.has(2)) return;
@@ -174,10 +200,10 @@ function openEncuestaForCurrentModule() {
     const encuesta = document.getElementById('modal-encuesta');
     if (!encuesta) return;
 
-    const form = document.getElementById('form-encuesta');
-    if (form) form.reset();
-    currentEncuestaStep = 1;
-    updateEncuestaUI();
+    const formIframe = document.getElementById('google-form-iframe');
+    if (formIframe && !formIframe.src) {
+        formIframe.src = formIframe.dataset.src;
+    }
     encuesta.style.display = 'block';
     document.body.style.overflow = 'hidden';
 }
@@ -247,72 +273,6 @@ function closeCanvaModal() {
     stopCanvaModalMedia();
 }
 
-// Variables y lógica para la Encuesta paso a paso
-let currentEncuestaStep = 1;
-const totalEncuestaSteps = 4;
-
-function updateEncuestaUI() {
-    // Mostrar solo el paso actual
-    const steps = document.querySelectorAll('.encuesta-step');
-    steps.forEach(step => {
-        const stepNum = parseInt(step.getAttribute('data-step'));
-        step.style.display = (stepNum === currentEncuestaStep) ? 'block' : 'none';
-    });
-
-    // Actualizar indicador de paso y barra de progreso
-    const stepText = document.getElementById('encuesta-step-text');
-    if (stepText) {
-        stepText.textContent = `Pregunta ${currentEncuestaStep} de ${totalEncuestaSteps}`;
-    }
-    const progressFill = document.getElementById('encuesta-progress-fill');
-    if (progressFill) {
-        progressFill.style.width = `${(currentEncuestaStep / totalEncuestaSteps) * 100}%`;
-    }
-
-    // Ocultar mensaje de error
-    const errorMsg = document.getElementById('encuesta-error');
-    if (errorMsg) errorMsg.style.display = 'none';
-
-    // Botón Anterior
-    const prevBtn = document.getElementById('btn-encuesta-prev');
-    if (prevBtn) {
-        prevBtn.style.display = (currentEncuestaStep > 1) ? 'inline-block' : 'none';
-    }
-
-    // Botón Siguiente / Enviar
-    const nextBtn = document.getElementById('btn-encuesta-next');
-    if (nextBtn) {
-        nextBtn.textContent = (currentEncuestaStep === totalEncuestaSteps) ? 'Enviar respuestas ✓' : 'Siguiente →';
-        nextBtn.disabled = false;
-    }
-}
-
-function nextEncuestaStep() {
-    // Validar que se haya seleccionado una opción en el paso actual
-    const currentRadio = document.querySelector(`input[name="p${currentEncuestaStep}"]:checked`);
-    const errorMsg = document.getElementById('encuesta-error');
-    if (!currentRadio) {
-        if (errorMsg) errorMsg.style.display = 'block';
-        return;
-    }
-
-    if (errorMsg) errorMsg.style.display = 'none';
-
-    if (currentEncuestaStep < totalEncuestaSteps) {
-        currentEncuestaStep++;
-        updateEncuestaUI();
-    } else {
-        enviarEncuesta();
-    }
-}
-
-function prevEncuestaStep() {
-    if (currentEncuestaStep > 1) {
-        currentEncuestaStep--;
-        updateEncuestaUI();
-    }
-}
-
 // Finalizar presentación y abrir encuesta
 function finalizarCanvaModal() {
     closeCanvaModal();
@@ -326,9 +286,11 @@ function closeEncuesta() {
         encuesta.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
+    const formIframe = document.getElementById('google-form-iframe');
+    if (formIframe) formIframe.src = '';
 }
 
-// Enviar encuesta
+// Confirmar el envío en Google Forms y completar el módulo
 function enviarEncuesta() {
     if (currentModuleId) completeModule(currentModuleId);
     currentModuleId = null;
