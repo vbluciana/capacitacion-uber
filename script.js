@@ -70,8 +70,7 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
         document.body.style.overflow = 'auto';
         if (event.target.id === 'modal-canva') {
-            const canvaIframe = document.getElementById('canva-iframe');
-            if (canvaIframe) canvaIframe.src = '';
+            stopCanvaModalMedia();
         }
     }
 }
@@ -87,34 +86,164 @@ document.addEventListener('keydown', function(event) {
                 document.body.style.overflow = 'auto';
             }
         });
-        // Limpiar iframe de Canva si estaba abierto
-        const canvaIframe = document.getElementById('canva-iframe');
-        if (canvaIframe) canvaIframe.src = '';
+        stopCanvaModalMedia();
     }
 });
 
 // Funciones para el modal de Canva (reutilizable)
-function openCanvaModal(url, title) {
+let currentCanvaDemoUrl = '';
+let currentModuleId = null;
+const moduleProgressStorageKey = 'uberTrainingCompletedModules';
+const moduleDefinitions = {
+    1: {
+        title: 'Módulo 1: Primeros Pasos',
+        guideUrl: 'https://www.canva.com/design/DAHX8hIW2g4/s2kbGXi2XHgoSO36PWaQPw/view?embed',
+        demoUrl: 'https://www.youtube.com/embed/ERVRVqlHwJk'
+    },
+    2: {
+        title: 'Módulo 2: Pedir un Viaje',
+        guideUrl: 'https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed'
+    }
+};
+let completedModules = loadCompletedModules();
+
+function loadCompletedModules() {
+    try {
+        const savedModules = JSON.parse(localStorage.getItem(moduleProgressStorageKey) || '[]');
+        return new Set(Array.isArray(savedModules) ? savedModules.filter(id => Number.isInteger(id) && id >= 1 && id <= 3) : []);
+    } catch (error) {
+        return new Set();
+    }
+}
+
+function updateModulesProgress() {
+    const completedCount = completedModules.size;
+    const progressText = document.getElementById('modules-progress-text');
+    const progressPercent = document.getElementById('modules-progress-percent');
+    const progressTrack = document.querySelector('.modules-progress-track');
+    const progressFill = document.getElementById('modules-progress-fill');
+    const module2Button = document.getElementById('module-2-start');
+    const module3Button = document.getElementById('module-3-start');
+    const lockMessage = document.getElementById('module-lock-message');
+    const nextLockedModule = !completedModules.has(1) ? 2 : !completedModules.has(2) ? 3 : null;
+
+    if (progressText) progressText.textContent = `${completedCount} de 3 módulos completados`;
+    if (progressPercent) progressPercent.textContent = `${Math.round(completedCount / 3 * 100)}%`;
+    if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(completedCount));
+    if (progressFill) progressFill.style.width = `${completedCount / 3 * 100}%`;
+    if (module2Button) module2Button.disabled = !completedModules.has(1);
+    if (module3Button) module3Button.disabled = !completedModules.has(2);
+    if (lockMessage) {
+        lockMessage.style.display = nextLockedModule ? 'block' : 'none';
+        lockMessage.textContent = nextLockedModule === 2
+            ? 'Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.'
+            : 'Finalice la encuesta del Módulo 2 para desbloquear el Módulo 3.';
+    }
+
+    document.querySelectorAll('.module-card[data-module-id]').forEach(card => {
+        card.classList.toggle('completed', completedModules.has(Number(card.dataset.moduleId)));
+    });
+}
+
+function completeModule(moduleId) {
+    completedModules.add(moduleId);
+    try {
+        localStorage.setItem(moduleProgressStorageKey, JSON.stringify([...completedModules]));
+    } catch (error) {
+        // Keep progress for this page session if browser storage is unavailable.
+    }
+    updateModulesProgress();
+}
+
+function startModule(moduleId) {
+    if (moduleId === 2 && !completedModules.has(1)) return;
+    if (moduleId === 3 && !completedModules.has(2)) return;
+    currentModuleId = moduleId;
+
+    if (moduleId === 3) {
+        openModal('modal3');
+        return;
+    }
+
+    const module = moduleDefinitions[moduleId];
+    if (module) openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
+}
+
+function openEncuestaForCurrentModule() {
+    const encuesta = document.getElementById('modal-encuesta');
+    if (!encuesta) return;
+
+    const form = document.getElementById('form-encuesta');
+    if (form) form.reset();
+    currentEncuestaStep = 1;
+    updateEncuestaUI();
+    encuesta.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function finalizarModuloInfo() {
+    closeModal('modal3');
+    openEncuestaForCurrentModule();
+}
+
+function openCanvaModal(url, title, demoUrl, moduleId) {
     const modal = document.getElementById('modal-canva');
     const iframe = document.getElementById('canva-iframe');
     const heading = document.getElementById('canva-modal-title') || (modal ? modal.querySelector('h2') : null);
     if (modal && iframe) {
         if (heading && title) heading.textContent = title;
+        currentCanvaDemoUrl = demoUrl || '';
+        currentModuleId = moduleId || currentModuleId;
+        switchCanvaModalView('guide');
         iframe.src = url;
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
 }
 
+function switchCanvaModalView(view) {
+    const canvaWrapper = document.querySelector('.canva-wrapper');
+    const demoWrapper = document.getElementById('demo-wrapper');
+    const canvaIframe = document.getElementById('canva-iframe');
+    const demoIframe = document.getElementById('demo-iframe');
+    const demoUnavailable = document.getElementById('demo-unavailable');
+    const guideButton = document.getElementById('btn-modal-guide');
+    const demoButton = document.getElementById('btn-modal-demo');
+    const showGuide = view === 'guide';
+    const showDemoVideo = !showGuide && Boolean(currentCanvaDemoUrl);
+
+    if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
+    if (demoWrapper) demoWrapper.style.display = showGuide ? 'none' : 'flex';
+    if (canvaIframe && !showGuide) canvaIframe.src = '';
+    if (demoIframe) {
+        demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
+        demoIframe.style.display = showDemoVideo ? 'block' : 'none';
+    }
+    if (demoUnavailable) demoUnavailable.style.display = !showGuide && !showDemoVideo ? 'block' : 'none';
+    if (guideButton) {
+        guideButton.classList.toggle('active', showGuide);
+        guideButton.setAttribute('aria-pressed', String(showGuide));
+    }
+    if (demoButton) {
+        demoButton.classList.toggle('active', !showGuide);
+        demoButton.setAttribute('aria-pressed', String(!showGuide));
+    }
+}
+
+function stopCanvaModalMedia() {
+    const canvaIframe = document.getElementById('canva-iframe');
+    const demoIframe = document.getElementById('demo-iframe');
+    if (canvaIframe) canvaIframe.src = '';
+    if (demoIframe) demoIframe.src = '';
+}
+
 function closeCanvaModal() {
     const modal = document.getElementById('modal-canva');
-    const iframe = document.getElementById('canva-iframe');
     if (modal) {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-    // Detener la presentación limpiando el src
-    if (iframe) iframe.src = '';
+    stopCanvaModalMedia();
 }
 
 // Variables y lógica para la Encuesta paso a paso
@@ -186,15 +315,7 @@ function prevEncuestaStep() {
 // Finalizar presentación y abrir encuesta
 function finalizarCanvaModal() {
     closeCanvaModal();
-    const encuesta = document.getElementById('modal-encuesta');
-    if (encuesta) {
-        const form = document.getElementById('form-encuesta');
-        if (form) form.reset();
-        currentEncuestaStep = 1;
-        updateEncuestaUI();
-        encuesta.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
+    openEncuestaForCurrentModule();
 }
 
 // Cerrar encuesta
@@ -208,7 +329,15 @@ function closeEncuesta() {
 
 // Enviar encuesta
 function enviarEncuesta() {
+    if (currentModuleId) completeModule(currentModuleId);
+    currentModuleId = null;
     closeEncuesta();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateModulesProgress);
+} else {
+    updateModulesProgress();
 }
 
 // Funciones para la Barra Lateral (Sidebar) de FAQ

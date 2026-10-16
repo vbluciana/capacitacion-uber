@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capacitación sobre Uber</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
@@ -43,29 +43,39 @@
 
             <section class="modules-section container" id="modulos">
                 <h2 class="text-center">Módulos de Aprendizaje</h2>
+                <div class="modules-progress">
+                    <div class="modules-progress-summary">
+                        <span id="modules-progress-text">0 de 3 módulos completados</span>
+                        <strong id="modules-progress-percent">0%</strong>
+                    </div>
+                    <div class="modules-progress-track" role="progressbar" aria-label="Módulos completados" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+                        <div id="modules-progress-fill"></div>
+                    </div>
+                    <p id="module-lock-message" class="module-lock-message" role="status">Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.</p>
+                </div>
                 <div class="module-grid">
                     <!-- Modulo 1 -->
-                    <article class="module-card">
+                    <article class="module-card" data-module-id="1">
                         <div class="module-number">1</div>
                         <h3>Primeros Pasos</h3>
                         <p>Aprenda cómo crear su cuenta de usuario de forma segura.</p>
-                        <button class="btn-secondary" onclick="openCanvaModal('https://www.canva.com/design/DAHX8hIW2g4/s2kbGXi2XHgoSO36PWaQPw/view?embed', 'Módulo 1: Primeros Pasos')">Ver detalles</button>
+                        <button class="btn-secondary" id="module-1-start" onclick="startModule(1)">Comenzar</button>
                     </article>
 
                     <!-- Modulo 2 -->
-                    <article class="module-card">
+                    <article class="module-card" data-module-id="2">
                         <div class="module-number">2</div>
                         <h3>Pedir un Viaje</h3>
                         <p>Instrucciones claras sobre cómo ingresar su destino, elegir el tipo de auto y confirmar su viaje. ¡Es muy fácil!</p>
-                        <button class="btn-secondary" onclick="openCanvaModal('https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed', 'Módulo 2: Pedir un Viaje')">Ver detalles</button>
+                        <button class="btn-secondary" id="module-2-start" onclick="startModule(2)" disabled>Comenzar</button>
                     </article>
 
                     <!-- Modulo 3 -->
-                    <article class="module-card">
+                    <article class="module-card" data-module-id="3">
                         <div class="module-number">3</div>
                         <h3>Seguridad y Pagos</h3>
                         <p>Conozca las herramientas de seguridad que ofrece la aplicación y cómo configurar sus métodos de pago.</p>
-                        <button class="btn-secondary" onclick="openModal('modal3')">Ver detalles</button>
+                        <button class="btn-secondary" id="module-3-start" onclick="startModule(3)" disabled>Comenzar</button>
                     </article>
                 </div>
             </section>
@@ -460,7 +470,7 @@
                 <p><strong>Seguridad:</strong> Verifique que la patente y el conductor coincidan con la información en su pantalla antes de subir.</p>
                 <p><strong>Pagos:</strong> Puede pagar en efectivo al finalizar el viaje o registrar una tarjeta de crédito para mayor comodidad.</p>
             </div>
-            <button class="btn-primary" onclick="closeModal('modal3')">Entendido</button>
+            <button class="btn-primary" onclick="finalizarModuloInfo()">Entendido</button>
         </div>
     </div>
 
@@ -478,7 +488,21 @@
                     allow="fullscreen">
                 </iframe>
             </div>
+            <div id="demo-wrapper" class="demo-wrapper" style="display: none;">
+                <iframe id="demo-iframe"
+                    src=""
+                    title="Como iniciar sesion en Uber?"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
+                <p id="demo-unavailable" class="demo-unavailable" role="status" style="display: none;">La demostración de este módulo estará disponible próximamente.</p>
+            </div>
             <div class="modal-canva-footer">
+                <div class="modal-view-toggle" role="group" aria-label="Tipo de contenido">
+                    <button type="button" class="modal-view-btn active" id="btn-modal-guide" aria-pressed="true" onclick="switchCanvaModalView('guide')">Guía</button>
+                    <button type="button" class="modal-view-btn" id="btn-modal-demo" aria-pressed="false" onclick="switchCanvaModalView('demo')">Demostración</button>
+                </div>
                 <button class="btn-primary" onclick="finalizarCanvaModal()">Finalizar ✓</button>
             </div>
         </div>
