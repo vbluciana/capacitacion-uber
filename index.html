@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capacitación sobre Uber</title>
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
@@ -430,10 +430,79 @@
     <footer class="footer">
         <div class="container text-center">
             <p>&copy; 2026 Programa de Capacitación en Inclusión Digital.</p>
+            <button class="admin-footer-btn" onclick="openAdminLogin()" aria-label="Acceso administrador">🔐 Admin</button>
         </div>
     </footer>
 
+    <!-- Modal de Login Admin -->
+    <div id="modal-admin-login" class="modal">
+        <div class="modal-content admin-login-modal-content" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
+            <span class="close-btn" onclick="closeModal('modal-admin-login')">&times;</span>
+            <h2 id="admin-login-title">🔐 Acceso Administrador</h2>
+            <p style="color:#555; font-size:0.9rem; margin-bottom:18px;">Ingrese la contraseña para ver los resultados.</p>
+            <div style="margin-bottom:14px;">
+                <input type="password" id="admin-password-input" class="faq-input" placeholder="Contraseña" style="width:100%; font-size:1rem; padding:10px 14px;" onkeydown="if(event.key==='Enter') verifyAdminPassword()">
+            </div>
+            <div id="admin-login-error" style="display:none; color:#d32f2f; font-size:0.9rem; margin-bottom:12px;">⚠️ Contraseña incorrecta. Intente nuevamente.</div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn-secondary" onclick="closeModal('modal-admin-login')">Cancelar</button>
+                <button class="btn-primary" onclick="verifyAdminPassword()">Ingresar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Panel Admin -->
+    <div id="modal-admin-panel" class="modal">
+        <div class="modal-content admin-panel-modal-content" role="dialog" aria-modal="true" aria-labelledby="admin-panel-title">
+            <span class="close-btn" onclick="closeModal('modal-admin-panel')">&times;</span>
+            <div class="admin-panel-header">
+                <h2 id="admin-panel-title">📊 Panel de Resultados</h2>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-secondary" onclick="exportAdminCSV()" style="font-size:0.85rem; padding:8px 16px;">📥 Descargar CSV</button>
+                    <button class="btn-secondary" onclick="clearAdminResults()" style="font-size:0.85rem; padding:8px 16px; color:#d32f2f; border-color:#d32f2f;">🗑️ Borrar datos</button>
+                </div>
+            </div>
+            <div id="admin-panel-summary" class="admin-summary-row"></div>
+            <div class="admin-table-wrapper">
+                <table id="admin-results-table" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Módulo / Práctica</th>
+                            <th>Intentos / Errores</th>
+                            <th>Tiempo</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-results-tbody"></tbody>
+                </table>
+                <p id="admin-no-results" style="text-align:center; color:#888; padding:30px; display:none;">Aún no hay resultados registrados.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actividad: Ordená los Pasos -->
+    <div id="modal-actividad" class="modal">
+        <div class="modal-content actividad-modal-content" role="dialog" aria-modal="true" aria-labelledby="actividad-title">
+            <div class="actividad-header">
+                <div>
+                    <h2 id="actividad-title">📋 ¡Antes de continuar!</h2>
+                    <p id="actividad-subtitle" style="color:#555; font-size:0.9rem; margin-top:4px;">Ordene los pasos en el orden correcto para completar el módulo.</p>
+                </div>
+            </div>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:16px;">⬆⬇ <strong>Arrastre las tarjetas</strong> para ordenarlas correctamente:</p>
+            <div id="actividad-sortable-list" class="actividad-sortable-list"></div>
+            <div id="actividad-feedback" class="actividad-feedback" style="display:none;"></div>
+            <div class="actividad-footer">
+                <div id="actividad-attempt-count" style="font-size:0.85rem; color:#888;"></div>
+                <button class="btn-primary" id="btn-actividad-verificar" onclick="verificarOrdenActividad()">✅ Verificar orden</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modals (Solo los 3 módulos del Inicio) -->
+
     <div id="modal-reset-progress" class="modal">
         <div class="modal-content reset-progress-modal-content" role="dialog" aria-modal="true" aria-labelledby="reset-progress-title" aria-describedby="reset-progress-description">
             <h2 id="reset-progress-title">Reiniciar progreso</h2>
@@ -626,6 +695,6 @@
         </div>
     </aside>
 
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>

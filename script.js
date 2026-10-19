@@ -28,6 +28,10 @@ function switchTab(viewId, navElement) {
         targetView.classList.add('active');
     }
 
+    if (viewId === 'view-simulador') {
+        if (!simStartTime) simStartTime = Date.now();
+    }
+
     // Actualizar estilo en la barra de navegación
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -275,11 +279,16 @@ function closeCanvaModal() {
     stopCanvaModalMedia();
 }
 
-// Los módulos 1 y 2 se completan al finalizar la presentación; el 3 requiere evaluación.
+// Los módulos 1 y 2 requieren completar la actividad; el 3 requiere evaluación.
 function finalizarCanvaModal() {
     closeCanvaModal();
     if (currentModuleId === 3) {
         openEncuestaForCurrentModule();
+        return;
+    }
+
+    if (currentModuleId === 1 || currentModuleId === 2) {
+        openActividadModal(currentModuleId);
         return;
     }
 
@@ -422,6 +431,9 @@ let simSelectedPayment = 'cash';
 let simErrorTimeout = null;
 let pickupDragPointerId = null;
 let pickupMarkerPosition = { left: 70, top: 50 };
+let simErrorsCount = 0;
+let simStartTime = null;
+let simCompleted = false;
 
 function updateDestinationSearch() {
     const input = document.getElementById('sim-destination-input');
@@ -565,6 +577,9 @@ function handlePhoneMisclick(event) {
 }
 
 function triggerPhoneError() {
+    simErrorsCount++;
+    if (!simStartTime) simStartTime = Date.now();
+
     const phone = document.getElementById('sim-phone-device');
     const screen = document.querySelector('.phone-screen');
     const errorBadge = document.getElementById('sim-error-badge');
@@ -607,6 +622,8 @@ function triggerPhoneError() {
 
 function simTriggerStep(step, event) {
     if (event) event.stopPropagation(); // Evitar error
+
+    if (!simStartTime) simStartTime = Date.now();
 
     // Cerrar hoja de pago si estaba abierta
     closePaymentSheet();
@@ -651,6 +668,22 @@ function simTriggerStep(step, event) {
     if (step === 3) {
         updateCarConfirmButton();
     }
+
+    // Registrar finalización exitosa del simulador en el paso 5
+    if (step === 5) {
+        if (!simCompleted) {
+            simCompleted = true;
+            const tiempoSeg = Math.round((Date.now() - (simStartTime || Date.now())) / 1000);
+            guardarResultadoSimulador(simErrorsCount, tiempoSeg);
+            const successCard = document.querySelector('.sim-success-card');
+            if (successCard) {
+                const badge = simErrorsCount === 0
+                    ? '<div style="margin-top: 8px; font-size: 0.85rem; color: #166534; font-weight: bold;">⭐ ¡Excelente! Completó la práctica sin cometer errores.</div>'
+                    : `<div style="margin-top: 8px; font-size: 0.85rem; color: #334155;">Errores cometidos durante la práctica: <strong>${simErrorsCount}</strong>.</div>`;
+                successCard.innerHTML = `🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.${badge}`;
+            }
+        }
+    }
 }
 
 function simPrevStep() {
@@ -662,6 +695,13 @@ function simPrevStep() {
 function restartSimulator() {
     simSelectedCar = 'uberx';
     simSelectedPayment = 'cash';
+    simErrorsCount = 0;
+    simStartTime = Date.now();
+    simCompleted = false;
+    const successCard = document.querySelector('.sim-success-card');
+    if (successCard) {
+        successCard.innerHTML = '🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.';
+    }
     const destinationInput = document.getElementById('sim-destination-input');
     if (destinationInput) destinationInput.value = '';
     updateDestinationSearch();
@@ -740,4 +780,489 @@ function updateCarConfirmButton() {
         const payName = (simSelectedPayment === 'cash') ? 'Efectivo' : 'Tarjeta';
         btnConfirm.textContent = `Elegir ${carName} (${payName})`;
     }
+}
+
+// ========================================================
+// ACTIVIDAD: ORDENÁ LOS PASOS (Drag & Drop)
+// ========================================================
+
+const TRAINING_RESULTS_KEY = 'uber_training_results';
+
+const actividadData = {
+    1: {
+        moduloNombre: 'Primeros Pasos',
+        instruccion: '¿En qué orden se inicia sesión en la app de Uber?',
+        pasos: [
+            { id: 1, texto: '📱 Entrar a la app' },
+            { id: 2, texto: '🔑 Ingresar con Google' },
+            { id: 3, texto: '👤 Seleccionar cuenta' },
+            { id: 4, texto: '✅ Aceptar condiciones' }
+        ],
+        ordenCorrecto: [1, 2, 3, 4]
+    },
+    2: {
+        moduloNombre: 'Pedir un Viaje',
+        instruccion: '¿En qué orden se pide un viaje en Uber?',
+        pasos: [
+            { id: 1, texto: '📱 Abrir la app de Uber' },
+            { id: 2, texto: '🔍 Tocar "¿A dónde vas?"' },
+            { id: 3, texto: '✏️ Escribir el destino' },
+            { id: 4, texto: '💳 Seleccionar medio de pago' },
+            { id: 5, texto: '🚗 Elegir el tipo de auto' },
+            { id: 6, texto: '✅ Confirmar el viaje' }
+        ],
+        ordenCorrecto: [1, 2, 3, 4, 5, 6]
+    }
+};
+
+let actividadModuloActual = null;
+let actividadIntentos = 0;
+let actividadStartTime = null;
+let actividadDragSrcIndex = null;
+let actividadOrdenActual = [];
+
+function openActividadModal(moduleId) {
+    const data = actividadData[moduleId];
+    if (!data) return;
+
+    actividadModuloActual = moduleId;
+    actividadIntentos = 0;
+    actividadStartTime = Date.now();
+
+    // Mezclar pasos aleatoriamente
+    actividadOrdenActual = shuffleArray([...data.pasos]);
+
+    renderActividadList();
+
+    const title = document.getElementById('actividad-title');
+    const subtitle = document.getElementById('actividad-subtitle');
+    const feedback = document.getElementById('actividad-feedback');
+    const attemptCount = document.getElementById('actividad-attempt-count');
+    const btnVerificar = document.getElementById('btn-actividad-verificar');
+
+    if (title) title.textContent = `📋 Módulo ${moduleId}: ¡Antes de continuar!`;
+    if (subtitle) subtitle.textContent = data.instruccion;
+    if (feedback) { feedback.style.display = 'none'; feedback.className = 'actividad-feedback'; }
+    if (attemptCount) attemptCount.textContent = '';
+    if (btnVerificar) { btnVerificar.disabled = false; btnVerificar.textContent = '✅ Verificar orden'; }
+
+    const modal = document.getElementById('modal-actividad');
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function renderActividadList() {
+    const list = document.getElementById('actividad-sortable-list');
+    if (!list) return;
+    list.innerHTML = '';
+    actividadOrdenActual.forEach((paso, index) => {
+        const card = document.createElement('div');
+        card.className = 'actividad-card';
+        card.setAttribute('draggable', 'true');
+        card.dataset.index = index;
+        card.innerHTML = `<span class="actividad-card-handle">☰</span><span class="actividad-card-text">${paso.texto}</span>`;
+
+        // Desktop drag events
+        card.addEventListener('dragstart', onActividadDragStart);
+        card.addEventListener('dragover', onActividadDragOver);
+        card.addEventListener('drop', onActividadDrop);
+        card.addEventListener('dragend', onActividadDragEnd);
+
+        // Touch events for mobile
+        card.addEventListener('touchstart', onActividadTouchStart, { passive: false });
+        card.addEventListener('touchmove', onActividadTouchMove, { passive: false });
+        card.addEventListener('touchend', onActividadTouchEnd);
+
+        list.appendChild(card);
+    });
+}
+
+// --- Drag events (desktop) ---
+function onActividadDragStart(e) {
+    actividadDragSrcIndex = parseInt(e.currentTarget.dataset.index);
+    e.currentTarget.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function onActividadDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const targetCard = e.currentTarget;
+    const list = document.getElementById('actividad-sortable-list');
+    const cards = [...list.querySelectorAll('.actividad-card:not(.dragging)')];
+    cards.forEach(c => c.classList.remove('drag-over'));
+    targetCard.classList.add('drag-over');
+}
+
+function onActividadDrop(e) {
+    e.preventDefault();
+    const targetIndex = parseInt(e.currentTarget.dataset.index);
+    if (actividadDragSrcIndex === null || actividadDragSrcIndex === targetIndex) return;
+    swapActividadCards(actividadDragSrcIndex, targetIndex);
+}
+
+function onActividadDragEnd(e) {
+    const list = document.getElementById('actividad-sortable-list');
+    if (list) list.querySelectorAll('.actividad-card').forEach(c => c.classList.remove('dragging', 'drag-over'));
+    actividadDragSrcIndex = null;
+}
+
+// --- Touch events (mobile) ---
+let actividadTouchSrcIndex = null;
+let actividadTouchClone = null;
+
+function onActividadTouchStart(e) {
+    actividadTouchSrcIndex = parseInt(e.currentTarget.dataset.index);
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    actividadTouchClone = card.cloneNode(true);
+    actividadTouchClone.style.cssText = `
+        position: fixed; z-index: 9999; pointer-events: none; opacity: 0.85;
+        width: ${rect.width}px; top: ${rect.top}px; left: ${rect.left}px;
+        background: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.18); border-radius: 12px;
+    `;
+    document.body.appendChild(actividadTouchClone);
+    card.classList.add('dragging');
+}
+
+function onActividadTouchMove(e) {
+    e.preventDefault();
+    if (!actividadTouchClone) return;
+    const touch = e.touches[0];
+    actividadTouchClone.style.top = (touch.clientY - 30) + 'px';
+    actividadTouchClone.style.left = (touch.clientX - actividadTouchClone.offsetWidth / 2) + 'px';
+}
+
+function onActividadTouchEnd(e) {
+    if (!actividadTouchClone) return;
+    const touch = e.changedTouches[0];
+    if (actividadTouchClone) { actividadTouchClone.remove(); actividadTouchClone = null; }
+
+    const list = document.getElementById('actividad-sortable-list');
+    if (!list) return;
+    const cards = [...list.querySelectorAll('.actividad-card')];
+    cards.forEach(c => c.classList.remove('dragging'));
+
+    // Find which card is under the finger
+    let targetIndex = null;
+    cards.forEach((card, i) => {
+        const rect = card.getBoundingClientRect();
+        if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+            touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+            targetIndex = i;
+        }
+    });
+
+    if (targetIndex !== null && targetIndex !== actividadTouchSrcIndex) {
+        swapActividadCards(actividadTouchSrcIndex, targetIndex);
+    }
+    actividadTouchSrcIndex = null;
+}
+
+function swapActividadCards(fromIndex, toIndex) {
+    [actividadOrdenActual[fromIndex], actividadOrdenActual[toIndex]] =
+        [actividadOrdenActual[toIndex], actividadOrdenActual[fromIndex]];
+    renderActividadList();
+
+    // Clear feedback on re-sort
+    const feedback = document.getElementById('actividad-feedback');
+    if (feedback && feedback.classList.contains('actividad-feedback-error')) {
+        feedback.style.display = 'none';
+    }
+}
+
+function verificarOrdenActividad() {
+    if (!actividadModuloActual) return;
+    const data = actividadData[actividadModuloActual];
+    actividadIntentos++;
+
+    const ordenActual = actividadOrdenActual.map(p => p.id);
+    const correcto = data.ordenCorrecto.every((id, i) => id === ordenActual[i]);
+
+    const feedback = document.getElementById('actividad-feedback');
+    const attemptCount = document.getElementById('actividad-attempt-count');
+    const list = document.getElementById('actividad-sortable-list');
+    const btnVerificar = document.getElementById('btn-actividad-verificar');
+
+    if (attemptCount) attemptCount.textContent = `Intentos: ${actividadIntentos}`;
+
+    if (correcto) {
+        // Mark all cards green
+        if (list) list.querySelectorAll('.actividad-card').forEach(c => {
+            c.classList.remove('card-error');
+            c.classList.add('card-correct');
+            c.setAttribute('draggable', 'false');
+        });
+        if (feedback) {
+            feedback.style.display = 'block';
+            feedback.className = 'actividad-feedback actividad-feedback-success';
+            feedback.innerHTML = '🎉 <strong>¡Perfecto!</strong> El orden es correcto. ¡Módulo completado!';
+        }
+        if (btnVerificar) { btnVerificar.disabled = true; btnVerificar.textContent = '✅ ¡Correcto!'; }
+
+        // Save result to localStorage
+        guardarResultadoActividad(actividadModuloActual, data.moduloNombre, actividadIntentos, 'correcto');
+
+        // Complete the module after short delay
+        setTimeout(() => {
+            const modal = document.getElementById('modal-actividad');
+            if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
+            completeModule(actividadModuloActual);
+            actividadModuloActual = null;
+        }, 1800);
+
+    } else {
+        // Mark incorrect cards red
+        if (list) {
+            const cards = [...list.querySelectorAll('.actividad-card')];
+            cards.forEach((card, i) => {
+                card.classList.remove('card-correct', 'card-error');
+                if (ordenActual[i] !== data.ordenCorrecto[i]) {
+                    card.classList.add('card-error');
+                }
+            });
+        }
+        if (feedback) {
+            feedback.style.display = 'block';
+            feedback.className = 'actividad-feedback actividad-feedback-error';
+            feedback.innerHTML = '❌ <strong>Orden incorrecto.</strong> Las tarjetas en rojo no están en el lugar correcto. ¡Inténtelo de nuevo!';
+        }
+    }
+}
+
+// ========================================================
+// PERSISTENCIA: localStorage
+// ========================================================
+
+function guardarResultadoActividad(moduleId, moduloNombre, intentos, resultado) {
+    const tiempoSeg = Math.round((Date.now() - actividadStartTime) / 1000);
+    const now = new Date();
+    const fecha = now.toLocaleDateString('es-AR');
+    const hora = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    const cometioErrores = intentos > 1;
+    const registro = {
+        id: `res_${Date.now()}`,
+        fecha,
+        hora,
+        tipo: 'actividad',
+        modulo: moduleId,
+        modulo_nombre: moduloNombre,
+        intentos,
+        errores: Math.max(0, intentos - 1),
+        cometio_errores: cometioErrores ? 'Sí' : 'No',
+        completado_exitoso: resultado === 'correcto',
+        resultado,
+        tiempo_segundos: tiempoSeg
+    };
+
+    try {
+        const existentes = JSON.parse(localStorage.getItem(TRAINING_RESULTS_KEY) || '[]');
+        existentes.push(registro);
+        localStorage.setItem(TRAINING_RESULTS_KEY, JSON.stringify(existentes));
+    } catch (e) {
+        // localStorage no disponible
+    }
+}
+
+function guardarResultadoSimulador(errores, tiempoSeg) {
+    const now = new Date();
+    const fecha = now.toLocaleDateString('es-AR');
+    const hora = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    const cometioErrores = errores > 0;
+    const registro = {
+        id: `sim_${Date.now()}`,
+        fecha,
+        hora,
+        tipo: 'simulador',
+        modulo: 'Simulador',
+        modulo_nombre: 'Simulador Práctico',
+        intentos: errores,
+        errores: errores,
+        cometio_errores: cometioErrores ? 'Sí' : 'No',
+        completado_exitoso: true,
+        resultado: 'Exitoso',
+        tiempo_segundos: tiempoSeg
+    };
+
+    try {
+        const existentes = JSON.parse(localStorage.getItem(TRAINING_RESULTS_KEY) || '[]');
+        existentes.push(registro);
+        localStorage.setItem(TRAINING_RESULTS_KEY, JSON.stringify(existentes));
+    } catch (e) {
+        // localStorage no disponible
+    }
+}
+
+function getResultados() {
+    try {
+        return JSON.parse(localStorage.getItem(TRAINING_RESULTS_KEY) || '[]');
+    } catch (e) {
+        return [];
+    }
+}
+
+// ========================================================
+// PANEL ADMIN
+// ========================================================
+
+const ADMIN_PASSWORD = 'admin123';
+
+function openAdminLogin() {
+    const input = document.getElementById('admin-password-input');
+    const error = document.getElementById('admin-login-error');
+    if (input) input.value = '';
+    if (error) error.style.display = 'none';
+    openModal('modal-admin-login');
+    setTimeout(() => { if (input) input.focus(); }, 100);
+}
+
+function verifyAdminPassword() {
+    const input = document.getElementById('admin-password-input');
+    const error = document.getElementById('admin-login-error');
+    if (!input) return;
+
+    if (input.value === ADMIN_PASSWORD) {
+        closeModal('modal-admin-login');
+        input.value = '';
+        renderAdminPanel();
+        openModal('modal-admin-panel');
+    } else {
+        if (error) error.style.display = 'block';
+        input.value = '';
+        input.focus();
+    }
+}
+
+function renderAdminPanel() {
+    const resultados = getResultados();
+    const tbody = document.getElementById('admin-results-tbody');
+    const noResults = document.getElementById('admin-no-results');
+    const summary = document.getElementById('admin-panel-summary');
+
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (resultados.length === 0) {
+        if (noResults) noResults.style.display = 'block';
+        if (summary) summary.innerHTML = '';
+        return;
+    }
+
+    if (noResults) noResults.style.display = 'none';
+
+    // Estadísticas segmentadas
+    const actividades = resultados.filter(r => r.tipo !== 'simulador');
+    const simuladores = resultados.filter(r => r.tipo === 'simulador');
+
+    // Métricas de Actividades de Módulos
+    const totalIntentos = actividades.reduce((s, r) => s + (Number(r.intentos) || 1), 0);
+    const promIntentos = actividades.length > 0 ? (totalIntentos / actividades.length).toFixed(1) : '-';
+    const totalTiempoAct = actividades.reduce((s, r) => s + (Number(r.tiempo_segundos) || 0), 0);
+    const promTiempoAct = actividades.length > 0 ? Math.round(totalTiempoAct / actividades.length) + 's' : '-';
+
+    // Métricas del Simulador Práctico
+    const totalErroresSim = simuladores.reduce((s, r) => s + (Number(r.errores) || 0), 0);
+    const promErroresSim = simuladores.length > 0 ? (totalErroresSim / simuladores.length).toFixed(1) : '-';
+    const totalTiempoSim = simuladores.reduce((s, r) => s + (Number(r.tiempo_segundos) || 0), 0);
+    const promTiempoSim = simuladores.length > 0 ? Math.round(totalTiempoSim / simuladores.length) + 's' : '-';
+    const simSinErrores = simuladores.filter(r => (Number(r.errores) || 0) === 0).length;
+
+    if (summary) {
+        summary.innerHTML = `
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+                <div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 6px;">📚 Módulos de Aprendizaje:</div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div class="admin-stat"><strong>${actividades.length}</strong><span>Actividades realizadas</span></div>
+                        <div class="admin-stat"><strong>${promIntentos}</strong><span>Intentos promedio</span></div>
+                        <div class="admin-stat"><strong>${promTiempoAct}</strong><span>Tiempo promedio</span></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 6px;">🎮 Simulador Práctico:</div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div class="admin-stat"><strong>${simuladores.length}</strong><span>Prácticas completadas</span></div>
+                        <div class="admin-stat"><strong>${promErroresSim}</strong><span>Errores promedio</span></div>
+                        <div class="admin-stat"><strong>${simSinErrores}</strong><span>Completadas sin errores</span></div>
+                        <div class="admin-stat"><strong>${promTiempoSim}</strong><span>Tiempo promedio</span></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Table rows (most recent first)
+    [...resultados].reverse().forEach(r => {
+        const tr = document.createElement('tr');
+        const isSim = r.tipo === 'simulador';
+        const moduloLabel = isSim ? '🎮 Simulador Práctico' : `Mód. ${r.modulo} – ${r.modulo_nombre}`;
+        const erroresLabel = isSim
+            ? (r.errores === 0 ? '0 errores (Sin errores ✓)' : `${r.errores} error(es)`)
+            : `${r.intentos} intento(s)`;
+        const resultadoLabel = isSim
+            ? (r.completado_exitoso ? '✅ Completado exitoso' : 'Incompleto')
+            : (r.resultado === 'correcto' ? '✅ Correcto' : '❌ Incorrecto');
+        const resultadoClass = (isSim ? r.completado_exitoso : r.resultado === 'correcto') ? 'result-ok' : 'result-fail';
+
+        tr.innerHTML = `
+            <td>${r.fecha}</td>
+            <td>${r.hora}</td>
+            <td><strong>${moduloLabel}</strong></td>
+            <td>${erroresLabel}</td>
+            <td>${r.tiempo_segundos}s</td>
+            <td class="${resultadoClass}">${resultadoLabel}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function exportAdminCSV() {
+    const resultados = getResultados();
+    if (resultados.length === 0) {
+        alert('No hay resultados para exportar.');
+        return;
+    }
+    const headers = ['ID', 'Fecha', 'Hora', 'Tipo', 'Módulo / Práctica', 'Intentos / Errores', 'Cometió Errores', 'Completado Exitoso', 'Tiempo (seg)'];
+    const rows = resultados.map(r => {
+        const isSim = r.tipo === 'simulador';
+        return [
+            r.id,
+            r.fecha,
+            r.hora,
+            isSim ? 'Simulador' : 'Actividad Módulo',
+            isSim ? 'Simulador Práctico' : `Módulo ${r.modulo}: ${r.modulo_nombre}`,
+            isSim ? r.errores : r.intentos,
+            r.cometio_errores || ((isSim ? r.errores > 0 : r.intentos > 1) ? 'Sí' : 'No'),
+            r.completado_exitoso ? 'Sí' : (r.resultado === 'correcto' ? 'Sí' : 'No'),
+            r.tiempo_segundos
+        ];
+    });
+    const csvContent = [headers, ...rows].map(row => row.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `resultados_uber_training_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function clearAdminResults() {
+    if (!confirm('¿Está seguro de que desea borrar TODOS los resultados? Esta acción no se puede deshacer.')) return;
+    try {
+        localStorage.removeItem(TRAINING_RESULTS_KEY);
+    } catch (e) {}
+    renderAdminPanel();
 }
