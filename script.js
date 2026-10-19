@@ -197,6 +197,8 @@ function startModule(moduleId) {
 }
 
 function openEncuestaForCurrentModule() {
+    if (currentModuleId !== 3) return;
+
     const encuesta = document.getElementById('modal-encuesta');
     if (!encuesta) return;
 
@@ -273,10 +275,16 @@ function closeCanvaModal() {
     stopCanvaModalMedia();
 }
 
-// Finalizar presentación y abrir encuesta
+// Los módulos 1 y 2 se completan al finalizar la presentación; el 3 requiere evaluación.
 function finalizarCanvaModal() {
     closeCanvaModal();
-    openEncuestaForCurrentModule();
+    if (currentModuleId === 3) {
+        openEncuestaForCurrentModule();
+        return;
+    }
+
+    if (currentModuleId) completeModule(currentModuleId);
+    currentModuleId = null;
 }
 
 // Cerrar encuesta
