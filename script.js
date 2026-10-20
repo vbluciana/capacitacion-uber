@@ -116,6 +116,10 @@ const moduleDefinitions = {
     2: {
         title: 'Módulo 2: Pedir un Viaje',
         guideUrl: 'https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed'
+    },
+    3: {
+        title: 'Módulo 3: Seguridad y Pagos',
+        guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed'
     }
 };
 let completedModules = loadCompletedModules();
@@ -150,7 +154,7 @@ function updateModulesProgress() {
         lockMessage.style.display = nextLockedModule ? 'block' : 'none';
         lockMessage.textContent = nextLockedModule === 2
             ? 'Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.'
-            : 'Finalice la encuesta del Módulo 2 para desbloquear el Módulo 3.';
+            : 'Complete la actividad del Módulo 2 para desbloquear el Módulo 3.';
     }
 
     document.querySelectorAll('.module-card[data-module-id]').forEach(card => {
@@ -191,11 +195,6 @@ function startModule(moduleId) {
     if (moduleId === 3 && !completedModules.has(2)) return;
     currentModuleId = moduleId;
 
-    if (moduleId === 3) {
-        openModal('modal3');
-        return;
-    }
-
     const module = moduleDefinitions[moduleId];
     if (module) openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
 }
@@ -212,11 +211,6 @@ function openEncuestaForCurrentModule() {
     }
     encuesta.style.display = 'block';
     document.body.style.overflow = 'hidden';
-}
-
-function finalizarModuloInfo() {
-    closeModal('modal3');
-    openEncuestaForCurrentModule();
 }
 
 function openCanvaModal(url, title, demoUrl, moduleId) {
