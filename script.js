@@ -119,16 +119,21 @@ const moduleDefinitions = {
         guideUrl: 'https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed'
     },
     3: {
-        title: 'Módulo 3: Seguridad y Pagos',
+        title: 'Módulo 3: Agregar método de pago',
         guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed'
-    }
-};
-let completedModules = loadCompletedModules();
+    },
+    4: {
+        title: 'Módulo 4: Manejo de imprevistos',
+        activityOnly: true
+    }
+};
+const totalModules = Object.keys(moduleDefinitions).length;
+let completedModules = loadCompletedModules();
 
 function loadCompletedModules() {
     try {
         const savedModules = JSON.parse(localStorage.getItem(moduleProgressStorageKey) || '[]');
-        return new Set(Array.isArray(savedModules) ? savedModules.filter(id => Number.isInteger(id) && id >= 1 && id <= 3) : []);
+        return new Set(Array.isArray(savedModules) ? savedModules.filter(id => Number.isInteger(id) && id >= 1 && id <= totalModules) : []);
     } catch (error) {
         return new Set();
     }
@@ -140,23 +145,26 @@ function updateModulesProgress() {
     const progressPercent = document.getElementById('modules-progress-percent');
     const progressTrack = document.querySelector('.modules-progress-track');
     const progressFill = document.getElementById('modules-progress-fill');
-    const module2Button = document.getElementById('module-2-start');
-    const module3Button = document.getElementById('module-3-start');
-    const lockMessage = document.getElementById('module-lock-message');
-    const nextLockedModule = !completedModules.has(1) ? 2 : !completedModules.has(2) ? 3 : null;
-
-    if (progressText) progressText.textContent = `${completedCount} de 3 módulos completados`;
-    if (progressPercent) progressPercent.textContent = `${Math.round(completedCount / 3 * 100)}%`;
+    const lockMessage = document.getElementById('module-lock-message');
+    const nextLockedModule = Array.from({ length: totalModules - 1 }, (_, index) => index + 2)
+        .find(moduleId => !completedModules.has(moduleId - 1));
+
+    if (progressText) progressText.textContent = `${completedCount} de ${totalModules} módulos completados`;
+    if (progressPercent) progressPercent.textContent = `${Math.round(completedCount / totalModules * 100)}%`;
+    if (progressTrack) progressTrack.setAttribute('aria-valuemax', String(totalModules));
     if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(completedCount));
-    if (progressFill) progressFill.style.width = `${completedCount / 3 * 100}%`;
-    if (module2Button) module2Button.disabled = !completedModules.has(1);
-    if (module3Button) module3Button.disabled = !completedModules.has(2);
-    if (lockMessage) {
-        lockMessage.style.display = nextLockedModule ? 'block' : 'none';
-        lockMessage.textContent = nextLockedModule === 2
-            ? 'Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.'
-            : 'Complete la actividad del Módulo 2 para desbloquear el Módulo 3.';
-    }
+    if (progressFill) progressFill.style.width = `${completedCount / totalModules * 100}%`;
+    document.querySelectorAll('.module-card[data-module-id]').forEach(card => {
+        const moduleId = Number(card.dataset.moduleId);
+        const button = card.querySelector('button');
+        if (button) button.disabled = moduleId > 1 && !completedModules.has(moduleId - 1);
+    });
+    if (lockMessage) {
+        lockMessage.style.display = nextLockedModule ? 'block' : 'none';
+        if (nextLockedModule) {
+            lockMessage.textContent = `Complete la actividad del Módulo ${nextLockedModule - 1} para desbloquear el Módulo ${nextLockedModule}.`;
+        }
+    }
 
     document.querySelectorAll('.module-card[data-module-id]').forEach(card => {
         card.classList.toggle('completed', completedModules.has(Number(card.dataset.moduleId)));
@@ -192,16 +200,19 @@ function confirmResetModulesProgress() {
 }
 
 function startModule(moduleId) {
-    if (moduleId === 2 && !completedModules.has(1)) return;
-    if (moduleId === 3 && !completedModules.has(2)) return;
-    currentModuleId = moduleId;
-
-    const module = moduleDefinitions[moduleId];
-    if (module) openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
-}
+    if (!moduleDefinitions[moduleId] || (moduleId > 1 && !completedModules.has(moduleId - 1))) return;
+    currentModuleId = moduleId;
+
+    const module = moduleDefinitions[moduleId];
+    if (module.activityOnly) {
+        openActividadModal(moduleId);
+        return;
+    }
+    openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
+}
 
 function openEncuestaForCurrentModule() {
-    if (currentModuleId !== 3) return;
+    if (currentModuleId !== 4) return;
 
     const encuesta = document.getElementById('modal-encuesta');
     if (!encuesta) return;
@@ -219,6 +230,8 @@ function openCanvaModal(url, title, demoUrl, moduleId) {
     const iframe = document.getElementById('canva-iframe');
     const heading = document.getElementById('canva-modal-title') || (modal ? modal.querySelector('h2') : null);
     if (modal && iframe) {
+        modal.classList.remove('side-by-side');
+        document.getElementById('modal-actividad')?.classList.remove('side-by-side');
         if (heading && title) heading.textContent = title;
         currentCanvaGuideUrl = url;
         currentCanvaDemoUrl = demoUrl || '';
@@ -267,26 +280,24 @@ function stopCanvaModalMedia() {
 
 function closeCanvaModal() {
     const modal = document.getElementById('modal-canva');
+    const activityModal = document.getElementById('modal-actividad');
     if (modal) {
         modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
     }
+    modal?.classList.remove('side-by-side');
+    activityModal?.classList.remove('side-by-side');
+    document.body.style.overflow = activityModal?.style.display === 'block' ? 'hidden' : 'auto';
     stopCanvaModalMedia();
 }
 
-// Los módulos 1 y 2 requieren completar la actividad; el 3 requiere evaluación.
+// La actividad de ordenamiento precede al formulario en todos los módulos.
 function finalizarCanvaModal() {
+    if (currentModuleId >= 1 && currentModuleId <= 3) {
+        openActividadModal(currentModuleId, true);
+        return;
+    }
+
     closeCanvaModal();
-    if (currentModuleId === 3) {
-        openEncuestaForCurrentModule();
-        return;
-    }
-
-    if (currentModuleId === 1 || currentModuleId === 2) {
-        openActividadModal(currentModuleId);
-        return;
-    }
-
     if (currentModuleId) completeModule(currentModuleId);
     currentModuleId = null;
 }
@@ -315,12 +326,12 @@ let accessibilityState = { ...defaultAccessibilityState };
 
 function loadAccessibilitySettings() {
     try {
-        const saved = JSON.parse(localStorage.getItem(accessibilityStorageKey) || '{}');
-        const savedFontScale = Number(saved.fontScale);
-        accessibilityState = {
-            fontScale: Number.isFinite(savedFontScale) && savedFontScale > 1 ? 1.2 : 1,
-            highContrast: Boolean(saved.highContrast)
-        };
+        const saved = JSON.parse(localStorage.getItem(accessibilityStorageKey) || '{}');
+        const savedFontScale = Number(saved.fontScale);
+        accessibilityState = {
+            fontScale: Number.isFinite(savedFontScale) && savedFontScale > 1 ? 1.2 : 1,
+            highContrast: Boolean(saved.highContrast)
+        };
     } catch (error) {
         accessibilityState = { ...defaultAccessibilityState };
     }
@@ -338,9 +349,9 @@ function applyAccessibilitySettings() {
     const root = document.documentElement;
     const toggleButton = document.getElementById('accessibility-toggle');
     const contrastButton = document.getElementById('toggle-contrast');
-    const fontToggleButton = document.getElementById('toggle-font-size');
-    const fontToggleLabel = document.getElementById('a11y-font-toggle-label');
-    const menu = document.getElementById('accessibility-menu');
+    const fontToggleButton = document.getElementById('toggle-font-size');
+    const fontToggleLabel = document.getElementById('a11y-font-toggle-label');
+    const menu = document.getElementById('accessibility-menu');
 
     root.style.setProperty('--accessibility-font-scale', String(accessibilityState.fontScale));
     document.body.classList.toggle('high-contrast', accessibilityState.highContrast);
@@ -351,18 +362,18 @@ function applyAccessibilitySettings() {
     }
 
     const fontIndicator = document.getElementById('a11y-font-indicator');
-    const isFontZoomEnabled = accessibilityState.fontScale === 1.2;
-    if (fontIndicator) {
-        fontIndicator.textContent = isFontZoomEnabled ? '120%' : '100%';
-    }
-    if (fontToggleButton) {
-        fontToggleButton.setAttribute('aria-pressed', String(isFontZoomEnabled));
-        fontToggleButton.setAttribute('aria-label', isFontZoomEnabled
-            ? 'Restablecer tamaño de letra al 100%'
-            : 'Aumentar tamaño de letra al 120%');
-    }
-    if (fontToggleLabel) {
-        fontToggleLabel.textContent = isFontZoomEnabled ? 'Texto ampliado' : 'Aumentar texto';
+    const isFontZoomEnabled = accessibilityState.fontScale === 1.2;
+    if (fontIndicator) {
+        fontIndicator.textContent = isFontZoomEnabled ? '120%' : '100%';
+    }
+    if (fontToggleButton) {
+        fontToggleButton.setAttribute('aria-pressed', String(isFontZoomEnabled));
+        fontToggleButton.setAttribute('aria-label', isFontZoomEnabled
+            ? 'Restablecer tamaño de letra al 100%'
+            : 'Aumentar tamaño de letra al 120%');
+    }
+    if (fontToggleLabel) {
+        fontToggleLabel.textContent = isFontZoomEnabled ? 'Texto ampliado' : 'Aumentar texto';
     }
 
     if (toggleButton) {
@@ -390,11 +401,11 @@ function toggleAccessibilityMenu(forceState) {
     menu.classList.toggle('active', shouldOpen);
 }
 
-function toggleFontScale() {
-    accessibilityState.fontScale = accessibilityState.fontScale === 1.2 ? 1 : 1.2;
-    saveAccessibilitySettings();
-    applyAccessibilitySettings();
-}
+function toggleFontScale() {
+    accessibilityState.fontScale = accessibilityState.fontScale === 1.2 ? 1 : 1.2;
+    saveAccessibilitySettings();
+    applyAccessibilitySettings();
+}
 
 function toggleHighContrast() {
     accessibilityState.highContrast = !accessibilityState.highContrast;
@@ -410,9 +421,9 @@ function resetAccessibilitySettings() {
 }
 
 function initializeAccessibilityControls() {
-    const toggleButton = document.getElementById('accessibility-toggle');
-    const menu = document.getElementById('accessibility-menu');
-    const fontToggleButton = document.getElementById('toggle-font-size');
+    const toggleButton = document.getElementById('accessibility-toggle');
+    const menu = document.getElementById('accessibility-menu');
+    const fontToggleButton = document.getElementById('toggle-font-size');
     const contrastButton = document.getElementById('toggle-contrast');
     const resetButton = document.getElementById('reset-accessibility');
 
@@ -432,12 +443,12 @@ function initializeAccessibilityControls() {
         });
     }
 
-    if (fontToggleButton) {
-        fontToggleButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            toggleFontScale();
-        });
-    }
+    if (fontToggleButton) {
+        fontToggleButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleFontScale();
+        });
+    }
 
     if (contrastButton) {
         contrastButton.addEventListener('click', (event) => {
@@ -980,8 +991,32 @@ const actividadData = {
             { id: 6, texto: '✅ Confirmar el viaje' }
         ],
         ordenCorrecto: [1, 2, 3, 4, 5, 6]
-    }
-};
+    },
+    3: {
+        moduloNombre: 'Agregar método de pago',
+        instruccion: '¿En qué orden se agrega un método de pago a la cuenta de Uber?',
+        pasos: [
+            { id: 1, texto: '📱 Abrir la aplicación de Uber' },
+            { id: 2, texto: '👤 Entrar al apartado “Cuenta”' },
+            { id: 3, texto: '👛 Abrir “Billetera” en la aplicación' },
+            { id: 4, texto: '➕ Seleccionar “Agregar método de pago”' },
+            { id: 5, texto: '💳 Elegir el método de pago preferido' },
+            { id: 6, texto: '✏️ Completar los datos de la tarjeta y tocar “Siguiente”' },
+            { id: 7, texto: '✅ Verificar que el método aparezca en la lista' }
+        ],
+        ordenCorrecto: [1, 2, 3, 4, 5, 6, 7]
+    },
+    4: {
+        moduloNombre: 'Manejo de imprevistos',
+        instruccion: '¿Qué hacer ante un imprevisto durante un viaje?',
+        pasos: [
+            { id: 1, texto: '🔎 Identificar qué ocurrió' },
+            { id: 2, texto: '🧘 Mantener la calma y evaluar la situación' },
+            { id: 3, texto: '🆘 Pedir ayuda o elegir una alternativa segura' }
+        ],
+        ordenCorrecto: [1, 2, 3]
+    }
+};
 
 let actividadModuloActual = null;
 let actividadIntentos = 0;
@@ -989,7 +1024,7 @@ let actividadStartTime = null;
 let actividadDragSrcIndex = null;
 let actividadOrdenActual = [];
 
-function openActividadModal(moduleId) {
+function openActividadModal(moduleId, showGuideAlongside = false) {
     const data = actividadData[moduleId];
     if (!data) return;
 
@@ -1016,6 +1051,12 @@ function openActividadModal(moduleId) {
 
     const modal = document.getElementById('modal-actividad');
     if (modal) {
+        const canvaModal = document.getElementById('modal-canva');
+        modal.classList.toggle('side-by-side', showGuideAlongside);
+        if (canvaModal) {
+            canvaModal.classList.toggle('side-by-side', showGuideAlongside);
+            if (showGuideAlongside) canvaModal.style.display = 'block';
+        }
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
@@ -1174,7 +1215,9 @@ function verificarOrdenActividad() {
         if (feedback) {
             feedback.style.display = 'block';
             feedback.className = 'actividad-feedback actividad-feedback-success';
-            feedback.innerHTML = '🎉 <strong>¡Perfecto!</strong> El orden es correcto. ¡Módulo completado!';
+            feedback.innerHTML = actividadModuloActual === 4
+                ? '🎉 <strong>¡Perfecto!</strong> El orden es correcto. Ahora completá el formulario para finalizar el módulo.'
+                : '🎉 <strong>¡Perfecto!</strong> El orden es correcto. ¡Módulo completado!';
         }
         if (btnVerificar) { btnVerificar.disabled = true; btnVerificar.textContent = '✅ ¡Correcto!'; }
 
@@ -1185,8 +1228,14 @@ function verificarOrdenActividad() {
         setTimeout(() => {
             const modal = document.getElementById('modal-actividad');
             if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
-            completeModule(actividadModuloActual);
+            const completedModuleId = actividadModuloActual;
             actividadModuloActual = null;
+            closeCanvaModal();
+            if (completedModuleId === 4) {
+                openEncuestaForCurrentModule();
+                return;
+            }
+            completeModule(completedModuleId);
         }, 1800);
 
     } else {

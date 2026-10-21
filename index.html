@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capacitación sobre Uber</title>
-    <link rel="stylesheet" href="style.css?v=26">
+    <link rel="stylesheet" href="style.css?v=29">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
@@ -93,13 +93,13 @@
                 <h2 class="text-center">Módulos de Aprendizaje</h2>
                 <div class="modules-progress">
                     <div class="modules-progress-summary">
-                        <span id="modules-progress-text">0 de 3 módulos completados</span>
+                        <span id="modules-progress-text">0 de 4 módulos completados</span>
                         <strong id="modules-progress-percent">0%</strong>
                     </div>
-                    <div class="modules-progress-track" role="progressbar" aria-label="Módulos completados" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+                    <div class="modules-progress-track" role="progressbar" aria-label="Módulos completados" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
                         <div id="modules-progress-fill"></div>
                     </div>
-                    <p id="module-lock-message" class="module-lock-message" role="status">Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.</p>
+                    <p id="module-lock-message" class="module-lock-message" role="status">Complete la actividad del Módulo 1 para desbloquear el Módulo 2.</p>
                 </div>
                 <div class="module-grid">
                     <!-- Modulo 1 -->
@@ -121,11 +121,19 @@
                     <!-- Modulo 3 -->
                     <article class="module-card" data-module-id="3">
                         <div class="module-number">3</div>
-                        <h3>Seguridad y Pagos</h3>
+                        <h3>Agregar método de pago</h3>
                         <p>Conozca las herramientas de seguridad que ofrece la aplicación y cómo configurar sus métodos de pago.</p>
                         <button class="btn-secondary" id="module-3-start" onclick="startModule(3)" disabled>Comenzar</button>
                     </article>
-                </div>
+
+                    <!-- Modulo 4 -->
+                    <article class="module-card" data-module-id="4">
+                        <div class="module-number">4</div>
+                        <h3>Manejo de imprevistos</h3>
+                        <p>Aprenda a mantener la calma y elegir cómo actuar ante una situación inesperada durante un viaje.</p>
+                        <button class="btn-secondary" id="module-4-start" onclick="startModule(4)" disabled>Comenzar</button>
+                    </article>
+                </div>
                 <button class="btn-secondary reset-progress-button" type="button" onclick="resetModulesProgress()">Reiniciar</button>
             </section>
 
@@ -728,6 +736,6 @@
         </div>
     </aside>
 
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=7"></script>
 </body>
 </html>
