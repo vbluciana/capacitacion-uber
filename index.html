@@ -1,688 +1,736 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capacitación sobre Uber</title>
-    <link rel="stylesheet" href="style.css?v=8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container nav-content">
-            <div class="logo">Capacitación Uber</div>
-            <ul class="nav-links">
-                <li><a href="#" class="nav-item active" onclick="switchTab('view-inicio', this); return false;">Inicio</a></li>
-                <li><a href="#" class="nav-item" onclick="switchTab('view-simulador', this); return false;">Simulador Práctico</a></li>
-                <li><a href="#" class="nav-item" onclick="switchTab('view-recursos', this); return false;">Centro de Recursos</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <main>
-        <!-- VISTA: INICIO -->
-        <div id="view-inicio" class="tab-view active">
-            <header class="header">
-                <div class="container header-content">
-                    <h1>Aprenda a usar Uber con Confianza</h1>
-                    <p class="subtitle">Guía paso a paso, fácil y segura para pedir sus viajes desde el celular.</p>
-                </div>
-            </header>
-
-            <section class="hero-section container">
-                <div class="hero-text">
-                    <div class="hero-logo-container">
-                        <img class="hero-logo" src="assets/uber_logo.png" alt="Uber">
-                    </div>
-                    <h2>Bienvenido a su nueva forma de moverse</h2>
-                    <p>Moverse por la ciudad nunca fue tan sencillo. En este curso, aprenderá todo lo necesario para pedir un auto desde la comodidad de su hogar, de manera segura y sin complicaciones.</p>
-                </div>
-                <div class="hero-image">
-                    <img src="assets/uber_training_hero_generic.jpg" alt="Persona usando un celular con confianza" id="heroImg">
-                </div>
-            </section>
-
-            <section class="modules-section container" id="modulos">
-                <h2 class="text-center">Módulos de Aprendizaje</h2>
-                <div class="modules-progress">
-                    <div class="modules-progress-summary">
-                        <span id="modules-progress-text">0 de 3 módulos completados</span>
-                        <strong id="modules-progress-percent">0%</strong>
-                    </div>
-                    <div class="modules-progress-track" role="progressbar" aria-label="Módulos completados" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
-                        <div id="modules-progress-fill"></div>
-                    </div>
-                    <p id="module-lock-message" class="module-lock-message" role="status">Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.</p>
-                </div>
-                <div class="module-grid">
-                    <!-- Modulo 1 -->
-                    <article class="module-card" data-module-id="1">
-                        <div class="module-number">1</div>
-                        <h3>Primeros Pasos</h3>
-                        <p>Aprenda cómo crear su cuenta de usuario de forma segura.</p>
-                        <button class="btn-secondary" id="module-1-start" onclick="startModule(1)">Comenzar</button>
-                    </article>
-
-                    <!-- Modulo 2 -->
-                    <article class="module-card" data-module-id="2">
-                        <div class="module-number">2</div>
-                        <h3>Pedir un Viaje</h3>
-                        <p>Instrucciones claras sobre cómo ingresar su destino, elegir el tipo de auto y confirmar su viaje. ¡Es muy fácil!</p>
-                        <button class="btn-secondary" id="module-2-start" onclick="startModule(2)" disabled>Comenzar</button>
-                    </article>
-
-                    <!-- Modulo 3 -->
-                    <article class="module-card" data-module-id="3">
-                        <div class="module-number">3</div>
-                        <h3>Seguridad y Pagos</h3>
-                        <p>Conozca las herramientas de seguridad que ofrece la aplicación y cómo configurar sus métodos de pago.</p>
-                        <button class="btn-secondary" id="module-3-start" onclick="startModule(3)" disabled>Comenzar</button>
-                    </article>
-                </div>
-                <button class="btn-secondary reset-progress-button" type="button" onclick="resetModulesProgress()">Reiniciar</button>
-            </section>
-
-            <section class="app-preview container">
-                <div class="app-image">
-                    <img src="assets/uber_app_mockup.jpg" alt="Pantalla de la aplicación Uber" id="appImg">
-                </div>
-                <div class="app-text">
-                    <h2>Objetivos de Aprendizaje</h2>
-                    <p>Al finalizar esta capacitación, usted tendrá el conocimiento necesario para utilizar la plataforma de transporte de manera autónoma y segura. Aprenderá a:</p>
-                    <ul class="feature-list">
-                        <li>✔️ Solicitar viajes desde cualquier ubicación hacia su destino.</li>
-                        <li>✔️ Identificar correctamente al conductor y el vehículo asignado.</li>
-                        <li>✔️ Configurar y utilizar distintos métodos de pago.</li>
-                        <li>✔️ Compartir el estado de su viaje con familiares para mayor tranquilidad.</li>
-                    </ul>
-                </div>
-            </section>
-        </div>
-
-        <!-- VISTA: SIMULADOR PRÁCTICO INTERACTIVO -->
-        <div id="view-simulador" class="tab-view" style="display: none;">
-            <header class="header">
-                <div class="container header-content">
-                    <h1>Simulador Práctico Interactivo</h1>
-                    <p class="subtitle">Aprenda a pedir su viaje paso a paso en un celular virtual seguro y sin riesgos.</p>
-                </div>
-            </header>
-
-            <section class="container simulator-container">
-                <!-- Panel lateral de guía pedagógica -->
-                <div class="sim-guide-panel">
-                    <div class="sim-guide-badge">
-                        <span>Paso <strong id="sim-step-number">1</strong> de 5</span>
-                    </div>
-
-                    <div class="sim-progress-bar">
-                        <div id="sim-progress-fill" style="width: 20%;"></div>
-                    </div>
-
-                    <h3 id="sim-guide-title">Buscar su destino</h3>
-                    <p id="sim-guide-desc">Para comenzar a pedir un auto, toque en el celular la barra que dice <strong>"¿A dónde vas?"</strong>.</p>
-
-                    <div class="sim-hint-box">
-                        <span class="sim-hint-icon">💡</span>
-                        <span id="sim-hint-text">El elemento que debe tocar en la pantalla del celular tiene un resplandor azul parpadeante.</span>
-                    </div>
-
-                    <div class="sim-controls">
-                        <button type="button" id="btn-sim-prev" class="btn-secondary" style="display: none; margin-right: 10px;" onclick="simPrevStep()">← Paso anterior</button>
-                        <button type="button" class="btn-secondary" onclick="restartSimulator()">🔄 Reiniciar ejercicio</button>
-                    </div>
-                </div>
-
-                <!-- Marco del Teléfono Virtual -->
-                <div class="phone-wrapper">
-                    <div class="phone-device" id="sim-phone-device">
-                        <!-- Barra de estado superior del celular -->
-                        <div class="phone-status-bar">
-                            <span class="phone-time">12:30</span>
-                            <div class="phone-notch"></div>
-                            <div class="phone-icons">
-                                <span>📶</span>
-                                <span>🔋</span>
-                            </div>
-                        </div>
-
-                        <!-- Pantalla interactiva (con detector de clics erróneos) -->
-                        <div class="phone-screen" onclick="handlePhoneMisclick(event)">
-                            <!-- Cartel de error flotante en la pantalla -->
-                            <div id="sim-error-badge" class="sim-error-badge" style="display: none;">⚠️ Opción incorrecta</div>
-
-                            <!-- PANTALLA 1: Inicio de Uber -->
-                            <div id="sim-screen-1" class="sim-screen active">
-                                <div class="sim-map sim-map-home">
-                                    <div class="map-grid"></div>
-                                    <div class="map-car" style="top: 30%; left: 30%;">🚗</div>
-                                    <div class="map-car" style="top: 20%; left: 70%;">🚗</div>
-                                    <div class="map-user-pin" style="top: 60%; left: 50%;">
-                                        <div class="user-pulse"></div>
-                                        <div class="user-dot"></div>
-                                    </div>
-                                </div>
-
-                                <div class="uber-home-sheet">
-                                    <h4 style="font-size: 1.15rem; margin-bottom: 12px; font-weight: 700;">Buenas tardes</h4>
-                                    <!-- Botón interactivo con efecto de resalte (Única acción válida del paso 1) -->
-                                    <div class="uber-search-bar sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(2, event)">
-                                        <span style="font-size: 1.2rem;">🔍</span>
-                                        <span style="color: #444; font-weight: 500;">¿A dónde vas?</span>
-                                    </div>
-
-                                    <div class="uber-recent-list">
-                                        <div class="uber-recent-item">
-                                            <span class="recent-icon">🕒</span>
-                                            <div>
-                                                <strong>Hospital Central</strong>
-                                                <p>Av. San Martín 1540</p>
-                                            </div>
-                                        </div>
-                                        <div class="uber-recent-item">
-                                            <span class="recent-icon">🏠</span>
-                                            <div>
-                                                <strong>Casa</strong>
-                                                <p>Av. Rivadavia 2500</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- PANTALLA 2: Elegir Destino -->
-                            <div id="sim-screen-2" class="sim-screen" style="display: none;">
-                                <div class="uber-dest-header">
-                                    <button class="sim-back-btn sim-screen-back" onclick="simTriggerStep(1, event)">←</button>
-                                    <span style="font-weight: 700; font-size: 1.05rem;">¿A dónde va?</span>
-                                </div>
-
-                                <div class="uber-route-inputs">
-                                    <div class="route-input-row">
-                                        <span class="dot-origin">🟢</span>
-                                        <input type="text" value="Av. Rivadavia 2500 (Ubicación actual)" readonly class="route-field">
-                                    </div>
-                                    <div class="route-input-row">
-                                        <span class="dot-dest">🔴</span>
-                                        <input type="text" id="sim-destination-input" placeholder="Escriba su destino" class="route-field target-dest sim-valid-action" autocomplete="off" oninput="updateDestinationSearch()" onkeydown="submitDestinationOnEnter(event)">
-                                    </div>
-                                </div>
-
-                                <div class="uber-dest-suggestions">
-                                    <p id="sim-destination-prompt" style="font-size: 0.85rem; color: #666; margin: 12px 0 8px 12px;">Escriba el lugar al que quiere ir.</p>
-                                    <div class="uber-suggestion-card sim-highlight-pulse sim-valid-action" onclick="searchSimulatorDestination(event)">
-                                        <div class="sugg-icon">🔍</div>
-                                        <div class="sugg-info">
-                                            <strong id="sim-destination-result">Buscar destino</strong>
-                                            <p>Toque aquí para continuar</p>
-                                        </div>
-                                        <span class="sugg-arrow">➔</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- PANTALLA 3: Opciones de Auto y Precio -->
-                            <div id="sim-screen-3" class="sim-screen" style="display: none;">
-                                <div class="sim-map sim-map-route">
-                                    <button class="sim-screen-back" onclick="simTriggerStep(2, event)">← Volver</button>
-                                    <div class="map-grid"></div>
-                                    <div class="map-pin-start" style="top: 70%; left: 40%;">🟢</div>
-                                    <div class="map-pin-end" style="top: 25%; left: 65%;">🔴</div>
-                                </div>
-
-                                <div class="uber-cars-sheet">
-                                    <div class="sheet-drag-handle"></div>
-                                    <h5 style="margin-bottom: 8px; font-weight: 700; font-size: 0.95rem;">Opciones de viaje disponibles</h5>
-                                    <p id="sim-selected-destination" style="margin-bottom: 8px; color: #64748B; font-size: 0.8rem;"></p>
-
-                                    <!-- Opción UberX recomendada -->
-                                    <div class="uber-car-option selected sim-highlight-pulse sim-valid-action" id="car-uberx" onclick="selectCarOption('uberx', event)">
-                                        <div class="car-info-left">
-                                            <span style="font-size: 1.6rem;">🚗</span>
-                                            <div>
-                                                <strong>UberX</strong>
-                                                <span class="car-time">🕒 3 min de espera</span>
-                                            </div>
-                                        </div>
-                                        <div class="car-info-right">
-                                            <span class="car-price">$1.450</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Opción Comfort -->
-                                    <div class="uber-car-option sim-valid-action" id="car-comfort" onclick="selectCarOption('comfort', event)">
-                                        <div class="car-info-left">
-                                            <span style="font-size: 1.6rem;">🚙</span>
-                                            <div>
-                                                <strong>Comfort</strong>
-                                                <span class="car-time">🕒 5 min de espera</span>
-                                            </div>
-                                        </div>
-                                        <div class="car-info-right">
-                                            <span class="car-price">$2.100</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Fila de método de pago estilo original con selector emergente -->
-                                    <div class="uber-payment-row sim-valid-action" onclick="openPaymentSheet(event)">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <span id="sim-current-pay-icon" style="font-size: 1.1rem;">💵</span>
-                                            <span id="sim-current-pay-text" style="font-weight: 600; font-size: 0.9rem;">Efectivo</span>
-                                        </div>
-                                        <span class="pay-change-link">Cambiar ➔</span>
-                                    </div>
-
-                                    <!-- Botón de confirmar auto -->
-                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(4, event)">
-                                        Elegir UberX
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Hoja desplegable de selección de método de pago (Bottom Sheet) -->
-                            <div id="sim-payment-sheet" class="sim-phone-bottom-sheet" style="display: none;" onclick="event.stopPropagation()">
-                                <div class="sheet-drag-handle"></div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                    <h5 style="margin: 0; font-size: 0.95rem; font-weight: bold;">Seleccionar método de pago</h5>
-                                    <button type="button" class="sheet-close-btn sim-screen-back" onclick="closePaymentSheet(event)">&times;</button>
-                                </div>
-
-                                <div class="payment-modal-option selected sim-valid-action" id="pay-opt-cash" onclick="choosePayment('cash', '💵', 'Efectivo', event)">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <span style="font-size: 1.4rem;">💵</span>
-                                        <div>
-                                            <strong style="font-size: 0.9rem; display: block;">Efectivo</strong>
-                                            <span style="font-size: 0.75rem; color: #64748B;">Pagar al chofer al finalizar</span>
-                                        </div>
-                                    </div>
-                                    <span class="pay-check-icon" id="pay-check-cash">✓</span>
-                                </div>
-
-                                <div class="payment-modal-option sim-valid-action" id="pay-opt-card" onclick="choosePayment('card', '💳', 'Tarjeta (**** 4321)', event)">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <span style="font-size: 1.4rem;">💳</span>
-                                        <div>
-                                            <strong style="font-size: 0.9rem; display: block;">Tarjeta de Débito / Crédito</strong>
-                                            <span style="font-size: 0.75rem; color: #64748B;">Visa terminada en 4321</span>
-                                        </div>
-                                    </div>
-                                    <span class="pay-check-icon" id="pay-check-card" style="display: none;">✓</span>
-                                </div>
-                            </div>
-
-                            <!-- PANTALLA 4: Confirmar Punto de Recogida -->
-                            <div id="sim-screen-4" class="sim-screen" style="display: none;">
-                                <div class="sim-map sim-map-pickup" id="pickup-map">
-                                    <button class="sim-screen-back" onclick="simTriggerStep(3, event)">← Volver</button>
-                                    <div class="map-grid"></div>
-                                    <div class="pickup-current-location" aria-label="Su ubicación actual">
-                                        <span class="pickup-current-dot"></span>
-                                        <span class="pickup-current-tag">Su ubicación</span>
-                                    </div>
-                                    <button type="button" class="pickup-marker sim-valid-action" id="pickup-marker" aria-label="Arrastre el marcador rojo hasta el punto azul de su ubicación actual" onpointerdown="startPickupDrag(event)" onkeydown="movePickupMarkerWithKeyboard(event)">
-                                        <span class="pickup-pin">📍</span>
-                                        <span class="pickup-tag">Mover aquí</span>
-                                    </button>
-                                </div>
-
-                                <div class="uber-pickup-sheet">
-                                    <div class="sheet-drag-handle"></div>
-                                    <h4>Punto de partida</h4>
-                                    <p style="color: #444; font-size: 0.9rem; margin: 4px 0 14px;">Av. Rivadavia 2500 (Frente a su puerta)</p>
-
-                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" id="confirm-pickup-btn" onclick="simTriggerStep(5, event)" disabled>
-                                        Confirmar punto de partida
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- PANTALLA 5: Conductor Asignado / En camino -->
-                            <div id="sim-screen-5" class="sim-screen" style="display: none;">
-                                <div class="sim-map sim-map-driver">
-                                    <div class="map-grid"></div>
-                                    <div class="map-driver-car" style="top: 25%; left: 45%;">🚗</div>
-                                    <div class="map-destination-pin" style="top: 50%; left: 50%;">🟢</div>
-                                </div>
-
-                                <div class="uber-driver-sheet">
-                                    <div class="driver-arrival-header">
-                                        <span class="driver-arrival-time">Llega en 3 min</span>
-                                        <span class="driver-arrival-status">Toyota Corolla Blanco</span>
-                                    </div>
-
-                                    <!-- Tarjeta destacada de la Patente -->
-                                    <div class="license-plate-banner">
-                                        <span class="plate-label">PATENTE DEL AUTO:</span>
-                                        <strong class="plate-number">AA 123 BB</strong>
-                                    </div>
-
-                                    <!-- Datos del conductor -->
-                                    <div class="driver-profile-card">
-                                        <div class="driver-avatar">👨‍✈️</div>
-                                        <div class="driver-details">
-                                            <strong>Carlos</strong>
-                                            <p>⭐ 4.95 (Más de 1.500 viajes)</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Botones de seguridad recomendados -->
-                                    <div class="driver-actions-row">
-                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Se abriría WhatsApp para compartir su viaje con un familiar.')">
-                                            <span>📤</span> Compartir viaje
-                                        </button>
-                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Llamando al chofer Carlos...')">
-                                            <span>📞</span> Llamar
-                                        </button>
-                                    </div>
-
-                                    <!-- Mensaje final de éxito -->
-                                    <div class="sim-success-card">
-                                        🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- VISTA: CENTRO DE RECURSOS -->
-        <div id="view-recursos" class="tab-view" style="display: none;">
-            <header class="header">
-                <div class="container header-content">
-                    <h1>Centro de Recursos</h1>
-                    <p class="subtitle">Material de apoyo, manuales y respuestas a preguntas frecuentes.</p>
-                </div>
-            </header>
-            <section class="container resources-section">
-                <div class="resources-grid">
-                    <div class="module-card">
-                        <h3>📚 Guías Paso a Paso</h3>
-                        <p>Guías paso a paso para leer en casa.</p>
-                        <ul style="margin-top: 20px; list-style: none;">
-                            <li style="margin-bottom: 10px;"><a href="assets/Guía para crear cuenta y solicitar viaje.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="module-card">
-                        <h3>🎥 Videos Tutoriales</h3>
-                        <p>Vea de forma visual cómo realizar acciones dentro de la aplicación.</p>
-                        <ul style="margin-top: 20px; list-style: none;">
-                            <li><a href="assets/videos/VIdeoFinal-iniciosesion-Uber.mp4" download="Como-iniciar-sesion-en-Uber.mp4" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Cómo iniciar sesión en Uber</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="module-card">
-                        <h3>❓ Preguntas Frecuentes</h3>
-                        <p>Encuentre respuestas rápidas a las dudas más comunes de nuestros usuarios.</p>
-                        <button class="btn-secondary" style="margin-top: 20px;" onclick="openFaqSidebar()">Ir a la sección FAQ</button>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-    </main>
-
-    <footer class="footer">
-        <div class="container text-center">
-            <p>&copy; 2026 Programa de Capacitación en Inclusión Digital.</p>
-            <button class="admin-footer-btn" onclick="openAdminLogin()" aria-label="Acceso administrador">🔐 Admin</button>
-        </div>
-    </footer>
-
-    <!-- Modal de Login Admin -->
-    <div id="modal-admin-login" class="modal">
-        <div class="modal-content admin-login-modal-content" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
-            <span class="close-btn" onclick="closeModal('modal-admin-login')">&times;</span>
-            <h2 id="admin-login-title">🔐 Acceso Administrador</h2>
-            <p style="color:#555; font-size:0.9rem; margin-bottom:18px;">Ingrese la contraseña para ver los resultados.</p>
-            <div style="margin-bottom:14px;">
-                <input type="password" id="admin-password-input" class="faq-input" placeholder="Contraseña" style="width:100%; font-size:1rem; padding:10px 14px;" onkeydown="if(event.key==='Enter') verifyAdminPassword()">
-            </div>
-            <div id="admin-login-error" style="display:none; color:#d32f2f; font-size:0.9rem; margin-bottom:12px;">⚠️ Contraseña incorrecta. Intente nuevamente.</div>
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-                <button class="btn-secondary" onclick="closeModal('modal-admin-login')">Cancelar</button>
-                <button class="btn-primary" onclick="verifyAdminPassword()">Ingresar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Panel Admin -->
-    <div id="modal-admin-panel" class="modal">
-        <div class="modal-content admin-panel-modal-content" role="dialog" aria-modal="true" aria-labelledby="admin-panel-title">
-            <span class="close-btn" onclick="closeModal('modal-admin-panel')">&times;</span>
-            <div class="admin-panel-header">
-                <h2 id="admin-panel-title">📊 Panel de Resultados</h2>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <button class="btn-secondary" onclick="exportAdminCSV()" style="font-size:0.85rem; padding:8px 16px;">📥 Descargar CSV</button>
-                    <button class="btn-secondary" onclick="clearAdminResults()" style="font-size:0.85rem; padding:8px 16px; color:#d32f2f; border-color:#d32f2f;">🗑️ Borrar datos</button>
-                </div>
-            </div>
-            <div id="admin-panel-summary" class="admin-summary-row"></div>
-            <div class="admin-table-wrapper">
-                <table id="admin-results-table" class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Módulo / Práctica</th>
-                            <th>Intentos / Errores</th>
-                            <th>Tiempo</th>
-                            <th>Resultado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-results-tbody"></tbody>
-                </table>
-                <p id="admin-no-results" style="text-align:center; color:#888; padding:30px; display:none;">Aún no hay resultados registrados.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Actividad: Ordená los Pasos -->
-    <div id="modal-actividad" class="modal">
-        <div class="modal-content actividad-modal-content" role="dialog" aria-modal="true" aria-labelledby="actividad-title">
-            <div class="actividad-header">
-                <div>
-                    <h2 id="actividad-title">📋 ¡Antes de continuar!</h2>
-                    <p id="actividad-subtitle" style="color:#555; font-size:0.9rem; margin-top:4px;">Ordene los pasos en el orden correcto para completar el módulo.</p>
-                </div>
-            </div>
-            <p style="font-size:0.9rem; color:#666; margin-bottom:16px;">⬆⬇ <strong>Arrastre las tarjetas</strong> para ordenarlas correctamente:</p>
-            <div id="actividad-sortable-list" class="actividad-sortable-list"></div>
-            <div id="actividad-feedback" class="actividad-feedback" style="display:none;"></div>
-            <div class="actividad-footer">
-                <div id="actividad-attempt-count" style="font-size:0.85rem; color:#888;"></div>
-                <button class="btn-primary" id="btn-actividad-verificar" onclick="verificarOrdenActividad()">✅ Verificar orden</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals (Solo los 3 módulos del Inicio) -->
-
-    <div id="modal-reset-progress" class="modal">
-        <div class="modal-content reset-progress-modal-content" role="dialog" aria-modal="true" aria-labelledby="reset-progress-title" aria-describedby="reset-progress-description">
-            <h2 id="reset-progress-title">Reiniciar progreso</h2>
-            <p id="reset-progress-description">¿Está seguro de que desea reiniciar el progreso de todos los módulos? Esta acción no se puede deshacer.</p>
-            <div class="reset-progress-actions">
-                <button class="btn-secondary" type="button" onclick="closeModal('modal-reset-progress')">Cancelar</button>
-                <button class="btn-primary" type="button" onclick="confirmResetModulesProgress()">Reiniciar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
-            <h2>Módulo 1: Primeros Pasos</h2>
-            <div class="modal-body">
-                <p>1. Vaya a la tienda de aplicaciones de su celular (Play Store o App Store).</p>
-                <p>2. Busque "Uber" y toque "Instalar".</p>
-                <p>3. Abra la aplicación y siga los pasos para registrarse usando su número de teléfono.</p>
-            </div>
-            <button class="btn-primary" onclick="closeModal('modal1')">Entendido</button>
-        </div>
-    </div>
-
-    <div id="modal2" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
-            <h2>Módulo 2: Pedir un Viaje</h2>
-            <div class="modal-body">
-                <p>1. Abra la aplicación de Uber.</p>
-                <p>2. Toque el recuadro que dice "¿A dónde vas?".</p>
-                <p>3. Escriba la dirección de su destino.</p>
-                <p>4. Elija el auto que más le convenga y toque "Confirmar".</p>
-            </div>
-            <button class="btn-primary" onclick="closeModal('modal2')">Entendido</button>
-        </div>
-    </div>
-
-    <!-- Modal Canva: Guía paso a paso -->
-    <div id="modal-canva" class="modal">
-        <div class="modal-content modal-canva-content">
-            <span class="close-btn" onclick="closeCanvaModal()">&times;</span>
-            <div class="modal-canva-header">
-                <h2 id="canva-modal-title">Guía para crear cuenta y solicitar viaje</h2>
-            </div>
-            <div class="canva-wrapper">
-                <iframe id="canva-iframe"
-                    src=""
-                    allowfullscreen
-                    allow="fullscreen">
-                </iframe>
-            </div>
-            <div id="demo-wrapper" class="demo-wrapper" style="display: none;">
-                <iframe id="demo-iframe"
-                    src=""
-                    title="Como iniciar sesion en Uber?"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                </iframe>
-                <p id="demo-unavailable" class="demo-unavailable" role="status" style="display: none;">La demostración de este módulo estará disponible próximamente.</p>
-            </div>
-            <div class="modal-canva-footer">
-                <div class="modal-view-toggle" role="group" aria-label="Tipo de contenido">
-                    <button type="button" class="modal-view-btn active" id="btn-modal-guide" aria-pressed="true" onclick="switchCanvaModalView('guide')">Guía</button>
-                    <button type="button" class="modal-view-btn" id="btn-modal-demo" aria-pressed="false" onclick="switchCanvaModalView('demo')">Demostración</button>
-                </div>
-                <button class="btn-primary" onclick="finalizarCanvaModal()">Finalizar ✓</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de evaluación con Google Forms -->
-    <div id="modal-encuesta" class="modal">
-        <div class="modal-content encuesta-modal-content" role="dialog" aria-modal="true" aria-labelledby="encuesta-title">
-            <span class="close-btn" onclick="closeEncuesta()">&times;</span>
-            <div class="encuesta-header">
-                <h2 id="encuesta-title">📝 Evaluación de Comprensión</h2>
-                <p>Complete y envíe el formulario. Después, seleccione “Ya respondí” para registrar el módulo como completado.</p>
-            </div>
-            <iframe
-                id="google-form-iframe"
-                class="google-form-iframe"
-                data-src="https://docs.google.com/forms/d/e/1FAIpQLSeieQho6QmV8SViuH9M19vkugeGZhjOflKihs3837WDiZ8EtQ/viewform?embedded=true"
-                title="Formulario de evaluación de comprensión"
-                loading="lazy">
-                Cargando…
-            </iframe>
-            <div class="google-form-actions">
-                <button type="button" class="btn-primary" onclick="enviarEncuesta()">Ya respondí, completar módulo ✓</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Backdrop de barra lateral FAQ -->
-    <div id="faq-overlay" class="sidebar-overlay" onclick="closeFaqSidebar()"></div>
-
-    <!-- Barra lateral derecha: FAQ y Preguntas de usuarios -->
-    <aside id="faq-sidebar" class="faq-sidebar">
-        <div class="faq-sidebar-header">
-            <div>
-                <h3>❓ Preguntas Frecuentes</h3>
-                <p>Consulte dudas o envíe su pregunta.</p>
-            </div>
-            <button class="close-sidebar-btn" onclick="closeFaqSidebar()" aria-label="Cerrar">&times;</button>
-        </div>
-
-        <div class="faq-sidebar-content">
-            <!-- Formulario para hacer una pregunta -->
-            <div class="faq-form-card">
-                <h4>Hacer una pregunta</h4>
-                <p style="font-size: 0.95rem; color: #555; margin-bottom: 12px;">Escriba su consulta y un facilitador le responderá.</p>
-                <form id="faq-question-form" onsubmit="enviarPreguntaUsuario(event)">
-                    <div style="margin-bottom: 10px;">
-                        <input type="text" id="faq-user-name" placeholder="Su nombre (opcional)" class="faq-input">
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <textarea id="faq-user-question" placeholder="Escriba su pregunta aquí..." rows="3" class="faq-textarea" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0; padding: 12px 20px; font-size: 1rem;">Enviar pregunta</button>
-                </form>
-                <div id="faq-form-success" class="faq-success-msg" style="display: none;">
-                    ✅ ¡Su pregunta fue enviada con éxito! La responderemos a la brevedad.
-                </div>
-            </div>
-
-            <!-- Preguntas frecuentes habituales -->
-            <div class="faq-list-section">
-                <h4>Preguntas habituales</h4>
-                <div class="faq-accordion">
-                    <div class="faq-item">
-                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
-                            <span>¿Es seguro viajar en Uber?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Sí. Antes de subir, siempre verifique la patente, el modelo del auto y la foto del conductor que figuran en la aplicación.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
-                            <span>¿Puedo pagar en efectivo?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Sí, al momento de pedir el viaje puede elegir "Efectivo" como método de pago y abonar al chofer al finalizar el trayecto.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
-                            <span>¿Puedo pedir un viaje para otra persona?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Sí, puede ingresar la dirección de recogida donde se encuentra su familiar o conocido y compartirle los datos del viaje.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
-                            <span>¿Qué hago si olvido algo en el auto?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>En el menú "Actividad" o "Viajes" de la app, seleccione el viaje y toque la opción "Encontrar objeto perdido" para contactar al conductor.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preguntas enviadas por el usuario -->
-            <div id="user-questions-section" style="display: none;">
-                <h4>Sus preguntas enviadas</h4>
-                <div id="user-questions-list"></div>
-            </div>
-        </div>
-    </aside>
-
-    <script src="script.js?v=3"></script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitación sobre Uber</title>
+    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">Capacitación Uber</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-item active" onclick="switchTab('view-inicio', this); return false;">Inicio</a></li>
+                    <li><a href="#" class="nav-item" onclick="switchTab('view-simulador', this); return false;">Simulador Práctico</a></li>
+                    <li><a href="#" class="nav-item" onclick="switchTab('view-recursos', this); return false;">Centro de Recursos</a></li>
+                </ul>
+
+                <div class="accessibility-toolbar" aria-live="polite">
+                    <button type="button" id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-menu" aria-label="Abrir menú de accesibilidad">
+                        <span class="a11y-icon">♿</span>
+                        <span class="a11y-label">Accesibilidad</span>
+                        <span class="a11y-chevron" aria-hidden="true">▾</span>
+                    </button>
+                    <div id="accessibility-menu" class="accessibility-menu" hidden>
+                        <div class="a11y-menu-header">
+                            <span class="a11y-menu-title">Ajustes visuales</span>
+                        </div>
+                        
+                        <!-- Control de tamaño de letra -->
+                        <div class="a11y-section">
+                            <span class="a11y-section-label">Tamaño de letra</span>
+                            <div class="a11y-font-controls">
+                                <button type="button" class="a11y-btn-sm" id="decrease-font" aria-label="Disminuir tamaño de letra" title="Disminuir texto">
+                                    <span>A−</span>
+                                </button>
+                                <span id="a11y-font-indicator" class="a11y-font-indicator">100%</span>
+                                <button type="button" class="a11y-btn-sm" id="increase-font" aria-label="Aumentar tamaño de letra" title="Aumentar texto">
+                                    <span>A+</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Opción de alto contraste con switch elegante -->
+                        <div class="a11y-section">
+                            <button type="button" class="a11y-toggle-row" id="toggle-contrast" aria-pressed="false" aria-label="Activar alto contraste">
+                                <div class="a11y-toggle-info">
+                                    <span class="a11y-toggle-icon">🌓</span>
+                                    <span class="a11y-toggle-text">Alto contraste</span>
+                                </div>
+                                <span class="a11y-switch" aria-hidden="true">
+                                    <span class="a11y-switch-thumb"></span>
+                                </span>
+                            </button>
+                        </div>
+
+                        <!-- Botón para restablecer -->
+                        <div class="a11y-footer">
+                            <button type="button" class="a11y-reset-btn" id="reset-accessibility" aria-label="Restablecer ajustes de accesibilidad">
+                                <span>↺</span> Restablecer predeterminados
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- VISTA: INICIO -->
+        <div id="view-inicio" class="tab-view active">
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Aprenda a usar Uber con Confianza</h1>
+                    <p class="subtitle">Guía paso a paso, fácil y segura para pedir sus viajes desde el celular.</p>
+                </div>
+            </header>
+
+            <section class="hero-section container">
+                <div class="hero-text">
+                    <div class="hero-logo-container">
+                        <img class="hero-logo" src="assets/uber_logo.png" alt="Uber">
+                    </div>
+                    <h2>Bienvenido a su nueva forma de moverse</h2>
+                    <p>Moverse por la ciudad nunca fue tan sencillo. En este curso, aprenderá todo lo necesario para pedir un auto desde la comodidad de su hogar, de manera segura y sin complicaciones.</p>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/uber_training_hero_generic.jpg" alt="Persona usando un celular con confianza" id="heroImg">
+                </div>
+            </section>
+
+            <section class="modules-section container" id="modulos">
+                <h2 class="text-center">Módulos de Aprendizaje</h2>
+                <div class="modules-progress">
+                    <div class="modules-progress-summary">
+                        <span id="modules-progress-text">0 de 3 módulos completados</span>
+                        <strong id="modules-progress-percent">0%</strong>
+                    </div>
+                    <div class="modules-progress-track" role="progressbar" aria-label="Módulos completados" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+                        <div id="modules-progress-fill"></div>
+                    </div>
+                    <p id="module-lock-message" class="module-lock-message" role="status">Finalice la encuesta del Módulo 1 para desbloquear el Módulo 2.</p>
+                </div>
+                <div class="module-grid">
+                    <!-- Modulo 1 -->
+                    <article class="module-card" data-module-id="1">
+                        <div class="module-number">1</div>
+                        <h3>Primeros Pasos</h3>
+                        <p>Aprenda cómo crear su cuenta de usuario de forma segura.</p>
+                        <button class="btn-secondary" id="module-1-start" onclick="startModule(1)">Comenzar</button>
+                    </article>
+
+                    <!-- Modulo 2 -->
+                    <article class="module-card" data-module-id="2">
+                        <div class="module-number">2</div>
+                        <h3>Pedir un Viaje</h3>
+                        <p>Instrucciones claras sobre cómo ingresar su destino, elegir el tipo de auto y confirmar su viaje. ¡Es muy fácil!</p>
+                        <button class="btn-secondary" id="module-2-start" onclick="startModule(2)" disabled>Comenzar</button>
+                    </article>
+
+                    <!-- Modulo 3 -->
+                    <article class="module-card" data-module-id="3">
+                        <div class="module-number">3</div>
+                        <h3>Seguridad y Pagos</h3>
+                        <p>Conozca las herramientas de seguridad que ofrece la aplicación y cómo configurar sus métodos de pago.</p>
+                        <button class="btn-secondary" id="module-3-start" onclick="startModule(3)" disabled>Comenzar</button>
+                    </article>
+                </div>
+                <button class="btn-secondary reset-progress-button" type="button" onclick="resetModulesProgress()">Reiniciar</button>
+            </section>
+
+            <section class="app-preview container">
+                <div class="app-image">
+                    <img src="assets/uber_app_mockup.jpg" alt="Pantalla de la aplicación Uber" id="appImg">
+                </div>
+                <div class="app-text">
+                    <h2>Objetivos de Aprendizaje</h2>
+                    <p>Al finalizar esta capacitación, usted tendrá el conocimiento necesario para utilizar la plataforma de transporte de manera autónoma y segura. Aprenderá a:</p>
+                    <ul class="feature-list">
+                        <li>✔️ Solicitar viajes desde cualquier ubicación hacia su destino.</li>
+                        <li>✔️ Identificar correctamente al conductor y el vehículo asignado.</li>
+                        <li>✔️ Configurar y utilizar distintos métodos de pago.</li>
+                        <li>✔️ Compartir el estado de su viaje con familiares para mayor tranquilidad.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- VISTA: SIMULADOR PRÁCTICO INTERACTIVO -->
+        <div id="view-simulador" class="tab-view" style="display: none;">
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Simulador Práctico Interactivo</h1>
+                    <p class="subtitle">Aprenda a pedir su viaje paso a paso en un celular virtual seguro y sin riesgos.</p>
+                </div>
+            </header>
+
+            <section class="container simulator-container">
+                <!-- Panel lateral de guía pedagógica -->
+                <div class="sim-guide-panel">
+                    <div class="sim-guide-badge">
+                        <span>Paso <strong id="sim-step-number">1</strong> de 5</span>
+                    </div>
+
+                    <div class="sim-progress-bar">
+                        <div id="sim-progress-fill" style="width: 20%;"></div>
+                    </div>
+
+                    <h3 id="sim-guide-title">Buscar su destino</h3>
+                    <p id="sim-guide-desc">Para comenzar a pedir un auto, toque en el celular la barra que dice <strong>"¿A dónde vas?"</strong>.</p>
+
+                    <div class="sim-hint-box">
+                        <span class="sim-hint-icon">💡</span>
+                        <span id="sim-hint-text">El elemento que debe tocar en la pantalla del celular tiene un resplandor azul parpadeante.</span>
+                    </div>
+
+                    <div class="sim-controls">
+                        <button type="button" id="btn-sim-prev" class="btn-secondary" style="display: none; margin-right: 10px;" onclick="simPrevStep()">← Paso anterior</button>
+                        <button type="button" class="btn-secondary" onclick="restartSimulator()">🔄 Reiniciar ejercicio</button>
+                    </div>
+                </div>
+
+                <!-- Marco del Teléfono Virtual -->
+                <div class="phone-wrapper">
+                    <div class="phone-device" id="sim-phone-device">
+                        <!-- Barra de estado superior del celular -->
+                        <div class="phone-status-bar">
+                            <span class="phone-time">12:30</span>
+                            <div class="phone-notch"></div>
+                            <div class="phone-icons">
+                                <span>📶</span>
+                                <span>🔋</span>
+                            </div>
+                        </div>
+
+                        <!-- Pantalla interactiva (con detector de clics erróneos) -->
+                        <div class="phone-screen" onclick="handlePhoneMisclick(event)">
+                            <!-- Cartel de error flotante en la pantalla -->
+                            <div id="sim-error-badge" class="sim-error-badge" style="display: none;">⚠️ Opción incorrecta</div>
+
+                            <!-- PANTALLA 1: Inicio de Uber -->
+                            <div id="sim-screen-1" class="sim-screen active">
+                                <div class="sim-map sim-map-home">
+                                    <div class="map-grid"></div>
+                                    <div class="map-car" style="top: 30%; left: 30%;">🚗</div>
+                                    <div class="map-car" style="top: 20%; left: 70%;">🚗</div>
+                                    <div class="map-user-pin" style="top: 60%; left: 50%;">
+                                        <div class="user-pulse"></div>
+                                        <div class="user-dot"></div>
+                                    </div>
+                                </div>
+
+                                <div class="uber-home-sheet">
+                                    <h4 style="font-size: 1.15rem; margin-bottom: 12px; font-weight: 700;">Buenas tardes</h4>
+                                    <!-- Botón interactivo con efecto de resalte (Única acción válida del paso 1) -->
+                                    <div class="uber-search-bar sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(2, event)">
+                                        <span style="font-size: 1.2rem;">🔍</span>
+                                        <span style="color: #444; font-weight: 500;">¿A dónde vas?</span>
+                                    </div>
+
+                                    <div class="uber-recent-list">
+                                        <div class="uber-recent-item">
+                                            <span class="recent-icon">🕒</span>
+                                            <div>
+                                                <strong>Hospital Central</strong>
+                                                <p>Av. San Martín 1540</p>
+                                            </div>
+                                        </div>
+                                        <div class="uber-recent-item">
+                                            <span class="recent-icon">🏠</span>
+                                            <div>
+                                                <strong>Casa</strong>
+                                                <p>Av. Rivadavia 2500</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 2: Elegir Destino -->
+                            <div id="sim-screen-2" class="sim-screen" style="display: none;">
+                                <div class="uber-dest-header">
+                                    <button class="sim-back-btn sim-screen-back" onclick="simTriggerStep(1, event)">←</button>
+                                    <span style="font-weight: 700; font-size: 1.05rem;">¿A dónde va?</span>
+                                </div>
+
+                                <div class="uber-route-inputs">
+                                    <div class="route-input-row">
+                                        <span class="dot-origin">🟢</span>
+                                        <input type="text" value="Av. Rivadavia 2500 (Ubicación actual)" readonly class="route-field">
+                                    </div>
+                                    <div class="route-input-row">
+                                        <span class="dot-dest">🔴</span>
+                                        <input type="text" id="sim-destination-input" placeholder="Escriba su destino" class="route-field target-dest sim-valid-action" autocomplete="off" oninput="updateDestinationSearch()" onkeydown="submitDestinationOnEnter(event)">
+                                    </div>
+                                </div>
+
+                                <div class="uber-dest-suggestions">
+                                    <p id="sim-destination-prompt" style="font-size: 0.85rem; color: #666; margin: 12px 0 8px 12px;">Escriba el lugar al que quiere ir.</p>
+                                    <div class="uber-suggestion-card sim-highlight-pulse sim-valid-action" onclick="searchSimulatorDestination(event)">
+                                        <div class="sugg-icon">🔍</div>
+                                        <div class="sugg-info">
+                                            <strong id="sim-destination-result">Buscar destino</strong>
+                                            <p>Toque aquí para continuar</p>
+                                        </div>
+                                        <span class="sugg-arrow">➔</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 3: Opciones de Auto y Precio -->
+                            <div id="sim-screen-3" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-route">
+                                    <button class="sim-screen-back" onclick="simTriggerStep(2, event)">← Volver</button>
+                                    <div class="map-grid"></div>
+                                    <div class="map-pin-start" style="top: 70%; left: 40%;">🟢</div>
+                                    <div class="map-pin-end" style="top: 25%; left: 65%;">🔴</div>
+                                </div>
+
+                                <div class="uber-cars-sheet">
+                                    <div class="sheet-drag-handle"></div>
+                                    <h5 style="margin-bottom: 8px; font-weight: 700; font-size: 0.95rem;">Opciones de viaje disponibles</h5>
+                                    <p id="sim-selected-destination" style="margin-bottom: 8px; color: #64748B; font-size: 0.8rem;"></p>
+
+                                    <!-- Opción UberX recomendada -->
+                                    <div class="uber-car-option selected sim-highlight-pulse sim-valid-action" id="car-uberx" onclick="selectCarOption('uberx', event)">
+                                        <div class="car-info-left">
+                                            <span style="font-size: 1.6rem;">🚗</span>
+                                            <div>
+                                                <strong>UberX</strong>
+                                                <span class="car-time">🕒 3 min de espera</span>
+                                            </div>
+                                        </div>
+                                        <div class="car-info-right">
+                                            <span class="car-price">$1.450</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Opción Comfort -->
+                                    <div class="uber-car-option sim-valid-action" id="car-comfort" onclick="selectCarOption('comfort', event)">
+                                        <div class="car-info-left">
+                                            <span style="font-size: 1.6rem;">🚙</span>
+                                            <div>
+                                                <strong>Comfort</strong>
+                                                <span class="car-time">🕒 5 min de espera</span>
+                                            </div>
+                                        </div>
+                                        <div class="car-info-right">
+                                            <span class="car-price">$2.100</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fila de método de pago estilo original con selector emergente -->
+                                    <div class="uber-payment-row sim-valid-action" onclick="openPaymentSheet(event)">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span id="sim-current-pay-icon" style="font-size: 1.1rem;">💵</span>
+                                            <span id="sim-current-pay-text" style="font-weight: 600; font-size: 0.9rem;">Efectivo</span>
+                                        </div>
+                                        <span class="pay-change-link">Cambiar ➔</span>
+                                    </div>
+
+                                    <!-- Botón de confirmar auto -->
+                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(4, event)">
+                                        Elegir UberX
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Hoja desplegable de selección de método de pago (Bottom Sheet) -->
+                            <div id="sim-payment-sheet" class="sim-phone-bottom-sheet" style="display: none;" onclick="event.stopPropagation()">
+                                <div class="sheet-drag-handle"></div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <h5 style="margin: 0; font-size: 0.95rem; font-weight: bold;">Seleccionar método de pago</h5>
+                                    <button type="button" class="sheet-close-btn sim-screen-back" onclick="closePaymentSheet(event)">&times;</button>
+                                </div>
+
+                                <div class="payment-modal-option selected sim-valid-action" id="pay-opt-cash" onclick="choosePayment('cash', '💵', 'Efectivo', event)">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 1.4rem;">💵</span>
+                                        <div>
+                                            <strong style="font-size: 0.9rem; display: block;">Efectivo</strong>
+                                            <span style="font-size: 0.75rem; color: #64748B;">Pagar al chofer al finalizar</span>
+                                        </div>
+                                    </div>
+                                    <span class="pay-check-icon" id="pay-check-cash">✓</span>
+                                </div>
+
+                                <div class="payment-modal-option sim-valid-action" id="pay-opt-card" onclick="choosePayment('card', '💳', 'Tarjeta (**** 4321)', event)">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 1.4rem;">💳</span>
+                                        <div>
+                                            <strong style="font-size: 0.9rem; display: block;">Tarjeta de Débito / Crédito</strong>
+                                            <span style="font-size: 0.75rem; color: #64748B;">Visa terminada en 4321</span>
+                                        </div>
+                                    </div>
+                                    <span class="pay-check-icon" id="pay-check-card" style="display: none;">✓</span>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 4: Confirmar Punto de Recogida -->
+                            <div id="sim-screen-4" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-pickup" id="pickup-map">
+                                    <button class="sim-screen-back" onclick="simTriggerStep(3, event)">← Volver</button>
+                                    <div class="map-grid"></div>
+                                    <div class="pickup-current-location" aria-label="Su ubicación actual">
+                                        <span class="pickup-current-dot"></span>
+                                        <span class="pickup-current-tag">Su ubicación</span>
+                                    </div>
+                                    <button type="button" class="pickup-marker sim-valid-action" id="pickup-marker" aria-label="Arrastre el marcador rojo hasta el punto azul de su ubicación actual" onpointerdown="startPickupDrag(event)" onkeydown="movePickupMarkerWithKeyboard(event)">
+                                        <span class="pickup-pin">📍</span>
+                                        <span class="pickup-tag">Mover aquí</span>
+                                    </button>
+                                </div>
+
+                                <div class="uber-pickup-sheet">
+                                    <div class="sheet-drag-handle"></div>
+                                    <h4>Punto de partida</h4>
+                                    <p style="color: #444; font-size: 0.9rem; margin: 4px 0 14px;">Av. Rivadavia 2500 (Frente a su puerta)</p>
+
+                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" id="confirm-pickup-btn" onclick="simTriggerStep(5, event)" disabled>
+                                        Confirmar punto de partida
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA 5: Conductor Asignado / En camino -->
+                            <div id="sim-screen-5" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-driver">
+                                    <div class="map-grid"></div>
+                                    <div class="map-driver-car" style="top: 25%; left: 45%;">🚗</div>
+                                    <div class="map-destination-pin" style="top: 50%; left: 50%;">🟢</div>
+                                </div>
+
+                                <div class="uber-driver-sheet">
+                                    <div class="driver-arrival-header">
+                                        <span class="driver-arrival-time">Llega en 3 min</span>
+                                        <span class="driver-arrival-status">Toyota Corolla Blanco</span>
+                                    </div>
+
+                                    <!-- Tarjeta destacada de la Patente -->
+                                    <div class="license-plate-banner">
+                                        <span class="plate-label">PATENTE DEL AUTO:</span>
+                                        <strong class="plate-number">AA 123 BB</strong>
+                                    </div>
+
+                                    <!-- Datos del conductor -->
+                                    <div class="driver-profile-card">
+                                        <div class="driver-avatar">👨‍✈️</div>
+                                        <div class="driver-details">
+                                            <strong>Carlos</strong>
+                                            <p>⭐ 4.95 (Más de 1.500 viajes)</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones de seguridad recomendados -->
+                                    <div class="driver-actions-row">
+                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Se abriría WhatsApp para compartir su viaje con un familiar.')">
+                                            <span>📤</span> Compartir viaje
+                                        </button>
+                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Llamando al chofer Carlos...')">
+                                            <span>📞</span> Llamar
+                                        </button>
+                                    </div>
+
+                                    <!-- Mensaje final de éxito -->
+                                    <div class="sim-success-card">
+                                        🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VISTA: CENTRO DE RECURSOS -->
+        <div id="view-recursos" class="tab-view" style="display: none;">
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Centro de Recursos</h1>
+                    <p class="subtitle">Material de apoyo, manuales y respuestas a preguntas frecuentes.</p>
+                </div>
+            </header>
+            <section class="container resources-section">
+                <div class="resources-grid">
+                    <div class="module-card">
+                        <h3>📚 Guías Paso a Paso</h3>
+                        <p>Guías paso a paso para leer en casa.</p>
+                        <ul style="margin-top: 20px; list-style: none;">
+                            <li style="margin-bottom: 10px;"><a href="assets/Guía para crear cuenta y solicitar viaje.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="module-card">
+                        <h3>🎥 Videos Tutoriales</h3>
+                        <p>Vea de forma visual cómo realizar acciones dentro de la aplicación.</p>
+                        <ul style="margin-top: 20px; list-style: none;">
+                            <li><a href="assets/videos/VIdeoFinal-iniciosesion-Uber.mp4" download="Como-iniciar-sesion-en-Uber.mp4" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Cómo iniciar sesión en Uber</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module-card">
+                        <h3>❓ Preguntas Frecuentes</h3>
+                        <p>Encuentre respuestas rápidas a las dudas más comunes de nuestros usuarios.</p>
+                        <button class="btn-secondary" style="margin-top: 20px;" onclick="openFaqSidebar()">Ir a la sección FAQ</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2026 Programa de Capacitación en Inclusión Digital.</p>
+            <button class="admin-footer-btn" onclick="openAdminLogin()" aria-label="Acceso administrador">🔐 Admin</button>
+        </div>
+    </footer>
+
+    <!-- Modal de Login Admin -->
+    <div id="modal-admin-login" class="modal">
+        <div class="modal-content admin-login-modal-content" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
+            <span class="close-btn" onclick="closeModal('modal-admin-login')">&times;</span>
+            <h2 id="admin-login-title">🔐 Acceso Administrador</h2>
+            <p style="color:#555; font-size:0.9rem; margin-bottom:18px;">Ingrese la contraseña para ver los resultados.</p>
+            <div style="margin-bottom:14px;">
+                <input type="password" id="admin-password-input" class="faq-input" placeholder="Contraseña" style="width:100%; font-size:1rem; padding:10px 14px;" onkeydown="if(event.key==='Enter') verifyAdminPassword()">
+            </div>
+            <div id="admin-login-error" style="display:none; color:#d32f2f; font-size:0.9rem; margin-bottom:12px;">⚠️ Contraseña incorrecta. Intente nuevamente.</div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn-secondary" onclick="closeModal('modal-admin-login')">Cancelar</button>
+                <button class="btn-primary" onclick="verifyAdminPassword()">Ingresar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Panel Admin -->
+    <div id="modal-admin-panel" class="modal">
+        <div class="modal-content admin-panel-modal-content" role="dialog" aria-modal="true" aria-labelledby="admin-panel-title">
+            <span class="close-btn" onclick="closeModal('modal-admin-panel')">&times;</span>
+            <div class="admin-panel-header">
+                <h2 id="admin-panel-title">📊 Panel de Resultados</h2>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-secondary" onclick="exportAdminCSV()" style="font-size:0.85rem; padding:8px 16px;">📥 Descargar CSV</button>
+                    <button class="btn-secondary" onclick="clearAdminResults()" style="font-size:0.85rem; padding:8px 16px; color:#d32f2f; border-color:#d32f2f;">🗑️ Borrar datos</button>
+                </div>
+            </div>
+            <div id="admin-panel-summary" class="admin-summary-row"></div>
+            <div class="admin-table-wrapper">
+                <table id="admin-results-table" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Módulo / Práctica</th>
+                            <th>Intentos / Errores</th>
+                            <th>Tiempo</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-results-tbody"></tbody>
+                </table>
+                <p id="admin-no-results" style="text-align:center; color:#888; padding:30px; display:none;">Aún no hay resultados registrados.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actividad: Ordená los Pasos -->
+    <div id="modal-actividad" class="modal">
+        <div class="modal-content actividad-modal-content" role="dialog" aria-modal="true" aria-labelledby="actividad-title">
+            <div class="actividad-header">
+                <div>
+                    <h2 id="actividad-title">📋 ¡Antes de continuar!</h2>
+                    <p id="actividad-subtitle" style="color:#555; font-size:0.9rem; margin-top:4px;">Ordene los pasos en el orden correcto para completar el módulo.</p>
+                </div>
+            </div>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:16px;">⬆⬇ <strong>Arrastre las tarjetas</strong> para ordenarlas correctamente:</p>
+            <div id="actividad-sortable-list" class="actividad-sortable-list"></div>
+            <div id="actividad-feedback" class="actividad-feedback" style="display:none;"></div>
+            <div class="actividad-footer">
+                <div id="actividad-attempt-count" style="font-size:0.85rem; color:#888;"></div>
+                <button class="btn-primary" id="btn-actividad-verificar" onclick="verificarOrdenActividad()">✅ Verificar orden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals (Solo los 3 módulos del Inicio) -->
+
+    <div id="modal-reset-progress" class="modal">
+        <div class="modal-content reset-progress-modal-content" role="dialog" aria-modal="true" aria-labelledby="reset-progress-title" aria-describedby="reset-progress-description">
+            <h2 id="reset-progress-title">Reiniciar progreso</h2>
+            <p id="reset-progress-description">¿Está seguro de que desea reiniciar el progreso de todos los módulos? Esta acción no se puede deshacer.</p>
+            <div class="reset-progress-actions">
+                <button class="btn-secondary" type="button" onclick="closeModal('modal-reset-progress')">Cancelar</button>
+                <button class="btn-primary" type="button" onclick="confirmResetModulesProgress()">Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
+            <h2>Módulo 1: Primeros Pasos</h2>
+            <div class="modal-body">
+                <p>1. Vaya a la tienda de aplicaciones de su celular (Play Store o App Store).</p>
+                <p>2. Busque "Uber" y toque "Instalar".</p>
+                <p>3. Abra la aplicación y siga los pasos para registrarse usando su número de teléfono.</p>
+            </div>
+            <button class="btn-primary" onclick="closeModal('modal1')">Entendido</button>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
+            <h2>Módulo 2: Pedir un Viaje</h2>
+            <div class="modal-body">
+                <p>1. Abra la aplicación de Uber.</p>
+                <p>2. Toque el recuadro que dice "¿A dónde vas?".</p>
+                <p>3. Escriba la dirección de su destino.</p>
+                <p>4. Elija el auto que más le convenga y toque "Confirmar".</p>
+            </div>
+            <button class="btn-primary" onclick="closeModal('modal2')">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Modal Canva: Guía paso a paso -->
+    <div id="modal-canva" class="modal">
+        <div class="modal-content modal-canva-content">
+            <span class="close-btn" onclick="closeCanvaModal()">&times;</span>
+            <div class="modal-canva-header">
+                <h2 id="canva-modal-title">Guía para crear cuenta y solicitar viaje</h2>
+            </div>
+            <div class="canva-wrapper">
+                <iframe id="canva-iframe"
+                    src=""
+                    allowfullscreen
+                    allow="fullscreen">
+                </iframe>
+            </div>
+            <div id="demo-wrapper" class="demo-wrapper" style="display: none;">
+                <iframe id="demo-iframe"
+                    src=""
+                    title="Como iniciar sesion en Uber?"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
+                <p id="demo-unavailable" class="demo-unavailable" role="status" style="display: none;">La demostración de este módulo estará disponible próximamente.</p>
+            </div>
+            <div class="modal-canva-footer">
+                <div class="modal-view-toggle" role="group" aria-label="Tipo de contenido">
+                    <button type="button" class="modal-view-btn active" id="btn-modal-guide" aria-pressed="true" onclick="switchCanvaModalView('guide')">Guía</button>
+                    <button type="button" class="modal-view-btn" id="btn-modal-demo" aria-pressed="false" onclick="switchCanvaModalView('demo')">Demostración</button>
+                </div>
+                <button class="btn-primary" onclick="finalizarCanvaModal()">Finalizar ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de evaluación con Google Forms -->
+    <div id="modal-encuesta" class="modal">
+        <div class="modal-content encuesta-modal-content" role="dialog" aria-modal="true" aria-labelledby="encuesta-title">
+            <span class="close-btn" onclick="closeEncuesta()">&times;</span>
+            <div class="encuesta-header">
+                <h2 id="encuesta-title">📝 Evaluación de Comprensión</h2>
+                <p>Complete y envíe el formulario. Después, seleccione “Ya respondí” para registrar el módulo como completado.</p>
+            </div>
+            <iframe
+                id="google-form-iframe"
+                class="google-form-iframe"
+                data-src="https://docs.google.com/forms/d/e/1FAIpQLSeieQho6QmV8SViuH9M19vkugeGZhjOflKihs3837WDiZ8EtQ/viewform?embedded=true"
+                title="Formulario de evaluación de comprensión"
+                loading="lazy">
+                Cargando…
+            </iframe>
+            <div class="google-form-actions">
+                <button type="button" class="btn-primary" onclick="enviarEncuesta()">Ya respondí, completar módulo ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop de barra lateral FAQ -->
+    <div id="faq-overlay" class="sidebar-overlay" onclick="closeFaqSidebar()"></div>
+
+    <!-- Barra lateral derecha: FAQ y Preguntas de usuarios -->
+    <aside id="faq-sidebar" class="faq-sidebar">
+        <div class="faq-sidebar-header">
+            <div>
+                <h3>❓ Preguntas Frecuentes</h3>
+                <p>Consulte dudas o envíe su pregunta.</p>
+            </div>
+            <button class="close-sidebar-btn" onclick="closeFaqSidebar()" aria-label="Cerrar">&times;</button>
+        </div>
+
+        <div class="faq-sidebar-content">
+            <!-- Formulario para hacer una pregunta -->
+            <div class="faq-form-card">
+                <h4>Hacer una pregunta</h4>
+                <p style="font-size: 0.95rem; color: #555; margin-bottom: 12px;">Escriba su consulta y un facilitador le responderá.</p>
+                <form id="faq-question-form" onsubmit="enviarPreguntaUsuario(event)">
+                    <div style="margin-bottom: 10px;">
+                        <input type="text" id="faq-user-name" placeholder="Su nombre (opcional)" class="faq-input">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <textarea id="faq-user-question" placeholder="Escriba su pregunta aquí..." rows="3" class="faq-textarea" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0; padding: 12px 20px; font-size: 1rem;">Enviar pregunta</button>
+                </form>
+                <div id="faq-form-success" class="faq-success-msg" style="display: none;">
+                    ✅ ¡Su pregunta fue enviada con éxito! La responderemos a la brevedad.
+                </div>
+            </div>
+
+            <!-- Preguntas frecuentes habituales -->
+            <div class="faq-list-section">
+                <h4>Preguntas habituales</h4>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Es seguro viajar en Uber?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí. Antes de subir, siempre verifique la patente, el modelo del auto y la foto del conductor que figuran en la aplicación.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Puedo pagar en efectivo?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí, al momento de pedir el viaje puede elegir "Efectivo" como método de pago y abonar al chofer al finalizar el trayecto.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Puedo pedir un viaje para otra persona?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí, puede ingresar la dirección de recogida donde se encuentra su familiar o conocido y compartirle los datos del viaje.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button" onclick="toggleFaqAccordion(this)">
+                            <span>¿Qué hago si olvido algo en el auto?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>En el menú "Actividad" o "Viajes" de la app, seleccione el viaje y toque la opción "Encontrar objeto perdido" para contactar al conductor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preguntas enviadas por el usuario -->
+            <div id="user-questions-section" style="display: none;">
+                <h4>Sus preguntas enviadas</h4>
+                <div id="user-questions-list"></div>
+            </div>
+        </div>
+    </aside>
+
+    <script src="script.js?v=4"></script>
+</body>
+</html>
