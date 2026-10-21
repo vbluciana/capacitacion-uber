@@ -315,13 +315,12 @@ let accessibilityState = { ...defaultAccessibilityState };
 
 function loadAccessibilitySettings() {
     try {
-        const saved = JSON.parse(localStorage.getItem(accessibilityStorageKey) || '{}');
-        accessibilityState = {
-            fontScale: Number(saved.fontScale) && Number(saved.fontScale) >= 0.8 && Number(saved.fontScale) <= 1.4
-                ? Number(saved.fontScale)
-                : defaultAccessibilityState.fontScale,
-            highContrast: Boolean(saved.highContrast)
-        };
+        const saved = JSON.parse(localStorage.getItem(accessibilityStorageKey) || '{}');
+        const savedFontScale = Number(saved.fontScale);
+        accessibilityState = {
+            fontScale: Number.isFinite(savedFontScale) && savedFontScale > 1 ? 1.2 : 1,
+            highContrast: Boolean(saved.highContrast)
+        };
     } catch (error) {
         accessibilityState = { ...defaultAccessibilityState };
     }
@@ -339,7 +338,9 @@ function applyAccessibilitySettings() {
     const root = document.documentElement;
     const toggleButton = document.getElementById('accessibility-toggle');
     const contrastButton = document.getElementById('toggle-contrast');
-    const menu = document.getElementById('accessibility-menu');
+    const fontToggleButton = document.getElementById('toggle-font-size');
+    const fontToggleLabel = document.getElementById('a11y-font-toggle-label');
+    const menu = document.getElementById('accessibility-menu');
 
     root.style.setProperty('--accessibility-font-scale', String(accessibilityState.fontScale));
     document.body.classList.toggle('high-contrast', accessibilityState.highContrast);
@@ -350,8 +351,18 @@ function applyAccessibilitySettings() {
     }
 
     const fontIndicator = document.getElementById('a11y-font-indicator');
-    if (fontIndicator) {
-        fontIndicator.textContent = `${Math.round(accessibilityState.fontScale * 100)}%`;
+    const isFontZoomEnabled = accessibilityState.fontScale === 1.2;
+    if (fontIndicator) {
+        fontIndicator.textContent = isFontZoomEnabled ? '120%' : '100%';
+    }
+    if (fontToggleButton) {
+        fontToggleButton.setAttribute('aria-pressed', String(isFontZoomEnabled));
+        fontToggleButton.setAttribute('aria-label', isFontZoomEnabled
+            ? 'Restablecer tamaño de letra al 100%'
+            : 'Aumentar tamaño de letra al 120%');
+    }
+    if (fontToggleLabel) {
+        fontToggleLabel.textContent = isFontZoomEnabled ? 'Texto ampliado' : 'Aumentar texto';
     }
 
     if (toggleButton) {
@@ -379,15 +390,11 @@ function toggleAccessibilityMenu(forceState) {
     menu.classList.toggle('active', shouldOpen);
 }
 
-function adjustFontScale(direction) {
-    const nextScale = direction === 'increase'
-        ? Math.min(1.4, Number((accessibilityState.fontScale + 0.1).toFixed(2)))
-        : Math.max(0.8, Number((accessibilityState.fontScale - 0.1).toFixed(2)));
-
-    accessibilityState.fontScale = nextScale;
-    saveAccessibilitySettings();
-    applyAccessibilitySettings();
-}
+function toggleFontScale() {
+    accessibilityState.fontScale = accessibilityState.fontScale === 1.2 ? 1 : 1.2;
+    saveAccessibilitySettings();
+    applyAccessibilitySettings();
+}
 
 function toggleHighContrast() {
     accessibilityState.highContrast = !accessibilityState.highContrast;
@@ -403,10 +410,9 @@ function resetAccessibilitySettings() {
 }
 
 function initializeAccessibilityControls() {
-    const toggleButton = document.getElementById('accessibility-toggle');
-    const menu = document.getElementById('accessibility-menu');
-    const increaseButton = document.getElementById('increase-font');
-    const decreaseButton = document.getElementById('decrease-font');
+    const toggleButton = document.getElementById('accessibility-toggle');
+    const menu = document.getElementById('accessibility-menu');
+    const fontToggleButton = document.getElementById('toggle-font-size');
     const contrastButton = document.getElementById('toggle-contrast');
     const resetButton = document.getElementById('reset-accessibility');
 
@@ -426,19 +432,12 @@ function initializeAccessibilityControls() {
         });
     }
 
-    if (increaseButton) {
-        increaseButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            adjustFontScale('increase');
-        });
-    }
-
-    if (decreaseButton) {
-        decreaseButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            adjustFontScale('decrease');
-        });
-    }
+    if (fontToggleButton) {
+        fontToggleButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleFontScale();
+        });
+    }
 
     if (contrastButton) {
         contrastButton.addEventListener('click', (event) => {

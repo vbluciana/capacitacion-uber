@@ -12,7 +12,8 @@
 
 html {
     scroll-behavior: smooth;
-}
+    font-size: calc(100% * var(--accessibility-font-scale));
+}
 
 * {
     margin: 0;
@@ -25,7 +26,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
-    font-size: calc(20px * var(--accessibility-font-scale));
+    font-size: 1.25rem;
     transition: font-size 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -33,11 +34,10 @@ body.high-contrast {
     --primary-color: #ffffff;
     --secondary-color: #ffd000;
     --background-color: #000000;
-    --text-color: #ffffff;
-    --card-bg: #111111;
-    --focus-ring: 4px solid #ffd000;
-    --accessibility-font-scale: 1.12;
-}
+    --text-color: #ffffff;
+    --card-bg: #111111;
+    --focus-ring: 4px solid #ffd000;
+}
 
 body.high-contrast .nav-links a,
 body.high-contrast .faq-question,
@@ -69,10 +69,274 @@ body.high-contrast textarea,
 body.high-contrast select {
     color: var(--text-color);
 }
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
+
+body.high-contrast .header {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+body.high-contrast .header h1,
+body.high-contrast .header .subtitle {
+    color: #FFFFFF;
+}
+
+body.high-contrast .hero-text p {
+    color: #FFFFFF;
+}
+
+body.high-contrast .modules-section {
+    border: 2px solid #FFD000;
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+body.high-contrast .modules-progress-summary,
+body.high-contrast .module-lock-message,
+body.high-contrast .module-card p {
+    color: #FFFFFF;
+}
+
+body.high-contrast .modules-progress-track {
+    border: 1px solid #FFD000;
+    background-color: #222222;
+}
+
+body.high-contrast #modules-progress-fill {
+    background-color: #FFD000;
+}
+
+body.high-contrast .module-number {
+    background-color: #FFD000;
+    color: #000000;
+}
+
+body.high-contrast .sim-guide-panel {
+    border-color: #FFD000;
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+body.high-contrast .sim-guide-panel h3,
+body.high-contrast .sim-guide-panel p {
+    color: #FFFFFF;
+}
+
+body.high-contrast .sim-guide-badge {
+    background-color: #111111;
+    color: #FFD000;
+}
+
+body.high-contrast .sim-hint-box {
+    border-color: #FFD000;
+    background-color: #111111;
+    color: #FFFFFF;
+}
+
+body.high-contrast .phone-screen .sim-screen {
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .sim-screen button:not(.pickup-marker):not(.uber-confirm-btn) {
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .sim-screen-back {
+    border: 2px solid #8A6D00;
+    background-color: #FFFFFF;
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .route-field {
+    color: #1E293B !important;
+}
+
+body.high-contrast .phone-screen .route-field::placeholder {
+    color: #475569;
+    opacity: 1;
+}
+
+body.high-contrast .phone-screen .uber-search-bar {
+    background-color: #E5E5E5;
+    color: #111111;
+    border-color: #1D4ED8;
+}
+
+body.high-contrast .phone-screen .uber-recent-item p,
+body.high-contrast .phone-screen .sugg-info p,
+body.high-contrast .phone-screen .car-time,
+body.high-contrast .phone-screen #sim-selected-destination {
+    color: #475569;
+}
+
+body.high-contrast .phone-screen .uber-suggestion-card {
+    background-color: #FFFFFF;
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .uber-car-option {
+    background-color: #FFFFFF;
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .uber-car-option.selected {
+    border-color: #8A6D00;
+    background-color: #FFF4BF;
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .car-price {
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .uber-payment-row {
+    border-color: #8A6D00;
+    background-color: #FFF4BF;
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .pay-change-link {
+    color: #6B4F00;
+}
+
+body.high-contrast .phone-screen .pay-check-icon,
+body.high-contrast .phone-screen .sugg-arrow,
+body.high-contrast .phone-screen .driver-arrival-time {
+    color: #6B4F00;
+}
+
+body.high-contrast .phone-screen .pickup-current-dot {
+    border-color: #111111;
+}
+
+body.high-contrast .phone-screen .uber-confirm-btn:not(:disabled) {
+    border: 2px solid #FFD000;
+    background-color: #FFD000;
+    color: #000000;
+}
+
+body.high-contrast .phone-screen .uber-confirm-btn:disabled {
+    border: 2px dashed #A3A3A3;
+    background-color: #404040;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+body.high-contrast #sim-payment-sheet {
+    background-color: #FFFFFF;
+    color: #111111;
+}
+
+body.high-contrast #sim-payment-sheet .payment-modal-option {
+    background-color: #FFFFFF;
+    color: #111111;
+}
+
+body.high-contrast #sim-payment-sheet .payment-modal-option.selected {
+    border-color: #8A6D00;
+    background-color: #FFF4BF;
+}
+
+body.high-contrast #sim-payment-sheet .payment-modal-option span:not(.pay-check-icon) {
+    color: #475569 !important;
+}
+
+body.high-contrast .phone-screen .pickup-current-tag {
+    background-color: #FFFFFF;
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .pickup-marker .pickup-tag {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+body.high-contrast .phone-screen .driver-arrival-status,
+body.high-contrast .phone-screen .driver-details p {
+    color: #475569;
+}
+
+body.high-contrast .phone-screen .license-plate-banner {
+    background-color: #FFF4BF;
+}
+
+body.high-contrast .phone-screen .plate-label {
+    color: #5C3B00;
+}
+
+body.high-contrast .phone-screen .plate-number {
+    color: #111111;
+}
+
+body.high-contrast .phone-screen .driver-action-btn {
+    border: 2px solid #8A6D00;
+    background-color: #FFD000;
+    color: #000000;
+}
+
+body.high-contrast .phone-screen .driver-action-btn:hover,
+body.high-contrast .phone-screen .driver-action-btn:focus-visible {
+    border-color: #111111;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.high-contrast .module-card .btn-secondary {
+    border: 2px solid #FFD000;
+    background-color: #FFD000;
+    color: #000000;
+}
+
+body.high-contrast .module-card .btn-secondary:not(:disabled):hover,
+body.high-contrast .module-card .btn-secondary:not(:disabled):focus-visible {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.high-contrast .module-card .btn-secondary:disabled {
+    border: 2px dashed #A3A3A3;
+    border-color: #A3A3A3 !important;
+    background-color: #262626;
+    color: #D4D4D4;
+    cursor: not-allowed;
+    opacity: 1;
+    box-shadow: none;
+    transform: none;
+}
+
+body.high-contrast .reset-progress-button {
+    border: 2px solid #FFD000;
+    background-color: #FFD000;
+    color: #000000;
+}
+
+body.high-contrast .reset-progress-button:hover,
+body.high-contrast .reset-progress-button:focus-visible {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.high-contrast .app-preview {
+    border: 2px solid #FFD000;
+    background: #000000;
+    color: #FFFFFF;
+}
+
+body.high-contrast .app-text h2,
+body.high-contrast .app-text > p {
+    color: #FFFFFF;
+}
+
+body.high-contrast .feature-list li {
+    border: 1px solid #FFD000;
+    background: #111111;
+    color: #FFFFFF;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 [tabindex]:focus-visible {
@@ -217,7 +481,7 @@ h3 { font-size: 1.5rem; }
     color: #0F172A;
     border-radius: 9999px;
     font: inherit;
-    font-size: 0.92rem;
+    font-size: 14.72px;
     font-weight: 600;
     cursor: pointer;
     padding: 8px 18px;
@@ -335,38 +599,44 @@ h3 { font-size: 1.5rem; }
 .a11y-font-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 4px;
     background: #F8FAFC;
     border: 1px solid #E2E8F0;
     border-radius: 12px;
 }
 
-.a11y-btn-sm {
-    display: inline-flex;
-    width: 44px;
-    height: 36px;
+.a11y-font-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 40px;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
+    padding: 6px 10px;
     border: 1px solid #CBD5E1;
     border-radius: 8px;
     background: #FFFFFF;
     color: #0F172A;
     cursor: pointer;
     font: inherit;
-    font-size: 15px;
-    font-weight: 700;
+    font-weight: 600;
+    text-align: left;
     transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-.a11y-btn-sm:hover {
+.a11y-font-toggle:hover,
+.a11y-font-toggle[aria-pressed="true"] {
     border-color: #276EF1;
-    background: #276EF1;
-    color: #FFFFFF;
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.a11y-font-symbol {
+    font-weight: 700;
 }
 
 .a11y-font-indicator {
-    min-width: 52px;
+    min-width: 42px;
+    margin-left: auto;
     color: #334155;
     font-size: 13px;
     font-weight: 700;
@@ -515,19 +785,24 @@ body.high-contrast .a11y-toggle-row {
     background: #111111;
 }
 
-body.high-contrast .a11y-toggle-row {
-    color: #FFFFFF;
-}
-
-body.high-contrast .a11y-btn-sm {
+body.high-contrast .a11y-font-toggle {
     border-color: #FFD000;
     background: #000000;
     color: #FFD000;
 }
 
-body.high-contrast .a11y-btn-sm:hover {
+body.high-contrast .a11y-font-toggle:hover,
+body.high-contrast .a11y-font-toggle[aria-pressed="true"] {
     background: #FFD000;
     color: #000000;
+}
+
+body.high-contrast .a11y-font-toggle[aria-pressed="true"] .a11y-font-indicator {
+    color: #000000;
+}
+
+body.high-contrast .a11y-toggle-row {
+    color: #FFFFFF;
 }
 
 body.high-contrast .a11y-toggle-row[aria-pressed="true"] .a11y-switch {
@@ -551,7 +826,7 @@ body.high-contrast .a11y-reset-btn:hover {
 }
 
 .accessibility-toggle:focus-visible,
-.a11y-btn-sm:focus-visible,
+.a11y-font-toggle:focus-visible,
 .a11y-toggle-row:focus-visible,
 .a11y-reset-btn:focus-visible {
     outline: 3px solid #276EF1;
@@ -559,7 +834,7 @@ body.high-contrast .a11y-reset-btn:hover {
 }
 
 body.high-contrast .accessibility-toggle:focus-visible,
-body.high-contrast .a11y-btn-sm:focus-visible,
+body.high-contrast .a11y-font-toggle:focus-visible,
 body.high-contrast .a11y-toggle-row:focus-visible,
 body.high-contrast .a11y-reset-btn:focus-visible {
     outline-color: #FFD000;
@@ -816,9 +1091,29 @@ section {
     color: white;
     text-decoration: underline;
 }
-
-/* Modals */
-.modal {
+
+body.high-contrast .footer {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+body.high-contrast .footer a {
+    color: #FFD000;
+}
+
+body.high-contrast .admin-footer-btn {
+    border-color: #A3A3A3;
+    color: #FFFFFF;
+}
+
+body.high-contrast .admin-footer-btn:hover,
+body.high-contrast .admin-footer-btn:focus-visible {
+    border-color: #FFD000;
+    color: #FFD000;
+}
+
+/* Modals */
+.modal {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -1395,9 +1690,36 @@ section {
     font-size: 1rem;
     padding: 12px 20px;
 }
-
-/* Marco del Teléfono Virtual */
-.phone-wrapper {
+
+body.high-contrast .sim-controls button {
+    min-height: 48px;
+    border: 2px solid #FFD000;
+    background-color: #FFD000;
+    color: #000000;
+}
+
+body.high-contrast .sim-controls button:hover,
+body.high-contrast .sim-controls button:focus-visible {
+    border-color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.high-contrast .sim-controls #btn-sim-prev {
+    border-color: #FFD000 !important;
+    background-color: #111111;
+    color: #FFD000;
+}
+
+body.high-contrast .sim-controls #btn-sim-prev:hover,
+body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
+    border-color: #FFFFFF !important;
+    background-color: #FFD000;
+    color: #000000;
+}
+
+/* Marco del Teléfono Virtual */
+.phone-wrapper {
     flex-shrink: 0;
 }
 
@@ -2016,7 +2338,7 @@ section {
 
 @media (max-width: 480px) {
     body {
-        font-size: calc(18px * var(--accessibility-font-scale));
+        font-size: 1.125rem;
     }
 
     .container {
@@ -2049,7 +2371,7 @@ section {
     }
 
     .header h1 {
-        font-size: clamp(1.75rem, 8vw, 2rem);
+        font-size: clamp(1.75rem, calc(8vw * var(--accessibility-font-scale)), 2rem);
     }
 
     .subtitle {
