@@ -544,17 +544,20 @@
                     <p id="actividad-subtitle" style="color:#555; font-size:0.9rem; margin-top:4px;">Ordene los pasos en el orden correcto para completar el módulo.</p>
                 </div>
             </div>
-            <p style="font-size:0.9rem; color:#666; margin-bottom:16px;">⬆⬇ <strong>Arrastre las tarjetas</strong> para ordenarlas correctamente:</p>
-            <div id="actividad-sortable-list" class="actividad-sortable-list"></div>
-            <div id="actividad-feedback" class="actividad-feedback" style="display:none;"></div>
-            <div class="actividad-footer">
-                <div id="actividad-attempt-count" style="font-size:0.85rem; color:#888;"></div>
-                <button class="btn-primary" id="btn-actividad-verificar" onclick="verificarOrdenActividad()">✅ Verificar orden</button>
-            </div>
-        </div>
-    </div>
+            <div id="actividad-secciones" class="actividad-secciones" hidden></div>
+            <div id="actividad-ejercicio" hidden>
+                <p id="actividad-sort-instruction" style="font-size:0.9rem; color:#666; margin-bottom:16px;">⬆⬇ <strong>Arrastre las tarjetas</strong> para ordenarlas correctamente:</p>
+                <div id="actividad-sortable-list" class="actividad-sortable-list"></div>
+                <div id="actividad-feedback" class="actividad-feedback" style="display:none;"></div>
+                <div class="actividad-footer">
+                    <div id="actividad-attempt-count" style="font-size:0.85rem; color:#888;"></div>
+                    <button class="btn-primary" id="btn-actividad-verificar" onclick="verificarOrdenActividad()">✅ Verificar orden</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Modals (Solo los 3 módulos del Inicio) -->
+    <!-- Modals de los módulos del Inicio -->
 
     <div id="modal-reset-progress" class="modal">
         <div class="modal-content reset-progress-modal-content" role="dialog" aria-modal="true" aria-labelledby="reset-progress-title" aria-describedby="reset-progress-description">

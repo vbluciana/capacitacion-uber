@@ -2839,10 +2839,152 @@ body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
     font-size: 1.4rem;
     margin-bottom: 0;
 }
-
-.actividad-sortable-list {
+
+.actividad-secciones {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    counter-reset: actividad-seccion;
+}
+
+.actividad-seccion-toggle {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto 16px;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E5E7EB;
+    border-left: 4px solid transparent;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FAFBFC 100%);
+    color: var(--text-color);
+    font: 600 1rem/1.35 'Outfit', sans-serif;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(17, 24, 39, 0.045);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.actividad-seccion-toggle::before {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: #F1F5F9;
+    color: #475569;
+    content: counter(actividad-seccion, decimal-leading-zero);
+    counter-increment: actividad-seccion;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.actividad-seccion-toggle::after {
+    width: 8px;
+    height: 8px;
+    color: #64748B;
+    content: "";
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.18s ease;
+}
+
+.actividad-seccion-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 16px rgba(17, 24, 39, 0.09);
+}
+
+.actividad-seccion-toggle:hover,
+.actividad-seccion-toggle.active {
+    border-color: #276EF1;
+}
+
+.actividad-seccion-toggle:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.actividad-seccion-toggle.active {
+    border-left-color: #276EF1;
+    background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+    box-shadow: 0 5px 14px rgba(39, 110, 241, 0.12);
+}
+
+.actividad-seccion-toggle.active::before {
+    background: #276EF1;
+    color: #FFFFFF;
+}
+
+.actividad-seccion-toggle.active::after {
+    color: #276EF1;
+    transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.actividad-seccion-toggle.completed {
+    border-color: #BBF7D0;
+    border-left-color: #16A34A;
+    background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%);
+}
+
+.actividad-seccion-toggle.completed:hover {
+    border-color: #16A34A;
+}
+
+.actividad-seccion-toggle.completed::before {
+    background: #16A34A;
+    color: #FFFFFF;
+}
+
+.actividad-seccion-status {
+    flex-shrink: 0;
+    color: #64748B;
+    border-radius: 999px;
+    background: #F1F5F9;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.actividad-seccion-toggle:disabled {
+    border-color: #BBF7D0;
+    border-left-color: #16A34A;
+    background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%);
+    cursor: default;
+    opacity: 1;
+}
+
+.actividad-seccion-toggle:disabled::before {
+    background: #16A34A;
+    color: #FFFFFF;
+}
+
+.actividad-seccion-toggle:disabled .actividad-seccion-status {
+    background: #DCFCE7;
+    color: #166534;
+}
+
+.actividad-seccion-toggle:disabled:hover {
+    transform: none;
+    box-shadow: 0 3px 10px rgba(17, 24, 39, 0.045);
+}
+
+.actividad-seccion-toggle.active .actividad-seccion-status {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.actividad-seccion-toggle.completed .actividad-seccion-status {
+    background: #DCFCE7;
+    color: #166534;
+}
+
+.actividad-sortable-list {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
     margin-bottom: 16px;
     user-select: none;
@@ -2922,6 +3064,27 @@ body.high-contrast .actividad-card {
 }
 
 body.high-contrast .actividad-card-handle {
+    color: #FFD000;
+}
+
+body.high-contrast .actividad-seccion-toggle,
+body.high-contrast .actividad-seccion-status {
+    border-color: #FFD000;
+    background: #1A1A1A;
+    color: #FFFFFF;
+}
+
+body.high-contrast .actividad-seccion-toggle.active {
+    border-left-color: #FFD000;
+    background: #333000;
+}
+
+body.high-contrast .actividad-seccion-toggle::before,
+body.high-contrast .actividad-seccion-toggle.active::before,
+body.high-contrast .actividad-seccion-toggle.completed::before,
+body.high-contrast .actividad-seccion-toggle.active .actividad-seccion-status,
+body.high-contrast .actividad-seccion-toggle.completed .actividad-seccion-status {
+    background: #1A1A1A;
     color: #FFD000;
 }
 

@@ -124,7 +124,7 @@ const moduleDefinitions = {
     },
     4: {
         title: 'Módulo 4: Manejo de imprevistos',
-        activityOnly: true
+        guideUrl: 'https://www.canva.com/design/DAHYwxFbfEc/sgddke-4jicx80EQ2ztUJg/view?embed'
     }
 };
 const totalModules = Object.keys(moduleDefinitions).length;
@@ -204,10 +204,6 @@ function startModule(moduleId) {
     currentModuleId = moduleId;
 
     const module = moduleDefinitions[moduleId];
-    if (module.activityOnly) {
-        openActividadModal(moduleId);
-        return;
-    }
     openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
 }
 
@@ -290,9 +286,9 @@ function closeCanvaModal() {
     stopCanvaModalMedia();
 }
 
-// La actividad de ordenamiento precede al formulario en todos los módulos.
+// La actividad de ordenamiento se realiza después de consultar la guía.
 function finalizarCanvaModal() {
-    if (currentModuleId >= 1 && currentModuleId <= 3) {
+    if (currentModuleId >= 1 && currentModuleId <= 4) {
         openActividadModal(currentModuleId, true);
         return;
     }
@@ -1008,21 +1004,61 @@ const actividadData = {
     },
     4: {
         moduloNombre: 'Manejo de imprevistos',
-        instruccion: '¿Qué hacer ante un imprevisto durante un viaje?',
-        pasos: [
-            { id: 1, texto: '🔎 Identificar qué ocurrió' },
-            { id: 2, texto: '🧘 Mantener la calma y evaluar la situación' },
-            { id: 3, texto: '🆘 Pedir ayuda o elegir una alternativa segura' }
-        ],
-        ordenCorrecto: [1, 2, 3]
+        instruccion: 'Seleccione cada situación y ordene sus pasos. Debe completar las tres actividades.',
+        actividades: {
+            compartirViaje: {
+                titulo: 'Compartir mi viaje en tiempo real',
+                instruccion: 'Ordene los pasos para compartir el estado del viaje con otra persona.',
+                pasos: [
+                    { id: 1, texto: '🚗 El viaje fue solicitado y aceptado por un conductor' },
+                    { id: 2, texto: '⬆️ Deslizar hacia arriba hasta ver “Compartir el estado del viaje”' },
+                    { id: 3, texto: '🔗 Tocar “Compartir”' },
+                    { id: 4, texto: '📋 Seleccionar “Copiar el enlace para compartir”' },
+                    { id: 5, texto: '💬 Abrir WhatsApp, elegir a la persona y enviarle el enlace' }
+                ],
+                ordenCorrecto: [1, 2, 3, 4, 5]
+            },
+            objetoPerdido: {
+                titulo: 'Encontrar un objeto perdido',
+                instruccion: 'Ordene los pasos para comunicarse con el conductor por un objeto olvidado.',
+                pasos: [
+                    { id: 1, texto: '📱 Seleccionar “Actividad” en el inicio' },
+                    { id: 2, texto: '🚗 Seleccionar el viaje en el que perdió el objeto' },
+                    { id: 3, texto: '🆘 En “Ayuda y seguridad”, elegir “Encuentra un objeto perdido”' },
+                    { id: 4, texto: '📞 Elegir la opción para hablar con el conductor' },
+                    { id: 5, texto: '📍 Confirmar si tiene el objeto y coordinar un punto de entrega' }
+                ],
+                ordenCorrecto: [1, 2, 3, 4, 5]
+            },
+            cancelarViaje: {
+                titulo: 'Cancelar un viaje',
+                instruccion: 'Ordene los pasos para cancelar un viaje que está esperando.',
+                pasos: [
+                    { id: 1, texto: '⋯ Tocar los tres puntos mientras espera el viaje' },
+                    { id: 2, texto: '❌ Seleccionar “Cancelar viaje”' },
+                    { id: 3, texto: '📝 Seleccionar el motivo de la cancelación' },
+                    { id: 4, texto: '✅ Confirmar la cancelación' }
+                ],
+                ordenCorrecto: [1, 2, 3, 4]
+            }
+        }
     }
 };
-
-let actividadModuloActual = null;
-let actividadIntentos = 0;
-let actividadStartTime = null;
-let actividadDragSrcIndex = null;
-let actividadOrdenActual = [];
+
+let actividadModuloActual = null;
+let actividadIntentos = 0;
+let actividadStartTime = null;
+let actividadDragSrcIndex = null;
+let actividadOrdenActual = [];
+let actividadSeccionActual = null;
+const progresoActividadesModulo4 = Object.fromEntries(
+    Object.keys(actividadData[4].actividades).map(key => [key, {
+        orden: null,
+        intentos: 0,
+        completada: false,
+        startTime: null
+    }])
+);
 
 function openActividadModal(moduleId, showGuideAlongside = false) {
     const data = actividadData[moduleId];
@@ -1031,25 +1067,39 @@ function openActividadModal(moduleId, showGuideAlongside = false) {
     actividadModuloActual = moduleId;
     actividadIntentos = 0;
     actividadStartTime = Date.now();
-
-    // Mezclar pasos aleatoriamente
-    actividadOrdenActual = shuffleArray([...data.pasos]);
-
-    renderActividadList();
-
-    const title = document.getElementById('actividad-title');
-    const subtitle = document.getElementById('actividad-subtitle');
-    const feedback = document.getElementById('actividad-feedback');
-    const attemptCount = document.getElementById('actividad-attempt-count');
-    const btnVerificar = document.getElementById('btn-actividad-verificar');
-
-    if (title) title.textContent = `📋 Módulo ${moduleId}: ¡Antes de continuar!`;
-    if (subtitle) subtitle.textContent = data.instruccion;
-    if (feedback) { feedback.style.display = 'none'; feedback.className = 'actividad-feedback'; }
-    if (attemptCount) attemptCount.textContent = '';
-    if (btnVerificar) { btnVerificar.disabled = false; btnVerificar.textContent = '✅ Verificar orden'; }
-
-    const modal = document.getElementById('modal-actividad');
+
+    const title = document.getElementById('actividad-title');
+    const subtitle = document.getElementById('actividad-subtitle');
+    const feedback = document.getElementById('actividad-feedback');
+    const attemptCount = document.getElementById('actividad-attempt-count');
+    const btnVerificar = document.getElementById('btn-actividad-verificar');
+    const sections = document.getElementById('actividad-secciones');
+    const exercise = document.getElementById('actividad-ejercicio');
+    const sortInstruction = document.getElementById('actividad-sort-instruction');
+
+    if (title) title.textContent = `📋 Módulo ${moduleId}: ¡Antes de continuar!`;
+    if (subtitle) subtitle.textContent = data.instruccion;
+    if (feedback) { feedback.style.display = 'none'; feedback.className = 'actividad-feedback'; }
+    if (attemptCount) attemptCount.textContent = '';
+    if (btnVerificar) { btnVerificar.disabled = false; btnVerificar.textContent = '✅ Verificar orden'; }
+    actividadSeccionActual = null;
+
+    if (moduleId === 4) {
+        if (sections) {
+            sections.hidden = false;
+            renderActividadSecciones();
+        }
+        if (exercise) exercise.hidden = true;
+        if (sortInstruction) sortInstruction.hidden = true;
+    } else {
+        actividadOrdenActual = shuffleArray([...data.pasos]);
+        if (sections) sections.hidden = true;
+        if (exercise) exercise.hidden = false;
+        if (sortInstruction) sortInstruction.hidden = false;
+        renderActividadList();
+    }
+
+    const modal = document.getElementById('modal-actividad');
     if (modal) {
         const canvaModal = document.getElementById('modal-canva');
         modal.classList.toggle('side-by-side', showGuideAlongside);
@@ -1061,8 +1111,107 @@ function openActividadModal(moduleId, showGuideAlongside = false) {
         document.body.style.overflow = 'hidden';
     }
 }
-
-function shuffleArray(arr) {
+
+function renderActividadSecciones() {
+    const sections = document.getElementById('actividad-secciones');
+    const exercise = document.getElementById('actividad-ejercicio');
+    if (!sections) return;
+
+    exercise?.remove();
+    sections.innerHTML = '';
+    Object.entries(actividadData[4].actividades).forEach(([key, data]) => {
+        const state = progresoActividadesModulo4[key];
+        const isActive = actividadSeccionActual === key;
+        const item = document.createElement('div');
+        item.className = 'actividad-seccion-item';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'actividad-seccion-toggle';
+        button.classList.toggle('active', isActive);
+        button.classList.toggle('completed', state.completada);
+        button.setAttribute('aria-expanded', String(isActive));
+        button.setAttribute('aria-controls', 'actividad-ejercicio');
+        button.addEventListener('click', () => toggleActividadSeccion(key));
+
+        const title = document.createElement('span');
+        title.textContent = data.titulo;
+        const status = document.createElement('span');
+        status.className = 'actividad-seccion-status';
+        status.textContent = state.completada ? '✓ Completada' : 'Abrir';
+        button.append(title, status);
+        item.appendChild(button);
+        if (isActive && exercise) {
+            exercise.hidden = false;
+            item.append(exercise);
+        }
+        sections.appendChild(item);
+    });
+
+    if (actividadSeccionActual === null && exercise) {
+        exercise.hidden = true;
+        const activeSection = Object.entries(progresoActividadesModulo4)
+            .find(([, state]) => !state.completada)?.[0];
+        const firstIncompleteItem = activeSection
+            ? sections.querySelectorAll('.actividad-seccion-item')[
+                Object.keys(actividadData[4].actividades).indexOf(activeSection)
+            ]
+            : null;
+        if (firstIncompleteItem) firstIncompleteItem.append(exercise);
+        else sections.append(exercise);
+    }
+}
+
+function toggleActividadSeccion(key) {
+    const sections = document.getElementById('actividad-secciones');
+    const exercise = document.getElementById('actividad-ejercicio');
+    const subtitle = document.getElementById('actividad-subtitle');
+    const feedback = document.getElementById('actividad-feedback');
+    const attemptCount = document.getElementById('actividad-attempt-count');
+    const btnVerificar = document.getElementById('btn-actividad-verificar');
+    const state = progresoActividadesModulo4[key];
+
+    if (!state) return;
+    if (actividadSeccionActual === key) {
+        actividadSeccionActual = null;
+        renderActividadSecciones();
+        return;
+    }
+
+    actividadSeccionActual = key;
+    const data = actividadData[4].actividades[key];
+    state.startTime = state.startTime || Date.now();
+    state.orden = state.orden || shuffleArray([...data.pasos]);
+    actividadOrdenActual = state.orden;
+    actividadIntentos = state.intentos;
+    actividadStartTime = state.startTime;
+
+    if (subtitle) subtitle.textContent = data.instruccion;
+    if (exercise) exercise.hidden = false;
+    if (feedback) {
+        feedback.style.display = state.completada ? 'block' : 'none';
+        feedback.className = state.completada
+            ? 'actividad-feedback actividad-feedback-success'
+            : 'actividad-feedback';
+        feedback.innerHTML = state.completada
+            ? '✅ <strong>Esta actividad ya está completa.</strong>'
+            : '';
+    }
+    if (attemptCount) attemptCount.textContent = state.intentos ? `Intentos: ${state.intentos}` : '';
+    if (btnVerificar) {
+        btnVerificar.disabled = state.completada;
+        btnVerificar.textContent = state.completada ? '✅ ¡Correcto!' : '✅ Verificar orden';
+    }
+    renderActividadList();
+    if (state.completada) {
+        document.querySelectorAll('#actividad-sortable-list .actividad-card').forEach(card => {
+            card.classList.add('card-correct');
+            card.setAttribute('draggable', 'false');
+        });
+    }
+    renderActividadSecciones();
+}
+
+function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -1181,7 +1330,10 @@ function onActividadTouchEnd(e) {
 function swapActividadCards(fromIndex, toIndex) {
     [actividadOrdenActual[fromIndex], actividadOrdenActual[toIndex]] =
         [actividadOrdenActual[toIndex], actividadOrdenActual[fromIndex]];
-    renderActividadList();
+    if (actividadModuloActual === 4 && actividadSeccionActual) {
+        progresoActividadesModulo4[actividadSeccionActual].orden = actividadOrdenActual;
+    }
+    renderActividadList();
 
     // Clear feedback on re-sort
     const feedback = document.getElementById('actividad-feedback');
@@ -1192,50 +1344,99 @@ function swapActividadCards(fromIndex, toIndex) {
 
 function verificarOrdenActividad() {
     if (!actividadModuloActual) return;
-    const data = actividadData[actividadModuloActual];
-    actividadIntentos++;
-
-    const ordenActual = actividadOrdenActual.map(p => p.id);
+    const data = actividadModuloActual === 4
+        ? actividadData[4].actividades[actividadSeccionActual]
+        : actividadData[actividadModuloActual];
+    if (!data) return;
+    actividadIntentos++;
+
+    const ordenActual = actividadOrdenActual.map(p => p.id);
     const correcto = data.ordenCorrecto.every((id, i) => id === ordenActual[i]);
 
     const feedback = document.getElementById('actividad-feedback');
+
     const attemptCount = document.getElementById('actividad-attempt-count');
+
     const list = document.getElementById('actividad-sortable-list');
+
     const btnVerificar = document.getElementById('btn-actividad-verificar');
-
+
+    const exercise = document.getElementById('actividad-ejercicio');
+
     if (attemptCount) attemptCount.textContent = `Intentos: ${actividadIntentos}`;
-
-    if (correcto) {
+    if (actividadModuloActual === 4) {
+        const state = progresoActividadesModulo4[actividadSeccionActual];
+        state.intentos = actividadIntentos;
+        state.orden = actividadOrdenActual;
+    }
+
+    if (correcto) {
         // Mark all cards green
         if (list) list.querySelectorAll('.actividad-card').forEach(c => {
             c.classList.remove('card-error');
             c.classList.add('card-correct');
             c.setAttribute('draggable', 'false');
         });
-        if (feedback) {
+        if (feedback && actividadModuloActual !== 4) {
             feedback.style.display = 'block';
             feedback.className = 'actividad-feedback actividad-feedback-success';
-            feedback.innerHTML = actividadModuloActual === 4
-                ? '🎉 <strong>¡Perfecto!</strong> El orden es correcto. Ahora completá el formulario para finalizar el módulo.'
-                : '🎉 <strong>¡Perfecto!</strong> El orden es correcto. ¡Módulo completado!';
-        }
-        if (btnVerificar) { btnVerificar.disabled = true; btnVerificar.textContent = '✅ ¡Correcto!'; }
-
-        // Save result to localStorage
-        guardarResultadoActividad(actividadModuloActual, data.moduloNombre, actividadIntentos, 'correcto');
-
-        // Complete the module after short delay
-        setTimeout(() => {
-            const modal = document.getElementById('modal-actividad');
-            if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
-            const completedModuleId = actividadModuloActual;
-            actividadModuloActual = null;
-            closeCanvaModal();
-            if (completedModuleId === 4) {
-                openEncuestaForCurrentModule();
-                return;
-            }
-            completeModule(completedModuleId);
+            feedback.innerHTML = '🎉 <strong>¡Perfecto!</strong> El orden es correcto. ¡Módulo completado!';
+        }
+        if (btnVerificar) { btnVerificar.disabled = true; btnVerificar.textContent = '✅ ¡Correcto!'; }
+
+        // Save result to localStorage
+        const moduleName = actividadModuloActual === 4
+            ? `${actividadData[4].moduloNombre} - ${data.titulo}`
+            : data.moduloNombre;
+        guardarResultadoActividad(actividadModuloActual, moduleName, actividadIntentos, 'correcto');
+
+        if (actividadModuloActual === 4) {
+            const state = progresoActividadesModulo4[actividadSeccionActual];
+            state.completada = true;
+            renderActividadSecciones();
+            const completedCount = Object.values(progresoActividadesModulo4).filter(activity => activity.completada).length;
+            const totalCount = Object.keys(progresoActividadesModulo4).length;
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'actividad-feedback actividad-feedback-success';
+                feedback.innerHTML = completedCount === totalCount
+                    ? '🎉 <strong>¡Completó las tres actividades!</strong> Ahora puede finalizar el módulo.'
+                    : `🎉 <strong>¡Perfecto!</strong> Actividad completada. Lleva ${completedCount} de ${totalCount}; abra otra situación para continuar.`;
+            }
+            const completedKey = actividadSeccionActual;
+            if (completedCount < totalCount) {
+                setTimeout(() => {
+                    if (actividadSeccionActual !== completedKey) return;
+                    actividadSeccionActual = null;
+                    if (exercise) exercise.hidden = true;
+                    renderActividadSecciones();
+                    const subtitle = document.getElementById('actividad-subtitle');
+                    if (subtitle) subtitle.textContent = actividadData[4].instruccion;
+                }, 1800);
+                return;
+            }
+
+            setTimeout(() => {
+                actividadSeccionActual = null;
+                if (exercise) exercise.hidden = true;
+                renderActividadSecciones();
+                const modal = document.getElementById('modal-actividad');
+                if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
+                actividadModuloActual = null;
+                closeCanvaModal();
+                openEncuestaForCurrentModule();
+            }, 1800);
+            return;
+        }
+
+        // Complete the module after short delay
+        setTimeout(() => {
+            const modal = document.getElementById('modal-actividad');
+            if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
+            const completedModuleId = actividadModuloActual;
+            actividadModuloActual = null;
+            closeCanvaModal();
+            completeModule(completedModuleId);
         }, 1800);
 
     } else {
