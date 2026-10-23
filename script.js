@@ -277,12 +277,17 @@ function stopCanvaModalMedia() {
 function closeCanvaModal() {
     const modal = document.getElementById('modal-canva');
     const activityModal = document.getElementById('modal-actividad');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-    modal?.classList.remove('side-by-side');
-    activityModal?.classList.remove('side-by-side');
-    document.body.style.overflow = activityModal?.style.display === 'block' ? 'hidden' : 'auto';
+    const isSideBySide = modal?.classList.contains('side-by-side')
+        || activityModal?.classList.contains('side-by-side');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    if (isSideBySide && activityModal) {
+        activityModal.style.display = 'none';
+    }
+    modal?.classList.remove('side-by-side');
+    activityModal?.classList.remove('side-by-side');
+    document.body.style.overflow = activityModal?.style.display === 'block' ? 'hidden' : 'auto';
     stopCanvaModalMedia();
 }
 
