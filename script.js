@@ -309,26 +309,31 @@ function stopCanvaModalMedia() {
 
 function closeCanvaModal() {
     const modal = document.getElementById('modal-canva');
-    const activityModal = document.getElementById('modal-actividad');
-    const isSideBySide = modal?.classList.contains('side-by-side')
-        || activityModal?.classList.contains('side-by-side');
     if (modal) {
         modal.style.display = 'none';
     }
-    if (isSideBySide && activityModal) {
-        activityModal.style.display = 'none';
-    }
     modal?.classList.remove('side-by-side');
-    activityModal?.classList.remove('side-by-side');
-    document.body.style.overflow = activityModal?.style.display === 'block' ? 'hidden' : 'auto';
-    stopCanvaModalMedia();
-}
-
+    document.body.style.overflow = 'auto';
+    stopCanvaModalMedia();
+}
+
+function volverAPresentacion() {
+    const modal = document.getElementById('modal-canva');
+    const activityModal = document.getElementById('modal-actividad');
+    if (!modal || !activityModal) return;
+
+    activityModal.style.display = 'none';
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    const demoButton = document.getElementById('btn-modal-demo');
+    switchCanvaModalView(demoButton?.getAttribute('aria-pressed') === 'true' ? 'demo' : 'guide');
+}
+
 // La actividad de ordenamiento se realiza después de consultar la guía.
-function finalizarCanvaModal() {
+function finalizarCanvaModal() {
     if (currentModuleId >= 1 && currentModuleId <= 4) {
-        openActividadModal(currentModuleId, true);
-        return;
+        openActividadModal(currentModuleId);
+        return;
     }
 
     closeCanvaModal();
@@ -1098,7 +1103,7 @@ const progresoActividadesModulo4 = Object.fromEntries(
     }])
 );
 
-function openActividadModal(moduleId, showGuideAlongside = false) {
+function openActividadModal(moduleId) {
     const data = actividadData[moduleId];
     if (!data) return;
 
@@ -1120,6 +1125,7 @@ function openActividadModal(moduleId, showGuideAlongside = false) {
     if (feedback) { feedback.style.display = 'none'; feedback.className = 'actividad-feedback'; }
     if (attemptCount) attemptCount.textContent = '';
     if (btnVerificar) { btnVerificar.disabled = false; btnVerificar.textContent = '✅ Verificar orden'; }
+    if (btnVerificar) btnVerificar.hidden = moduleId === 4;
     actividadSeccionActual = null;
 
     if (moduleId === 4) {
@@ -1138,23 +1144,24 @@ function openActividadModal(moduleId, showGuideAlongside = false) {
     }
 
     const modal = document.getElementById('modal-actividad');
-    if (modal) {
-        const canvaModal = document.getElementById('modal-canva');
-        modal.classList.toggle('side-by-side', showGuideAlongside);
-        if (canvaModal) {
-            canvaModal.classList.toggle('side-by-side', showGuideAlongside);
-            if (showGuideAlongside) canvaModal.style.display = 'block';
-        }
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+    if (modal) {
+        const canvaModal = document.getElementById('modal-canva');
+        if (canvaModal) {
+            canvaModal.style.display = 'none';
+        }
+        stopCanvaModalMedia();
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
     }
 }
 
 function renderActividadSecciones() {
     const sections = document.getElementById('actividad-secciones');
     const exercise = document.getElementById('actividad-ejercicio');
+    const btnVerificar = document.getElementById('btn-actividad-verificar');
     if (!sections) return;
 
+    if (btnVerificar) btnVerificar.hidden = actividadSeccionActual === null;
     exercise?.remove();
     sections.innerHTML = '';
     Object.entries(actividadData[4].actividades).forEach(([key, data]) => {

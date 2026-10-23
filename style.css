@@ -2883,8 +2883,15 @@ body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
     max-height: 90vh;
     overflow-y: auto;
 }
-
-.actividad-header {
+
+.actividad-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.actividad-header {
     margin-bottom: 16px;
 }
 .actividad-header h2 {
@@ -3196,6 +3203,12 @@ body.high-contrast .modal-view-btn:focus-visible {
     padding: 12px 24px;
     font-size: 1rem;
 }
+
+.actividad-footer .actividad-back-button {
+    margin: 0;
+    padding: 9px 12px;
+    font-size: 0.85rem;
+}
 
 @media (max-width: 1100px) {
     #modal-canva.side-by-side .modal-canva-content {
