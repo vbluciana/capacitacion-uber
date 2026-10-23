@@ -106,7 +106,9 @@ document.addEventListener('keydown', function(event) {
 // Funciones para el modal de Canva (reutilizable)
 let currentCanvaGuideUrl = '';
 let currentCanvaDemoUrl = '';
-let currentModuleId = null;
+let currentCanvaDemoAudioUrl = '';
+let currentCanvaDemoAudioTitle = '';
+let currentModuleId = null;
 const moduleProgressStorageKey = 'uberTrainingCompletedModules';
 const moduleDefinitions = {
     1: {
@@ -116,15 +118,20 @@ const moduleDefinitions = {
     },
     2: {
         title: 'Módulo 2: Pedir un Viaje',
-        guideUrl: 'https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed'
+        guideUrl: 'https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed',
+        demoAudioUrl: 'assets/podcast_modulo_2.mp3',
+        demoAudioTitle: 'Pedir un viaje'
     },
     3: {
         title: 'Módulo 3: Agregar método de pago',
-        guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed'
+        guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed',
+        demoAudioUrl: 'assets/podcast_modulo_3.mp3?v=2',
+        demoAudioTitle: 'Medio de pago'
     },
     4: {
         title: 'Módulo 4: Manejo de imprevistos',
-        guideUrl: 'https://www.canva.com/design/DAHYwxFbfEc/sgddke-4jicx80EQ2ztUJg/view?embed'
+        guideUrl: 'https://www.canva.com/design/DAHYwxFbfEc/sgddke-4jicx80EQ2ztUJg/view?embed',
+        demoUrl: 'https://www.youtube.com/embed/Ux4J6Fsbryg'
     }
 };
 const totalModules = Object.keys(moduleDefinitions).length;
@@ -204,7 +211,7 @@ function startModule(moduleId) {
     currentModuleId = moduleId;
 
     const module = moduleDefinitions[moduleId];
-    openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
+    openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId, module.demoAudioUrl, module.demoAudioTitle);
 }
 
 function openEncuestaForCurrentModule() {
@@ -221,7 +228,7 @@ function openEncuestaForCurrentModule() {
     document.body.style.overflow = 'hidden';
 }
 
-function openCanvaModal(url, title, demoUrl, moduleId) {
+function openCanvaModal(url, title, demoUrl, moduleId, demoAudioUrl, demoAudioTitle) {
     const modal = document.getElementById('modal-canva');
     const iframe = document.getElementById('canva-iframe');
     const heading = document.getElementById('canva-modal-title') || (modal ? modal.querySelector('h2') : null);
@@ -231,7 +238,9 @@ function openCanvaModal(url, title, demoUrl, moduleId) {
         if (heading && title) heading.textContent = title;
         currentCanvaGuideUrl = url;
         currentCanvaDemoUrl = demoUrl || '';
-        currentModuleId = moduleId || currentModuleId;
+        currentCanvaDemoAudioUrl = demoAudioUrl || '';
+        currentCanvaDemoAudioTitle = demoAudioTitle || '';
+        currentModuleId = moduleId || currentModuleId;
         switchCanvaModalView('guide');
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
@@ -243,20 +252,37 @@ function switchCanvaModalView(view) {
     const demoWrapper = document.getElementById('demo-wrapper');
     const canvaIframe = document.getElementById('canva-iframe');
     const demoIframe = document.getElementById('demo-iframe');
-    const demoUnavailable = document.getElementById('demo-unavailable');
+    const demoAudioPlayer = document.getElementById('demo-audio-player');
+    const demoAudio = document.getElementById('demo-audio');
+    const demoAudioTitle = demoAudioPlayer ? demoAudioPlayer.querySelector('h3') : null;
+    const demoUnavailable = document.getElementById('demo-unavailable');
     const guideButton = document.getElementById('btn-modal-guide');
     const demoButton = document.getElementById('btn-modal-demo');
     const showGuide = view === 'guide';
     const showDemoVideo = !showGuide && Boolean(currentCanvaDemoUrl);
-
-    if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
-    if (demoWrapper) demoWrapper.style.display = showGuide ? 'none' : 'flex';
-    if (canvaIframe) canvaIframe.src = showGuide ? currentCanvaGuideUrl : '';
-    if (demoIframe) {
-        demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
-        demoIframe.style.display = showDemoVideo ? 'block' : 'none';
-    }
-    if (demoUnavailable) demoUnavailable.style.display = !showGuide && !showDemoVideo ? 'block' : 'none';
+    const showDemoAudio = !showGuide && Boolean(currentCanvaDemoAudioUrl);
+
+    if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
+    if (demoWrapper) demoWrapper.style.display = showGuide ? 'none' : 'flex';
+    if (demoWrapper) demoWrapper.classList.toggle('audio-demo', showDemoAudio);
+    if (canvaIframe) canvaIframe.src = showGuide ? currentCanvaGuideUrl : '';
+    if (demoIframe) {
+        demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
+        demoIframe.style.display = showDemoVideo ? 'block' : 'none';
+    }
+    if (demoAudioPlayer) demoAudioPlayer.style.display = showDemoAudio ? 'block' : 'none';
+    if (demoAudioTitle) demoAudioTitle.textContent = currentCanvaDemoAudioTitle;
+    if (demoAudio) {
+        demoAudio.setAttribute('aria-label', `Podcast: ${currentCanvaDemoAudioTitle}`);
+        if (showDemoAudio) {
+            if (demoAudio.getAttribute('src') !== currentCanvaDemoAudioUrl) {
+                demoAudio.src = currentCanvaDemoAudioUrl;
+            }
+        } else {
+            demoAudio.pause();
+        }
+    }
+    if (demoUnavailable) demoUnavailable.style.display = !showGuide && !showDemoVideo && !showDemoAudio ? 'block' : 'none';
     if (guideButton) {
         guideButton.classList.toggle('active', showGuide);
         guideButton.setAttribute('aria-pressed', String(showGuide));
@@ -270,32 +296,44 @@ function switchCanvaModalView(view) {
 function stopCanvaModalMedia() {
     const canvaIframe = document.getElementById('canva-iframe');
     const demoIframe = document.getElementById('demo-iframe');
-    if (canvaIframe) canvaIframe.src = '';
-    if (demoIframe) demoIframe.src = '';
-}
+    const demoAudio = document.getElementById('demo-audio');
+    if (canvaIframe) canvaIframe.src = '';
+    if (demoIframe) demoIframe.src = '';
+    if (demoAudio) {
+        demoAudio.pause();
+        demoAudio.currentTime = 0;
+        demoAudio.removeAttribute('src');
+        demoAudio.load();
+    }
+}
 
 function closeCanvaModal() {
     const modal = document.getElementById('modal-canva');
-    const activityModal = document.getElementById('modal-actividad');
-    const isSideBySide = modal?.classList.contains('side-by-side')
-        || activityModal?.classList.contains('side-by-side');
     if (modal) {
         modal.style.display = 'none';
     }
-    if (isSideBySide && activityModal) {
-        activityModal.style.display = 'none';
-    }
     modal?.classList.remove('side-by-side');
-    activityModal?.classList.remove('side-by-side');
-    document.body.style.overflow = activityModal?.style.display === 'block' ? 'hidden' : 'auto';
-    stopCanvaModalMedia();
-}
-
+    document.body.style.overflow = 'auto';
+    stopCanvaModalMedia();
+}
+
+function volverAPresentacion() {
+    const modal = document.getElementById('modal-canva');
+    const activityModal = document.getElementById('modal-actividad');
+    if (!modal || !activityModal) return;
+
+    activityModal.style.display = 'none';
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    const demoButton = document.getElementById('btn-modal-demo');
+    switchCanvaModalView(demoButton?.getAttribute('aria-pressed') === 'true' ? 'demo' : 'guide');
+}
+
 // La actividad de ordenamiento se realiza después de consultar la guía.
-function finalizarCanvaModal() {
+function finalizarCanvaModal() {
     if (currentModuleId >= 1 && currentModuleId <= 4) {
-        openActividadModal(currentModuleId, true);
-        return;
+        openActividadModal(currentModuleId);
+        return;
     }
 
     closeCanvaModal();
@@ -1065,7 +1103,7 @@ const progresoActividadesModulo4 = Object.fromEntries(
     }])
 );
 
-function openActividadModal(moduleId, showGuideAlongside = false) {
+function openActividadModal(moduleId) {
     const data = actividadData[moduleId];
     if (!data) return;
 
@@ -1087,6 +1125,7 @@ function openActividadModal(moduleId, showGuideAlongside = false) {
     if (feedback) { feedback.style.display = 'none'; feedback.className = 'actividad-feedback'; }
     if (attemptCount) attemptCount.textContent = '';
     if (btnVerificar) { btnVerificar.disabled = false; btnVerificar.textContent = '✅ Verificar orden'; }
+    if (btnVerificar) btnVerificar.hidden = moduleId === 4;
     actividadSeccionActual = null;
 
     if (moduleId === 4) {
@@ -1105,23 +1144,24 @@ function openActividadModal(moduleId, showGuideAlongside = false) {
     }
 
     const modal = document.getElementById('modal-actividad');
-    if (modal) {
-        const canvaModal = document.getElementById('modal-canva');
-        modal.classList.toggle('side-by-side', showGuideAlongside);
-        if (canvaModal) {
-            canvaModal.classList.toggle('side-by-side', showGuideAlongside);
-            if (showGuideAlongside) canvaModal.style.display = 'block';
-        }
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+    if (modal) {
+        const canvaModal = document.getElementById('modal-canva');
+        if (canvaModal) {
+            canvaModal.style.display = 'none';
+        }
+        stopCanvaModalMedia();
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
     }
 }
 
 function renderActividadSecciones() {
     const sections = document.getElementById('actividad-secciones');
     const exercise = document.getElementById('actividad-ejercicio');
+    const btnVerificar = document.getElementById('btn-actividad-verificar');
     if (!sections) return;
 
+    if (btnVerificar) btnVerificar.hidden = actividadSeccionActual === null;
     exercise?.remove();
     sections.innerHTML = '';
     Object.entries(actividadData[4].actividades).forEach(([key, data]) => {
