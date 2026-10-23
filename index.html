@@ -464,10 +464,11 @@
                     </div>
                     
                     <div class="module-card">
-                        <h3>🎥 Videos Tutoriales</h3>
+                        <h3>🎥 Videos y Podcasts</h3>
                         <p>Vea de forma visual cómo realizar acciones dentro de la aplicación.</p>
                         <ul style="margin-top: 20px; list-style: none;">
-                            <li><a href="assets/videos/VIdeoFinal-iniciosesion-Uber.mp4" download="Como-iniciar-sesion-en-Uber.mp4" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Cómo iniciar sesión en Uber</a></li>
+                            <li style="margin-bottom: 10px;"><a href="assets/videos/VIdeoFinal-iniciosesion-Uber.mp4" download="Como-iniciar-sesion-en-Uber.mp4" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Cómo iniciar sesión en Uber</a></li>
+                            <li><a href="assets/podcast_modulo_3.mp3" download="podcast_medio_de_pago.mp3" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Podcast: Medio de pago</a></li>
                         </ul>
                     </div>
 
@@ -621,8 +622,17 @@
                     referrerpolicy="strict-origin-when-cross-origin"
                     allowfullscreen>
                 </iframe>
-                <p id="demo-unavailable" class="demo-unavailable" role="status" style="display: none;">La demostración de este módulo estará disponible próximamente.</p>
-            </div>
+                <div id="demo-audio-player" class="demo-audio-player" style="display: none;">
+                    <div class="demo-audio-art" aria-hidden="true">♫</div>
+                    <div class="demo-audio-info">
+                        <p class="demo-audio-label">PODCAST</p>
+                        <h3>Medio de pago</h3>
+                        <p>Escuchá la demostración en formato audio.</p>
+                    </div>
+                    <audio id="demo-audio" controls preload="metadata" aria-label="Podcast: Medio de pago"></audio>
+                </div>
+                <p id="demo-unavailable" class="demo-unavailable" role="status" style="display: none;">La demostración de este módulo estará disponible próximamente.</p>
+            </div>
             <div class="modal-canva-footer">
                 <div class="modal-view-toggle" role="group" aria-label="Tipo de contenido">
                     <button type="button" class="modal-view-btn active" id="btn-modal-guide" aria-pressed="true" onclick="switchCanvaModalView('guide')">Guía</button>

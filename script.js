@@ -106,7 +106,8 @@ document.addEventListener('keydown', function(event) {
 // Funciones para el modal de Canva (reutilizable)
 let currentCanvaGuideUrl = '';
 let currentCanvaDemoUrl = '';
-let currentModuleId = null;
+let currentCanvaDemoAudioUrl = '';
+let currentModuleId = null;
 const moduleProgressStorageKey = 'uberTrainingCompletedModules';
 const moduleDefinitions = {
     1: {
@@ -120,7 +121,8 @@ const moduleDefinitions = {
     },
     3: {
         title: 'Módulo 3: Agregar método de pago',
-        guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed'
+        guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed',
+        demoAudioUrl: 'assets/podcast_modulo_3.mp3'
     },
     4: {
         title: 'Módulo 4: Manejo de imprevistos',
@@ -204,7 +206,7 @@ function startModule(moduleId) {
     currentModuleId = moduleId;
 
     const module = moduleDefinitions[moduleId];
-    openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId);
+    openCanvaModal(module.guideUrl, module.title, module.demoUrl, moduleId, module.demoAudioUrl);
 }
 
 function openEncuestaForCurrentModule() {
@@ -221,7 +223,7 @@ function openEncuestaForCurrentModule() {
     document.body.style.overflow = 'hidden';
 }
 
-function openCanvaModal(url, title, demoUrl, moduleId) {
+function openCanvaModal(url, title, demoUrl, moduleId, demoAudioUrl) {
     const modal = document.getElementById('modal-canva');
     const iframe = document.getElementById('canva-iframe');
     const heading = document.getElementById('canva-modal-title') || (modal ? modal.querySelector('h2') : null);
@@ -231,7 +233,8 @@ function openCanvaModal(url, title, demoUrl, moduleId) {
         if (heading && title) heading.textContent = title;
         currentCanvaGuideUrl = url;
         currentCanvaDemoUrl = demoUrl || '';
-        currentModuleId = moduleId || currentModuleId;
+        currentCanvaDemoAudioUrl = demoAudioUrl || '';
+        currentModuleId = moduleId || currentModuleId;
         switchCanvaModalView('guide');
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
@@ -243,20 +246,34 @@ function switchCanvaModalView(view) {
     const demoWrapper = document.getElementById('demo-wrapper');
     const canvaIframe = document.getElementById('canva-iframe');
     const demoIframe = document.getElementById('demo-iframe');
-    const demoUnavailable = document.getElementById('demo-unavailable');
+    const demoAudioPlayer = document.getElementById('demo-audio-player');
+    const demoAudio = document.getElementById('demo-audio');
+    const demoUnavailable = document.getElementById('demo-unavailable');
     const guideButton = document.getElementById('btn-modal-guide');
     const demoButton = document.getElementById('btn-modal-demo');
     const showGuide = view === 'guide';
     const showDemoVideo = !showGuide && Boolean(currentCanvaDemoUrl);
-
-    if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
-    if (demoWrapper) demoWrapper.style.display = showGuide ? 'none' : 'flex';
-    if (canvaIframe) canvaIframe.src = showGuide ? currentCanvaGuideUrl : '';
-    if (demoIframe) {
-        demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
-        demoIframe.style.display = showDemoVideo ? 'block' : 'none';
-    }
-    if (demoUnavailable) demoUnavailable.style.display = !showGuide && !showDemoVideo ? 'block' : 'none';
+    const showDemoAudio = !showGuide && Boolean(currentCanvaDemoAudioUrl);
+
+    if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
+    if (demoWrapper) demoWrapper.style.display = showGuide ? 'none' : 'flex';
+    if (demoWrapper) demoWrapper.classList.toggle('audio-demo', showDemoAudio);
+    if (canvaIframe) canvaIframe.src = showGuide ? currentCanvaGuideUrl : '';
+    if (demoIframe) {
+        demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
+        demoIframe.style.display = showDemoVideo ? 'block' : 'none';
+    }
+    if (demoAudioPlayer) demoAudioPlayer.style.display = showDemoAudio ? 'block' : 'none';
+    if (demoAudio) {
+        if (showDemoAudio) {
+            if (demoAudio.getAttribute('src') !== currentCanvaDemoAudioUrl) {
+                demoAudio.src = currentCanvaDemoAudioUrl;
+            }
+        } else {
+            demoAudio.pause();
+        }
+    }
+    if (demoUnavailable) demoUnavailable.style.display = !showGuide && !showDemoVideo && !showDemoAudio ? 'block' : 'none';
     if (guideButton) {
         guideButton.classList.toggle('active', showGuide);
         guideButton.setAttribute('aria-pressed', String(showGuide));
@@ -270,9 +287,16 @@ function switchCanvaModalView(view) {
 function stopCanvaModalMedia() {
     const canvaIframe = document.getElementById('canva-iframe');
     const demoIframe = document.getElementById('demo-iframe');
-    if (canvaIframe) canvaIframe.src = '';
-    if (demoIframe) demoIframe.src = '';
-}
+    const demoAudio = document.getElementById('demo-audio');
+    if (canvaIframe) canvaIframe.src = '';
+    if (demoIframe) demoIframe.src = '';
+    if (demoAudio) {
+        demoAudio.pause();
+        demoAudio.currentTime = 0;
+        demoAudio.removeAttribute('src');
+        demoAudio.load();
+    }
+}
 
 function closeCanvaModal() {
     const modal = document.getElementById('modal-canva');

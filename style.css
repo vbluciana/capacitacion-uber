@@ -1269,12 +1269,64 @@ body.high-contrast .admin-footer-btn:focus-visible {
     height: 100%;
     border: none;
 }
-
+
+.demo-wrapper.audio-demo {
+    width: min(100%, 560px);
+    min-height: 300px;
+    aspect-ratio: auto;
+    padding: 28px;
+    background: linear-gradient(145deg, #161616, #30343b);
+}
+
+.demo-audio-player {
+    width: 100%;
+    color: #fff;
+    text-align: center;
+}
+
+.demo-audio-art {
+    display: grid;
+    width: 104px;
+    height: 104px;
+    margin: 0 auto 18px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #5c91fa, #276EF1 55%, #1749a5);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    color: #fff;
+    font-size: 3rem;
+}
+
+.demo-audio-info h3 {
+    margin: 2px 0 4px;
+    color: #fff;
+    font-size: 1.35rem;
+}
+
+.demo-audio-info p {
+    color: #d1d5db;
+    font-size: 0.95rem;
+}
+
+.demo-audio-info .demo-audio-label {
+    color: #9dbdff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.demo-audio-player audio {
+    display: block;
+    width: 100%;
+    margin-top: 22px;
+}
+
 .demo-unavailable {
     padding: 24px;
     color: #444;
     text-align: center;
-}
+}
 
 .modal-canva-footer {
     display: flex;
@@ -3172,6 +3224,46 @@ body.high-contrast .modal-view-btn:focus-visible {
         min-height: 90px;
         padding-top: 0;
         aspect-ratio: auto;
+    }
+
+    #modal-canva.side-by-side .demo-wrapper.audio-demo {
+        padding: 12px;
+    }
+
+    #modal-canva.side-by-side .demo-audio-player {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        column-gap: 12px;
+        align-items: center;
+        text-align: left;
+    }
+
+    #modal-canva.side-by-side .demo-audio-art {
+        width: 56px;
+        height: 56px;
+        margin: 0;
+        font-size: 1.75rem;
+    }
+
+    #modal-canva.side-by-side .demo-audio-info {
+        grid-column: 2;
+    }
+
+    #modal-canva.side-by-side .demo-audio-info h3 {
+        font-size: 1rem;
+    }
+
+    #modal-canva.side-by-side .demo-audio-info p {
+        font-size: 0.75rem;
+    }
+
+    #modal-canva.side-by-side .demo-audio-info p:not(.demo-audio-label) {
+        display: none;
+    }
+
+    #modal-canva.side-by-side .demo-audio-player audio {
+        grid-column: 1 / -1;
+        margin-top: 8px;
     }
 
     #modal-canva.side-by-side .modal-canva-footer {
