@@ -122,7 +122,7 @@ const moduleDefinitions = {
     3: {
         title: 'Módulo 3: Agregar método de pago',
         guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed',
-        demoAudioUrl: 'assets/podcast_modulo_3.mp3'
+        demoAudioUrl: 'assets/podcast_modulo_3.mp3?v=2'
     },
     4: {
         title: 'Módulo 4: Manejo de imprevistos',
