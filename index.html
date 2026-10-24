@@ -16,7 +16,7 @@
     <title>Capacitación sobre Uber</title>
 
 
-    <link rel="stylesheet" href="style.css?v=30">
+    <link rel="stylesheet" href="style.css?v=36">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -31,6 +31,23 @@
 
 
 <body>
+    <!-- Filtros SVG para Daltonismo (Accesibilidad Visual) -->
+    <svg id="a11y-svg-filters" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <filter id="filter-protanopia">
+                <feColorMatrix type="matrix" values="0.567, 0.433, 0, 0, 0  0.558, 0.442, 0, 0, 0  0, 0.242, 0.758, 0, 0  0, 0, 0, 1, 0"/>
+            </filter>
+            <filter id="filter-deuteranopia">
+                <feColorMatrix type="matrix" values="0.625, 0.375, 0, 0, 0  0.700, 0.300, 0, 0, 0  0, 0.300, 0.700, 0, 0  0, 0, 0, 1, 0"/>
+            </filter>
+            <filter id="filter-tritanopia">
+                <feColorMatrix type="matrix" values="0.950, 0.050, 0, 0, 0  0, 0.433, 0.567, 0, 0  0, 0.475, 0.525, 0, 0  0, 0, 0, 1, 0"/>
+            </filter>
+            <filter id="filter-achromatopsia">
+                <feColorMatrix type="matrix" values="0.299, 0.587, 0.114, 0, 0  0.299, 0.587, 0.114, 0, 0  0.299, 0.587, 0.114, 0, 0  0, 0, 0, 1, 0"/>
+            </filter>
+        </defs>
+    </svg>
 
 
     <nav class="navbar">
@@ -57,126 +74,100 @@
                     <li><a href="#" class="nav-item" onclick="switchTab('view-recursos', this); return false;">Centro de Recursos</a></li>
 
 
+                                    <li><a href="#" class="nav-item" onclick="switchTab('view-nosotros', this); return false;">Marco Institucional</a></li>
                 </ul>
 
 
 
 
 
-                <div class="accessibility-toolbar" aria-live="polite">
-
-
-                    <button type="button" id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-menu" aria-label="Abrir menú de accesibilidad">
-
-
-                        <span class="a11y-icon">♿</span>
-
-
-                        <span class="a11y-label">Accesibilidad</span>
-
-
+                                <div class="accessibility-toolbar" aria-live="polite">
+                    <button type="button" id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-menu" aria-label="Abrir menú de preferencias">
+                        <span class="a11y-icon">⚙️</span>
+                        <span class="a11y-label">Preferencias</span>
                         <span class="a11y-chevron" aria-hidden="true">▾</span>
-
-
                     </button>
 
-
                     <div id="accessibility-menu" class="accessibility-menu" hidden>
-
-
                         <div class="a11y-menu-header">
-
-
-                            <span class="a11y-menu-title">Ajustes visuales</span>
-
-
+                            <span class="a11y-menu-title">⚙️ Preferencias</span>
                         </div>
 
-
-                        
-
-
+                        <!-- Zoom y Tamaño -->
                         <div class="a11y-section">
-
-                            <span class="a11y-section-label">Tamaño de letra</span>
-
-                            <div class="a11y-font-controls">
-
-                                <button type="button" class="a11y-font-toggle" id="toggle-font-size" aria-pressed="false" aria-label="Aumentar tamaño de letra al 120%">
-
-                                    <span class="a11y-font-symbol" aria-hidden="true">A+</span>
-
-                                    <span id="a11y-font-toggle-label">Aumentar texto</span>
-
-                                    <span id="a11y-font-indicator" class="a11y-font-indicator">100%</span>
-
-                                </button>
-
+                            <span class="a11y-section-label">🔍 Zoom y tamaño de texto</span>
+                            <div class="a11y-zoom-controls">
+                                <button type="button" class="a11y-zoom-btn" id="zoom-out-btn" aria-label="Disminuir zoom">A−</button>
+                                <span id="a11y-zoom-indicator" class="a11y-zoom-indicator" role="status" aria-live="polite">100%</span>
+                                <button type="button" class="a11y-zoom-btn" id="zoom-in-btn" aria-label="Aumentar zoom">A+</button>
+                                <button type="button" class="a11y-zoom-reset" id="zoom-reset-btn" aria-label="Restablecer zoom al 100%">100%</button>
                             </div>
-
                         </div>
 
-
-
-
-                        <!-- Opción de alto contraste con switch elegante -->
-
-
+                        <!-- Modo Claro / Oscuro -->
                         <div class="a11y-section">
+                            <span class="a11y-section-label">🎨 Modo de color</span>
+                            <div class="a11y-theme-selector" role="group" aria-label="Selección de modo de color">
+                                <button type="button" class="a11y-theme-btn active" id="theme-light-btn" aria-pressed="true">
+                                    <span>☀️</span> Claro
+                                </button>
+                                <button type="button" class="a11y-theme-btn" id="theme-dark-btn" aria-pressed="false">
+                                    <span>🌙</span> Oscuro
+                                </button>
+                            </div>
+                        </div>
 
-
+                        <!-- Alto Contraste -->
+                        <div class="a11y-section">
                             <button type="button" class="a11y-toggle-row" id="toggle-contrast" aria-pressed="false" aria-label="Activar alto contraste">
-
-
                                 <div class="a11y-toggle-info">
-
-
                                     <span class="a11y-toggle-icon">🌓</span>
-
-
                                     <span class="a11y-toggle-text">Alto contraste</span>
-
-
                                 </div>
-
-
                                 <span class="a11y-switch" aria-hidden="true">
-
-
                                     <span class="a11y-switch-thumb"></span>
-
-
                                 </span>
-
-
                             </button>
-
-
                         </div>
 
+                        <!-- Daltonismo -->
+                        <div class="a11y-section">
+                            <label for="colorblind-select" class="a11y-section-label">👁️ Filtro para Daltonismo</label>
+                            <div class="a11y-select-wrapper">
+                                <select id="colorblind-select" class="a11y-select" aria-label="Seleccionar filtro de daltonismo">
+                                    <option value="none">Normal (Sin filtro)</option>
+                                    <option value="protanopia">Protanopía (Rojo débil)</option>
+                                    <option value="deuteranopia">Deuteranopía (Verde débil)</option>
+                                    <option value="tritanopia">Tritanopía (Azul débil)</option>
+                                    <option value="achromatopsia">Monocromático (Escala de grises)</option>
+                                </select>
+                            </div>
+                        </div>
 
+                        <!-- Herramientas Inclusivas -->
+                        <div class="a11y-section">
+                            <span class="a11y-section-label">✨ Tipografía accesible</span>
 
+                            <!-- Tipografía para Dislexia -->
+                            <button type="button" class="a11y-toggle-row" id="toggle-dyslexia" aria-pressed="false" aria-label="Activar tipografía para dislexia">
+                                <div class="a11y-toggle-info">
+                                    <span class="a11y-toggle-icon">📖</span>
+                                    <span class="a11y-toggle-text">Tipografía para dislexia</span>
+                                </div>
+                                <span class="a11y-switch" aria-hidden="true">
+                                    <span class="a11y-switch-thumb"></span>
+                                </span>
+                            </button>
+                        </div>
 
-
-                        <!-- Botón para restablecer -->
-
-
+                        <!-- Restablecer -->
                         <div class="a11y-footer">
-
-
-                            <button type="button" class="a11y-reset-btn" id="reset-accessibility" aria-label="Restablecer ajustes de accesibilidad">
-
-
+                            <button type="button" class="a11y-reset-btn" id="reset-accessibility" aria-label="Restablecer todas las preferencias">
                                 <span>↺</span> Restablecer predeterminados
-
-
                             </button>
-
-
                         </div>
-
-
                     </div>
+                </div>
 
 
                 </div>
@@ -294,92 +285,71 @@
 
 
                 <div class="module-grid">
-
-
                     <!-- Modulo 1 -->
-
-
                     <article class="module-card" data-module-id="1">
-
-
                         <div class="module-number">1</div>
-
-
-                        <h3>Primeros Pasos</h3>
-
-
-                        <p>Aprenda cómo crear su cuenta de usuario de forma segura.</p>
-
-
+                        <h3>Registro e Inicio de Sesión</h3>
+                        <p>Aprenda a crear su cuenta de usuario y familiarizarse con la aplicación de forma segura.</p>
+                        <div class="module-contents">
+                            <span class="module-contents-title">Contenidos incluidos:</span>
+                            <ul class="module-contents-list">
+                                <li>Reconocimiento de la interfaz principal y funciones básicas.</li>
+                                <li>Creación de cuenta con Google y datos personales.</li>
+                                <li>Permisos requeridos del sistema: geolocalización y notificaciones.</li>
+                            </ul>
+                        </div>
                         <button class="btn-secondary" id="module-1-start" onclick="startModule(1)">Comenzar</button>
-
-
                     </article>
-
-
-
-
 
                     <!-- Modulo 2 -->
-
-
                     <article class="module-card" data-module-id="2">
-
-
                         <div class="module-number">2</div>
-
-
-                        <h3>Pedir un Viaje</h3>
-
-
-                        <p>Instrucciones claras sobre cómo ingresar su destino, elegir el tipo de auto y confirmar su viaje. ¡Es muy fácil!</p>
-
-
+                        <h3>Solicitud de Viajes</h3>
+                        <p>Instrucciones claras sobre cómo ingresar su destino, elegir el vehículo y confirmar su viaje.</p>
+                        <div class="module-contents">
+                            <span class="module-contents-title">Contenidos incluidos:</span>
+                            <ul class="module-contents-list">
+                                <li>Estimación de tarifas y factores del precio.</li>
+                                <li>Ingreso de dirección y punto de destino en el mapa.</li>
+                                <li>Confirmación del traslado y seguimiento del vehículo.</li>
+                                <li>Comunicación con el conductor mediante el chat interno.</li>
+                            </ul>
+                        </div>
                         <button class="btn-secondary" id="module-2-start" onclick="startModule(2)" disabled>Comenzar</button>
-
-
                     </article>
-
-
-
-
 
                     <!-- Modulo 3 -->
-
-
                     <article class="module-card" data-module-id="3">
-
-
                         <div class="module-number">3</div>
-
-
-                        <h3>Agregar método de pago</h3>
-
-                        <p>Conozca las herramientas de seguridad que ofrece la aplicación y cómo configurar sus métodos de pago.</p>
-
-
+                        <h3>Gestión de Pagos</h3>
+                        <p>Conozca las opciones de pago disponibles y cómo administrarlas con total tranquilidad.</p>
+                        <div class="module-contents">
+                            <span class="module-contents-title">Contenidos incluidos:</span>
+                            <ul class="module-contents-list">
+                                <li>Vinculación segura de tarjetas de débito y crédito.</li>
+                                <li>Selección de medio de pago (efectivo o tarjeta).</li>
+                                <li>Modificación y eliminación de métodos de pago.</li>
+                            </ul>
+                        </div>
                         <button class="btn-secondary" id="module-3-start" onclick="startModule(3)" disabled>Comenzar</button>
-
-
                     </article>
-
-
-
 
                     <!-- Modulo 4 -->
-
                     <article class="module-card" data-module-id="4">
-
                         <div class="module-number">4</div>
-
-                        <h3>Manejo de imprevistos</h3>
-
-                        <p>Aprenda a mantener la calma y elegir cómo actuar ante una situación inesperada durante un viaje.</p>
-
+                        <h3>Gestión de Imprevistos y Soporte</h3>
+                        <p>Aprenda las pautas de prevención y cómo actuar ante cualquier situación inesperada.</p>
+                        <div class="module-contents">
+                            <span class="module-contents-title">Contenidos incluidos:</span>
+                            <ul class="module-contents-list">
+                                <li>Verificación preventiva de seguridad: patente, auto y chofer.</li>
+                                <li>Cancelación de viajes y comprensión de tarifas.</li>
+                                <li>Compartir recorrido en tiempo real con familiares.</li>
+                                <li>Canales oficiales de asistencia y soporte técnico.</li>
+                            </ul>
+                        </div>
                         <button class="btn-secondary" id="module-4-start" onclick="startModule(4)" disabled>Comenzar</button>
-
                     </article>
-
                 </div>
 
                 <button class="btn-secondary reset-progress-button" type="button" onclick="resetModulesProgress()">Reiniciar</button>
@@ -1420,6 +1390,100 @@
 
 
 
+    
+        <!-- Pestaña: Marco Institucional -->
+        <div id="view-nosotros" class="tab-view" style="display: none;">
+            <!-- Header estándar negro, homogéneo con el resto de la plataforma -->
+            <header class="header">
+                <div class="container header-content">
+                    <h1>Marco Institucional</h1>
+                    <p class="subtitle">Propuesta pedagógica, origen académico y plan oficial de capacitación</p>
+                </div>
+            </header>
+
+            <section class="container project-section">
+                <div class="project-grid">
+                    <!-- Tarjeta 1: Origen del Proyecto & Equipo -->
+                    <div class="module-card project-card">
+                        <span class="project-tag-pill">MARCO ACADÉMICO</span>
+                        <h3>🏛️ Origen del Proyecto</h3>
+                        <p class="project-intro-text">
+                            Esta propuesta de capacitación surge desde el desarrollo de la materia <strong>Comunicación Multimedial en el Desarrollo de Sistemas de la Información</strong>, correspondiente a la carrera de Ingeniería en Sistemas de Información de la Universidad Tecnológica Nacional – Facultad Regional Córdoba (UTN FRC).
+                        </p>
+
+                        <div class="project-academic-table">
+                            <div class="academic-field-item">
+                                <span class="field-label">Año</span>
+                                <span class="field-value">2026</span>
+                            </div>
+                            <div class="academic-field-item">
+                                <span class="field-label">Institución</span>
+                                <span class="field-value">UTN FRC</span>
+                            </div>
+                            <div class="academic-field-item">
+                                <span class="field-label">Curso</span>
+                                <span class="field-value">4K4A</span>
+                            </div>
+                            <div class="academic-field-item">
+                                <span class="field-label">Grupo</span>
+                                <span class="field-value">Grupo N° 10</span>
+                            </div>
+                            <div class="academic-field-item academic-full-span">
+                                <span class="field-label">Docentes</span>
+                                <span class="field-value">Andrés Kabusch · Karina Toranzo</span>
+                            </div>
+                        </div>
+
+                        <div class="project-members-wrapper">
+                            <h4>👥 Integrantes del Grupo</h4>
+                            <ul class="project-members-list">
+                                <li><strong>Corvera</strong>, Yazmín Guadalupe</li>
+                                <li><strong>Del Genio</strong>, Guadalupe</li>
+                                <li><strong>Scatena</strong>, Marco</li>
+                                <li><strong>Tapia</strong>, Agostina</li>
+                                <li><strong>Villarroel</strong>, Luciana</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Objetivo General Sintetizado -->
+                    <div class="module-card project-card">
+                        <span class="project-tag-pill">PROPÓSITO FORMATIVO</span>
+                        <h3>🎯 Objetivo General de la Capacitación</h3>
+                        
+                        <div class="project-quote-box">
+                            <p class="project-quote-text">
+                                "Operar de forma autónoma, segura y eficiente la aplicación móvil <strong>Uber Pasajeros</strong> para la gestión integral de sus traslados cotidianos, seleccionando adecuadamente puntos de origen/destino y medios de pago, y aplicando las herramientas de seguridad preventiva de la plataforma."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3: Plan de Capacitación Oficial -->
+                    <div class="module-card project-card">
+                        <span class="project-tag-pill">DOCUMENTO OFICIAL · GOOGLE DRIVE</span>
+                        <h3>📄 Plan de Capacitación Oficial</h3>
+                        
+                        <p class="project-intro-text">
+                            En este documento se detalla la planificación pedagógica integral del proyecto: el marco metodológico para usuarios mayores de 50 años, el diagnóstico de necesidades, los contenidos desglosados en 4 módulos temáticos, las dinámicas de práctica interactiva con simulador y los criterios de evaluación formativa y seguimiento.
+                        </p>
+
+                        <div class="project-actions-bar">
+                            <a href="https://docs.google.com/document/d/1hFNjJ3PDCeuR_kmHtWijFmwWy8ot9AsVbIp7H5L5mJo/export?format=pdf" target="_blank" rel="noopener" class="btn-primary" style="margin-top: 0;">
+                                📥 Descargar Plan (PDF)
+                            </a>
+                        </div>
+
+                        <div class="project-pdf-viewer">
+                            <div class="project-pdf-header">
+                                <span>📄 Plan de Capacitación Oficial</span>
+                                <a href="https://docs.google.com/document/d/1hFNjJ3PDCeuR_kmHtWijFmwWy8ot9AsVbIp7H5L5mJo/edit?usp=sharing" target="_blank" rel="noopener">Abrir en Google Drive ↗</a>
+                            </div>
+                            <iframe src="https://docs.google.com/document/d/1hFNjJ3PDCeuR_kmHtWijFmwWy8ot9AsVbIp7H5L5mJo/preview" class="project-pdf-frame" title="Visor del Plan de Capacitación en Google Drive" allow="autoplay"></iframe>
+                        </div>
+                    </div></div>
+            </section>
+        </div>
+
     </main>
 
 
@@ -1693,7 +1757,7 @@
             <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
 
 
-            <h2>Módulo 1: Primeros Pasos</h2>
+            <h2>Módulo 1: Registro e Inicio de Sesión</h2>
 
 
             <div class="modal-body">
@@ -1732,7 +1796,7 @@
             <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
 
 
-            <h2>Módulo 2: Pedir un Viaje</h2>
+            <h2>Módulo 2: Solicitud de Viajes</h2>
 
 
             <div class="modal-body">
@@ -2207,7 +2271,10 @@
 
 
 
-    <script src="script.js?v=8"></script>
+    <script src="script.js?v=13"></script>
+
+
+
 
 </body>
 

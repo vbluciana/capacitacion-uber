@@ -986,10 +986,10 @@ h3 { font-size: 1.5rem; }
     color: white;
 
 
-    padding: 60px 0;
+    padding: 36px 0 32px;
 
 
-    border-bottom: 8px solid var(--secondary-color);
+    border-bottom: 6px solid var(--secondary-color);
 
 
 }
@@ -1854,15 +1854,10 @@ body.high-contrast .a11y-reset-btn:hover {
 
 
 @media (max-width: 768px) {
-
     .accessibility-menu {
-
-        right: auto;
-
-        left: 0;
-
+        right: 0 !important;
+        left: auto !important;
     }
-
 }
 
 
@@ -1930,8 +1925,8 @@ section {
 
 .hero-logo-container {
     width: 100%;
-    max-width: 360px;
-    height: clamp(90px, 16vw, 130px);
+    max-width: 100%;
+    height: clamp(110px, 16vw, 150px);
     margin-bottom: 24px;
     overflow: hidden;
     background-color: #000000;
@@ -2256,17 +2251,55 @@ section {
 
 
 .module-card p {
-
-
     color: #555;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
 
-
-    line-height: 1.7;
-
-
+.module-contents {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #E2E8F0;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
+.module-contents-title {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
+}
 
+.module-contents-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.module-contents-list li {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #475569;
+    position: relative;
+    padding-left: 20px;
+}
+
+.module-contents-list li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    top: -1px;
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+    line-height: 1;
+    font-weight: bold;
 }
 
 
@@ -2601,10 +2634,10 @@ body.high-contrast .module-status {
     color: white;
 
 
-    padding: 56px 0;
+    padding: 20px 0;
 
 
-    margin-top: 80px;
+    margin-top: 40px;
 
 
 }
@@ -3354,213 +3387,241 @@ body.high-contrast .admin-footer-btn:focus-visible {
 
 
 
-/* Responsive */
-
-
+/* ==========================================================================
+   OPTIMIZACIÓN RESPONSIVE AVANZADA: TABLETS Y DISPOSITIVOS MÓVILES (<= 768px)
+   ========================================================================== */
 @media (max-width: 768px) {
 
+    /* --- Prevenir cualquier desbordamiento horizontal accidental --- */
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+
+    /* --- Navbar Móvil: 2 Filas Inteligentes y Compactas --- */
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
 
     .nav-content {
-
-
-        flex-wrap: wrap;
-
-
-        gap: 12px;
-
-
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        align-items: center;
+        gap: 10px 12px;
+        padding: 10px 16px;
     }
 
-
-
-
+    .logo {
+        grid-column: 1;
+        grid-row: 1;
+        font-size: 1.25rem;
+        font-weight: 700;
+        white-space: nowrap;
+        margin: 0;
+    }
 
     .nav-right {
-
-
-        width: 100%;
-
-
-        display: flex;
-
-
-        flex-wrap: wrap;
-
-
-        align-items: center;
-
-
-        justify-content: space-between;
-
-
-        gap: 12px;
-
-
+        display: contents; /* Despliega nav-links y accessibility-toolbar en la cuadrícula de nav-content */
     }
 
+    .accessibility-toolbar {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+    }
 
+    .accessibility-toggle {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        min-height: 40px;
+        gap: 6px;
+    }
 
+    .accessibility-menu {
+        position: fixed !important;
+        top: 58px !important;
+        right: 12px !important;
+        left: auto !important;
+        width: calc(100vw - 24px) !important;
+        max-width: 330px !important;
+        max-height: calc(100vh - 75px) !important;
+        overflow-y: auto !important;
+        z-index: 10000 !important;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28) !important;
+        border-radius: 18px !important;
+    }
 
-
+    /* Barra de Pestañas Móviles Desplazables Suavemente */
     .nav-links {
-
-
-        flex-wrap: wrap;
-
-
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         gap: 8px;
-
-
+        padding: 2px 4px 6px;
+        margin: 0 -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+        scrollbar-width: none;
     }
 
+    .nav-links::-webkit-scrollbar {
+        display: none;
+    }
 
-
-
+    .nav-links li {
+        flex-shrink: 0;
+    }
 
     .nav-links a {
-
-
-        padding: 10px 12px;
-
-
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 14px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        border-radius: 999px;
+        white-space: nowrap;
+        background: #F1F5F9;
+        color: #334155;
+        border: 1px solid #E2E8F0;
+        transition: all 0.2s ease;
+        min-height: 38px;
     }
 
+    .nav-links a:hover,
+    .nav-links a.active {
+        background: #276EF1;
+        color: #FFFFFF;
+        border-color: #276EF1;
+        box-shadow: 0 2px 8px rgba(39, 110, 241, 0.25);
+    }
 
+    body.dark-mode .nav-links a {
+        background: #1E293B;
+        color: #94A3B8;
+        border-color: #334155;
+    }
 
+    body.dark-mode .nav-links a:hover,
+    body.dark-mode .nav-links a.active {
+        background: #60A5FA;
+        color: #0F172A;
+        border-color: #60A5FA;
+    }
 
+    /* --- Botones y Zonas Táctiles Mobile Friendly (Min 44px) --- */
+    .btn-primary, .btn-secondary {
+        min-height: 44px;
+        padding: 12px 20px;
+        font-size: 1.05rem;
+    }
 
+    /* --- Tipografía y Títulos Proporcionales --- */
+    h1 { font-size: clamp(1.75rem, 6vw, 2.1rem); line-height: 1.25; }
+    h2 { font-size: clamp(1.4rem, 5vw, 1.65rem); line-height: 1.3; }
+    h3 { font-size: clamp(1.2rem, 4vw, 1.35rem); line-height: 1.35; }
+    .subtitle { font-size: 1.05rem; }
+
+    /* --- Sección Hero & Presentación de la App --- */
     .hero-section, .app-preview {
-
-
         flex-direction: column;
-
-
-        gap: 40px;
-
-
+        gap: 32px;
+        text-align: center;
     }
+
     .hero-logo-container {
-        max-width: 320px;
+        width: 100%;
+        max-width: 100%;
         height: 110px;
+        margin: 0 auto 20px;
+    }
+
+    .hero-image {
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .hero-image img {
-        max-height: 440px;
+        width: 100%;
+        max-width: 420px;
+        max-height: 360px;
+        margin: 0 auto;
     }
 
     .app-image img {
-        max-width: 300px;
-        max-height: 500px;
+        max-width: 280px;
+        max-height: 440px;
+        margin: 0 auto;
     }
-
-
-
-
 
     .app-preview {
-
-
-        padding: 40px 24px;
-
-
+        padding: 36px 20px;
+        text-align: left;
     }
 
-
-
-
-
+    /* --- Módulos Educativos en 1 Columna --- */
     .modules-section {
-
-
-        padding: 40px 20px !important;
-
-
+        padding: 36px 18px !important;
     }
 
+    .module-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
 
+    .module-card {
+        padding: 28px 20px;
+    }
 
+    .module-card .btn-secondary {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
 
-
-    h1 { font-size: 2rem; }
-
-
-    h2 { font-size: 1.5rem; }
-
-
-    
-
-
+    /* --- Modales en Mobile/Tablet --- */
     .modal-canva-content {
-
-
-        padding: 16px;
-
-
+        padding: 18px 14px;
         margin: 10px auto;
-
-
+        width: 96%;
     }
-
-
-
-
 
     .modal-canva-footer {
-
-
         align-items: stretch;
-
-
         flex-direction: column;
-
-
+        gap: 10px;
     }
-
-
-
-
 
     .modal-view-toggle {
-
-
         width: 100%;
-
-
+        display: flex;
     }
-
-
-
-
 
     .modal-view-btn {
-
-
         flex: 1;
-
-
         padding: 10px 8px;
-
-
+        font-size: 0.95rem;
     }
-
-
-
-
 
     .modal-canva-footer .btn-primary {
-
-
         width: 100%;
-
-
+        padding: 13px 18px;
     }
 
-
+    /* --- Barra Lateral FAQ Pantalla Completa --- */
+    .faq-sidebar {
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
 }
-
-
-
-
 
 /* Evaluación integrada de Google Forms */
 
@@ -6523,420 +6584,453 @@ body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
 
 
 
+/* ==========================================================================
+   OPTIMIZACIÓN RESPONSIVE EXTREMA: DISPOSITIVOS MÓVILES COMPACTOS (<= 480px)
+   ========================================================================== */
 @media (max-width: 480px) {
 
-
     body {
-
-
-        font-size: 1.125rem;
-
+        font-size: 1.05rem;
     }
-
-
-
-
 
     .container {
-
-
-        padding-right: 16px;
-
-
-        padding-left: 16px;
-
-
-    }
-
-
-
-
-    .module-grid {
-
-        grid-template-columns: 1fr;
-
-        gap: 20px;
-
-    }
-
-
-
-
-    .nav-content {
-
-
-        align-items: flex-start;
-
-
-        padding: 12px 16px;
-
-
-    }
-
-
-
-
-
-    .logo {
-
-
-        font-size: 1.25rem;
-
-
-    }
-
-
-
-
-
-    .nav-links {
-
-
+        padding-right: 14px;
+        padding-left: 14px;
         width: 100%;
-
-
-        gap: 4px;
-
-
+        max-width: 100%;
     }
-
-
-
-
-
-    .nav-links a {
-
-
-        display: block;
-
-
-        padding: 8px 10px;
-
-
-        font-size: 0.9rem;
-
-
-    }
-
-
-
-
-
-    .header {
-
-
-        padding: 40px 0;
-
-
-    }
-
-
-
-
-
-    .header h1 {
-
-
-        font-size: clamp(1.75rem, calc(8vw * var(--accessibility-font-scale)), 2rem);
-
-    }
-
-
-
-
-
-    .subtitle {
-
-
-        font-size: 1.1rem;
-
-
-    }
-
-
-
-
 
     section {
-
-
-        padding: 56px 0;
-
-
+        padding: 36px 0;
     }
 
+    .header {
+        padding: 24px 0 18px;
+    }
 
+    .header h1 {
+        font-size: clamp(1.6rem, 7vw, 1.95rem);
+    }
 
+    .subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
 
+    /* --- Navbar en pantallas muy pequeñas (< 480px) --- */
+    .nav-content {
+        padding: 8px 12px;
+        gap: 8px 10px;
+    }
 
+    .logo {
+        font-size: 1.15rem;
+    }
+
+    .accessibility-toggle {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .accessibility-toggle .a11y-label {
+        font-size: 0.8rem;
+    }
+
+    .nav-links a {
+        padding: 6px 12px;
+        font-size: 0.82rem;
+    }
+
+    /* --- Hero Section Móvil --- */
     .hero-section {
-
-
-        gap: 24px;
-
-
-        padding-top: 32px;
-
-
-        padding-bottom: 32px;
-
-
+        gap: 20px;
+        padding-top: 20px;
+        padding-bottom: 24px;
     }
+
     .hero-logo-container {
-        max-width: 280px;
-        height: 90px;
-        margin-bottom: 20px;
+        height: 80px;
+        margin-bottom: 16px;
+        border-radius: 12px;
     }
 
     .hero-image img {
-        max-height: 380px;
+        max-height: 250px;
+        border-radius: 14px;
+    }
+
+    .hero-text h2 {
+        font-size: 1.45rem;
+        line-height: 1.3;
+        margin-bottom: 10px;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* --- Módulos Educativos en Móviles --- */
+    .modules-section {
+        padding: 24px 14px !important;
+        border-radius: 16px;
+    }
+
+    .modules-progress-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .module-grid {
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    .module-card {
+        padding: 22px 16px;
+        border-radius: 16px;
+        border-top-width: 5px;
+    }
+
+    .module-number {
+        width: 42px;
+        height: 42px;
+        font-size: 1.15rem;
+        margin-bottom: 14px;
+    }
+
+    .module-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    .module-card p {
+        font-size: 0.96rem;
+        line-height: 1.55;
+    }
+
+    .module-card .btn-secondary {
+        margin-top: 16px;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+
+    /* --- App Preview Móvil --- */
+    .app-preview {
+        gap: 24px;
+        padding: 24px 16px;
+        border-radius: 16px;
     }
 
     .app-image img {
-        max-width: 260px;
-        max-height: 460px;
+        max-width: 220px;
+        max-height: 360px;
+        border-radius: 18px;
     }
-
-
-
-
-
-    .hero-text h2 {
-
-
-        font-size: 1.7rem;
-
-
-    }
-
-
-
-
-
-    .modules-section {
-
-
-        padding: 32px 16px !important;
-
-
-    }
-
-
-
-
-
-    .resources-section {
-
-
-        padding: 40px 16px;
-
-
-    }
-
-
-
-
-
-    .resources-grid {
-
-
-        gap: 20px;
-
-
-    }
-
-
-
-
-
-    .module-grid {
-
-
-        gap: 20px;
-
-
-    }
-
-
-
-
-
-    .module-card {
-
-
-        padding: 28px 24px;
-
-
-    }
-
-
-
-
-
-    .app-preview {
-
-
-        gap: 28px;
-
-
-        padding: 32px 20px;
-
-
-    }
-
-
-
-
 
     .feature-list li {
-
-
-        padding: 14px;
-
-
-        font-size: 1rem;
-
-
+        padding: 12px 14px;
+        font-size: 0.92rem;
+        border-radius: 12px;
     }
 
+    /* --- Simulador Práctico en Móvil --- */
+    .simulator-container {
+        padding: 16px 12px 40px !important;
+        gap: 20px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
 
-
-
+    .sim-guide-panel {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        padding: 20px 16px !important;
+        border-radius: 16px !important;
+        border-left-width: 5px !important;
+    }
 
     .sim-guide-panel h3 {
-
-
-        font-size: 1.4rem;
-
-
+        font-size: 1.25rem !important;
+        margin-bottom: 8px;
     }
-
-
-
-
 
     .sim-guide-panel p {
-
-
-        font-size: 1rem;
-
-
+        font-size: 0.98rem !important;
+        line-height: 1.5;
     }
 
-
-
-
+    .sim-hint-box {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+        border-radius: 12px;
+    }
 
     .sim-controls {
-
-
-        flex-wrap: wrap;
-
-
-        gap: 10px;
-
-
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
     }
-
-
-
-
 
     .sim-controls button {
-
-
-        max-width: 100%;
-
-
+        width: 100% !important;
+        min-height: 44px;
+        padding: 11px 8px !important;
+        font-size: 0.88rem !important;
+        justify-content: center;
+        margin: 0 !important;
     }
 
+    .phone-wrapper {
+        width: 100% !important;
+        max-width: 330px !important;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+    }
 
+    .phone-device {
+        width: 100% !important;
+        max-width: 320px !important;
+        height: 580px !important;
+        max-height: 75vh !important;
+        aspect-ratio: auto !important;
+        border-width: 8px !important;
+        border-radius: 36px !important;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22) !important;
+    }
 
+    /* --- Centro de Recursos en Móvil --- */
+    .resources-section {
+        padding: 24px 12px 48px;
+    }
 
+    .resources-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 
+    .module-card ul li a {
+        padding: 10px 12px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        line-height: 1.4;
+        word-break: break-word;
+        font-size: 0.92rem;
+    }
+
+    body.dark-mode .module-card ul li a {
+        background: #1E293B;
+        border-color: #334155;
+    }
+
+    /* --- Pestaña: El Proyecto en Móvil --- */
+    .project-section {
+        padding: 24px 12px 48px;
+    }
+
+    .project-grid {
+        gap: 18px;
+    }
+
+    .project-card {
+        padding: 20px 14px;
+        border-radius: 14px;
+        border-top-width: 5px;
+    }
+
+    .project-card h3 {
+        font-size: 1.3rem;
+    }
+
+    .project-intro-text {
+        font-size: 1rem;
+        line-height: 1.55;
+        margin-bottom: 16px;
+    }
+
+    .project-academic-table {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .field-label {
+        font-size: 0.72rem;
+    }
+
+    .field-value {
+        font-size: 0.95rem;
+    }
+
+    .project-members-wrapper {
+        padding: 12px 14px;
+        border-radius: 10px;
+    }
+
+    .project-members-wrapper h4 {
+        font-size: 1.05rem;
+    }
+
+    .project-members-list li {
+        font-size: 0.92rem;
+        padding: 6px 0;
+    }
+
+    .project-quote-box {
+        padding: 14px 14px;
+        border-left-width: 4px;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .project-quote-text {
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+
+    .project-actions-bar .btn-primary {
+        width: 100%;
+        justify-content: center;
+        min-height: 46px;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+    }
+
+    .project-pdf-viewer {
+        height: 300px;
+        border-radius: 12px;
+    }
+
+    /* --- Modales Responsivos Móviles --- */
     .modal {
-
-
-        padding: 8px;
-
-
+        padding: 6px;
     }
 
-
-
-
-
-    .modal-content,
-
-
-    .encuesta-modal-content,
-
+    .modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto;
+        border-radius: 16px;
+        padding: 18px 14px;
+    }
 
     .modal-canva-content {
-
-
-        width: 100%;
-
-
-        margin: 8px auto;
-
-
-        padding: 24px 18px;
-
-
+        width: 100% !important;
+        height: calc(100vh - 16px) !important;
+        max-height: calc(100vh - 16px) !important;
+        padding: 14px 12px !important;
+        margin: 0 auto !important;
     }
 
-
-
-
+    .canva-wrapper {
+        min-height: 220px;
+    }
 
     .encuesta-modal-content {
-
-
-        height: calc(100vh - 32px);
-
-
-        max-height: calc(100vh - 32px);
-
-
+        width: 100% !important;
+        height: calc(100vh - 16px) !important;
+        max-height: calc(100vh - 16px) !important;
+        padding: 16px 12px !important;
+        margin: 0 auto !important;
     }
-
-
-
-
 
     .modal-canva-header h2,
-
-
     .encuesta-header h2 {
-
-
-        font-size: 1.35rem;
-
-
+        font-size: 1.25rem;
     }
-
-
-
-
 
     .google-form-actions button {
-
-
         width: 100%;
-
-
-        padding: 14px 18px;
-
-
+        min-height: 46px;
+        padding: 13px 16px;
+        font-size: 0.95rem;
     }
 
+    /* Actividad Interactiva en Móvil */
+    .actividad-modal-content {
+        width: 100% !important;
+        max-height: 92vh !important;
+        padding: 18px 14px !important;
+    }
+
+    .actividad-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .actividad-seccion-toggle {
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 10px 10px;
+        font-size: 0.88rem;
+    }
+
+    .actividad-seccion-toggle::before {
+        width: 32px;
+        height: 32px;
+        font-size: 0.78rem;
+        border-radius: 8px;
+    }
+
+    .actividad-seccion-toggle::after {
+        display: none;
+    }
+
+    .actividad-card {
+        padding: 11px 12px;
+        font-size: 0.9rem;
+        min-height: 46px;
+        gap: 10px;
+        border-radius: 10px;
+    }
+
+    /* Panel Admin en Móvil */
+    .admin-panel-modal-content {
+        padding: 16px 12px;
+        max-height: 92vh;
+    }
+
+    .admin-table-wrapper {
+        overflow-x: auto;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-table {
+        min-width: 460px;
+        font-size: 0.78rem;
+    }
+
+    .admin-table th, .admin-table td {
+        padding: 8px 10px;
+    }
+
+    .admin-summary-row {
+        gap: 8px;
+    }
+
+    .admin-stat {
+        padding: 8px 12px;
+        min-width: 70px;
+    }
+
+    .admin-stat strong {
+        font-size: 1.3rem;
+    }
+
+    /* Prevención de zoom no deseado en iOS: inputs en 16px */
+    .faq-input, .faq-textarea, #admin-password-input {
+        font-size: 16px !important;
+    }
 
 }
-
-
-
-
 
 @media (max-height: 500px) {
 
@@ -7318,66 +7412,37 @@ body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
 
 @media (max-width: 768px) {
 
-
     .simulator-container {
-
-
-        gap: 32px;
-
-
-        padding: 32px 16px 56px;
-
-
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 28px;
+        padding: 24px 16px 56px;
+        width: 100%;
     }
-
-
-
-
 
     .sim-guide-panel {
-
-
-        flex: 1 1 100%;
-
-
+        width: 100% !important;
         min-width: 0;
-
-
         max-width: 560px;
-
-
     }
-
-
-
-
 
     .phone-wrapper {
-
-
-        width: min(330px, 100%);
-
-
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
     }
-
-
-
-
 
     .phone-device {
-
-
         width: 100%;
-
-
-        height: auto;
-
-
-        aspect-ratio: 1 / 2;
-
-
+        max-width: 330px;
+        height: 600px;
+        max-height: 80vh;
+        aspect-ratio: auto;
+        border-width: 8px;
+        border-radius: 36px;
     }
-
 
 }
 
@@ -8727,3 +8792,756 @@ body.high-contrast .modal-view-btn:focus-visible {
 
 }
 
+
+
+
+/* ==========================================================================
+   SISTEMA DE PREFERENCIAS, MODOS DE COLOR E INCLUSIÓN VISUAL
+   ========================================================================== */
+
+/* --- REGLA DE LECTURA VISUAL (GUÍA DE FOCO) --- */
+.reading-guide-ruler {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 38px;
+    background: rgba(39, 110, 241, 0.15);
+    border-top: 2px solid #276EF1;
+    border-bottom: 2px solid #276EF1;
+    pointer-events: none;
+    z-index: 99999;
+    display: none;
+    transform: translateY(-50%);
+    box-shadow: 0 0 16px rgba(39, 110, 241, 0.25);
+    transition: top 0.05s ease-out;
+}
+body.reading-guide-active .reading-guide-ruler {
+    display: block;
+}
+body.dark-mode .reading-guide-ruler {
+    background: rgba(96, 165, 250, 0.18);
+    border-color: #60A5FA;
+    box-shadow: 0 0 16px rgba(96, 165, 250, 0.3);
+}
+body.high-contrast .reading-guide-ruler {
+    background: rgba(255, 208, 0, 0.25);
+    border-color: #FFD000;
+    box-shadow: 0 0 20px rgba(255, 208, 0, 0.4);
+}
+
+/* --- FILTROS DE DALTONISMO --- */
+body.colorblind-protanopia {
+    filter: url('#filter-protanopia') !important;
+}
+body.colorblind-deuteranopia {
+    filter: url('#filter-deuteranopia') !important;
+}
+body.colorblind-tritanopia {
+    filter: url('#filter-tritanopia') !important;
+}
+body.colorblind-achromatopsia {
+    filter: url('#filter-achromatopsia') !important;
+}
+
+/* --- TIPOGRAFÍA PARA DISLEXIA --- */
+body.dyslexia-font {
+    font-family: 'Comic Sans MS', 'Trebuchet MS', 'OpenDyslexic', 'Segoe UI', sans-serif !important;
+    letter-spacing: 0.04em !important;
+    word-spacing: 0.08em !important;
+    line-height: 1.85 !important;
+}
+body.dyslexia-font p,
+body.dyslexia-font li,
+body.dyslexia-font span,
+body.dyslexia-font button,
+body.dyslexia-font a,
+body.dyslexia-font h1,
+body.dyslexia-font h2,
+body.dyslexia-font h3 {
+    letter-spacing: 0.03em !important;
+    line-height: 1.75 !important;
+}
+
+/* --- REDUCCIÓN DE MOVIMIENTO --- */
+body.reduced-motion *,
+body.reduced-motion *::before,
+body.reduced-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* --- RESALTAR ENLACES Y BOTONES --- */
+body.highlight-links a {
+    text-decoration: underline 3px #276EF1 !important;
+    text-underline-offset: 4px !important;
+    font-weight: 700 !important;
+}
+body.highlight-links button {
+    outline: 2px solid #276EF1 !important;
+    outline-offset: 2px !important;
+}
+
+/* --- MENÚ DE PREFERENCIAS: CONTROLES MODERNOS --- */
+.accessibility-menu {
+    width: 320px;
+    max-width: min(340px, calc(100vw - 24px));
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding: 18px;
+    border-radius: 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.18), 0 6px 18px -2px rgba(0, 0, 0, 0.06);
+    z-index: 1050;
+}
+
+.accessibility-menu::-webkit-scrollbar {
+    width: 6px;
+}
+.accessibility-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+.accessibility-menu::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 999px;
+}
+
+/* Controles de Zoom */
+.a11y-zoom-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 6px 8px;
+    gap: 8px;
+}
+.a11y-zoom-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1E293B;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.a11y-zoom-btn:hover:not(:disabled) {
+    background: #276EF1;
+    color: #FFFFFF;
+    border-color: #276EF1;
+    transform: scale(1.05);
+}
+.a11y-zoom-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.a11y-zoom-indicator {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #0F172A;
+    min-width: 52px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.a11y-zoom-reset {
+    padding: 6px 10px;
+    background: #EDF2F7;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.a11y-zoom-reset:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+/* Selector de Tema (Claro / Oscuro) */
+.a11y-theme-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 12px;
+}
+.a11y-theme-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #64748B;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.a11y-theme-btn:hover {
+    color: #0F172A;
+}
+.a11y-theme-btn.active {
+    background: #FFFFFF;
+    color: #0F172A;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Select para Daltonismo */
+.a11y-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+.a11y-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #0F172A;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+.a11y-select:focus {
+    border-color: #276EF1;
+    box-shadow: 0 0 0 3px rgba(39, 110, 241, 0.15);
+}
+
+/* ==========================================================================
+   MODO OSCURO (DARK MODE) ESTÉTICO Y ELEGANTE
+   ========================================================================== */
+body.dark-mode {
+    --primary-color: #FFFFFF;
+    --secondary-color: #60A5FA;
+    --background-color: #0F172A;
+    --text-color: #F8FAFC;
+    --card-bg: #1E293B;
+    --focus-ring: 4px solid rgba(96, 165, 250, 0.5);
+    background-color: #0F172A;
+    color: #F8FAFC;
+}
+
+body.dark-mode .navbar {
+    background-color: #1E293B;
+    border-bottom: 1px solid #334155;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+body.dark-mode .logo {
+    color: #F8FAFC;
+}
+body.dark-mode .nav-links a {
+    color: #94A3B8;
+}
+body.dark-mode .nav-links a:hover,
+body.dark-mode .nav-links a.active {
+    color: #60A5FA;
+    background: rgba(96, 165, 250, 0.12);
+}
+
+/* Preferencias en Modo Oscuro */
+body.dark-mode .accessibility-toggle {
+    background: #1E293B;
+    border-color: #334155;
+    color: #F8FAFC;
+}
+body.dark-mode .accessibility-toggle:hover {
+    background: #334155;
+    border-color: #60A5FA;
+}
+body.dark-mode .accessibility-toggle[aria-expanded="true"] {
+    background: rgba(96, 165, 250, 0.15);
+    border-color: #60A5FA;
+    color: #60A5FA;
+}
+body.dark-mode .accessibility-menu {
+    background: #1E293B;
+    border-color: #334155;
+    color: #F8FAFC;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+}
+body.dark-mode .a11y-menu-title {
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-section-label {
+    color: #94A3B8;
+}
+body.dark-mode .a11y-zoom-controls {
+    background: #0F172A;
+    border-color: #334155;
+}
+body.dark-mode .a11y-zoom-btn {
+    background: #1E293B;
+    border-color: #475569;
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-zoom-btn:hover:not(:disabled) {
+    background: #60A5FA;
+    color: #0F172A;
+}
+body.dark-mode .a11y-zoom-indicator {
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-zoom-reset {
+    background: #334155;
+    border-color: #475569;
+    color: #CBD5E1;
+}
+body.dark-mode .a11y-theme-selector {
+    background: #0F172A;
+}
+body.dark-mode .a11y-theme-btn {
+    color: #94A3B8;
+}
+body.dark-mode .a11y-theme-btn.active {
+    background: #334155;
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-toggle-row {
+    background: #0F172A;
+    border-color: #334155;
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-toggle-text {
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-switch {
+    background: #475569;
+}
+body.dark-mode .a11y-select {
+    background: #0F172A;
+    border-color: #334155;
+    color: #F8FAFC;
+}
+body.dark-mode .a11y-reset-btn {
+    background: #0F172A;
+    border-color: #334155;
+    color: #94A3B8;
+}
+body.dark-mode .a11y-reset-btn:hover {
+    background: #334155;
+    color: #F8FAFC;
+}
+
+/* Componentes generales en Modo Oscuro */
+body.dark-mode .hero {
+    background: radial-gradient(ellipse at top, #1E293B, #0F172A);
+}
+body.dark-mode .module-card,
+body.dark-mode .resource-card,
+body.dark-mode .about-card,
+body.dark-mode .faq-item {
+    background: #1E293B;
+    border-color: #334155;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    color: #F8FAFC;
+}
+body.dark-mode .modal-content {
+    background: #1E293B;
+    color: #F8FAFC;
+    border: 1px solid #334155;
+}
+body.dark-mode .faq-sidebar {
+    background: #1E293B;
+    border-left: 1px solid #334155;
+    color: #F8FAFC;
+}
+body.dark-mode .faq-question {
+    color: #F8FAFC;
+}
+body.dark-mode .faq-input,
+body.dark-mode .faq-textarea {
+    background: #0F172A;
+    border-color: #334155;
+    color: #F8FAFC;
+}
+body.dark-mode .footer {
+    background: #0B1120;
+    border-top: 1px solid #1E293B;
+    color: #94A3B8;
+}
+body.dark-mode .btn-secondary {
+    background: #1E293B;
+    border-color: #475569;
+    color: #F8FAFC;
+}
+body.dark-mode .btn-secondary:hover {
+    background: #334155;
+}
+body.dark-mode .sim-guide-panel,
+body.dark-mode .driver-profile-card,
+body.dark-mode .sim-success-card {
+    background: #1E293B;
+    border-color: #334155;
+    color: #F8FAFC;
+}
+
+
+/* ==========================================================================
+   ESTILOS DE LA PESTAÑA: EL PROYECTO (#view-nosotros)
+   Homogéneo con el resto de la plataforma (Paleta Uber + Accesible +50)
+   ========================================================================== */
+
+.project-section {
+    padding: 48px 24px 60px;
+}
+
+.project-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.project-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 36px 32px;
+    border-top: 6px solid var(--secondary-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transition: var(--transition);
+}
+
+.project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px rgba(39, 110, 241, 0.1);
+}
+
+.project-tag-pill {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--secondary-color);
+    background: #EFF6FF;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+.project-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.project-intro-text {
+    font-size: 1.15rem;
+    line-height: 1.65;
+    color: var(--text-color);
+    margin-bottom: 22px;
+}
+
+/* Ficha técnica académica estilo Uber (limpio, directo y legible) */
+.project-academic-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    background: var(--background-color);
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+}
+
+.academic-field-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.academic-full-span {
+    grid-column: 1 / -1;
+    border-top: 1px solid #E2E8F0;
+    padding-top: 10px;
+    margin-top: 4px;
+}
+
+.field-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748B;
+}
+
+.field-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Lista de integrantes accesible y destacada */
+.project-members-wrapper {
+    background: var(--background-color);
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 18px 22px;
+}
+
+.project-members-wrapper h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.project-members-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.project-members-list li {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed #E2E8F0;
+}
+
+.project-members-list li:last-child {
+    border-bottom: none;
+}
+
+.project-members-list li strong {
+    color: var(--primary-color);
+}
+
+/* Cita destacada del Objetivo General */
+.project-quote-box {
+    background: var(--background-color);
+    border-left: 6px solid var(--secondary-color);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    margin-top: 8px;
+}
+
+.project-quote-text {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.7;
+    color: var(--text-color);
+    font-style: italic;
+    margin: 0;
+}
+
+/* Botones y visor del plan */
+.project-actions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.project-actions-bar .btn-primary,
+.project-actions-bar .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.project-gdoc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    padding: 10px 4px;
+    transition: var(--transition);
+}
+
+.project-gdoc-link:hover {
+    color: #1D58C4;
+    text-decoration-thickness: 2px;
+}
+
+body.dark-mode .project-gdoc-link {
+    color: #60A5FA;
+}
+
+body.dark-mode .project-gdoc-link:hover {
+    color: #93C5FD;
+}
+
+body.high-contrast .project-gdoc-link {
+    color: #FFD000;
+}
+
+.project-pdf-viewer {
+    background: var(--background-color);
+    border: 1px solid #CBD5E1;
+    border-radius: 14px;
+    overflow: hidden;
+    height: 420px;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #EDF2F7;
+    border-bottom: 1px solid #CBD5E1;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.project-pdf-header a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.project-pdf-header a:hover {
+    text-decoration: underline;
+}
+
+.project-pdf-frame {
+    flex: 1;
+    width: 100%;
+    border: none;
+}
+
+/* Modo Oscuro para la pestaña del proyecto */
+body.dark-mode .project-tag-pill {
+    background: rgba(96, 165, 250, 0.15);
+    color: #93C5FD;
+}
+
+body.dark-mode .project-card h3,
+body.dark-mode .project-members-wrapper h4,
+body.dark-mode .project-members-list li strong {
+    color: #F8FAFC;
+}
+
+body.dark-mode .project-academic-table,
+body.dark-mode .project-members-wrapper,
+body.dark-mode .project-quote-box {
+    background: #0F172A;
+    border-color: #334155;
+}
+
+body.dark-mode .academic-full-span,
+body.dark-mode .project-members-list li {
+    border-color: #334155;
+}
+
+body.dark-mode .field-label {
+    color: #94A3B8;
+}
+
+body.dark-mode .field-value,
+body.dark-mode .project-quote-text,
+body.dark-mode .project-members-list li {
+    color: #F1F5F9;
+}
+
+body.dark-mode .project-pdf-viewer {
+    background: #0F172A;
+    border-color: #334155;
+}
+
+body.dark-mode .project-pdf-header {
+    background: #1E293B;
+    border-color: #334155;
+    color: #CBD5E1;
+}
+
+/* Alto Contraste */
+body.high-contrast .project-card {
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .project-quote-box {
+    border-left-color: #FFD000 !important;
+    background: #111111 !important;
+}
+
+body.high-contrast .project-quote-text {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .project-tag-pill {
+    background: #FFD000 !important;
+    color: #000000 !important;
+}
+
+body.dark-mode .module-contents {
+    border-top-color: #334155;
+}
+
+body.dark-mode .module-contents-title {
+    color: #F8FAFC;
+}
+
+body.dark-mode .module-contents-list li {
+    color: #CBD5E1;
+}
+
+body.dark-mode .module-contents-list li::before {
+    color: #60A5FA;
+}
+
+body.high-contrast .module-contents {
+    border-top-color: #FFD000;
+}
+
+body.high-contrast .module-contents-title {
+    color: #FFD000;
+}
+
+body.high-contrast .module-contents-list li {
+    color: #FFFFFF;
+}
+
+body.high-contrast .module-contents-list li::before {
+    color: #FFD000;
+}
+
+
+/* Adaptación de modales side-by-side en pantallas estrechas */
+@media (max-width: 640px) {
+    #modal-canva.side-by-side .modal-canva-content {
+        display: none !important;
+    }
+    #modal-actividad.side-by-side .actividad-modal-content {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        max-height: 92vh !important;
+        transform: none !important;
+        margin: 10px auto !important;
+    }
+}
