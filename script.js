@@ -242,7 +242,7 @@ const moduleDefinitions = {
         title: 'Módulo 2: Solicitud de Viajes',
 
         guideUrl: 'https://www.canva.com/design/DAHX8iPiL44/hhPkYl3F4QvCrri1YWeSeA/view?embed',
-        demoAudioUrl: 'assets/podcast_modulo_2.mp3',
+        demoAudioUrl: 'assets/audio/podcast_modulo_2.mp3',
         demoAudioTitle: 'Solicitud de viajes'
     },
 
@@ -251,7 +251,7 @@ const moduleDefinitions = {
         title: 'Módulo 3: Gestión de Pagos',
 
         guideUrl: 'https://www.canva.com/design/DAHYNePtU_U/dTA5TuNUEqcU6PL-BhUozg/view?embed',
-        demoAudioUrl: 'assets/podcast_modulo_3.mp3?v=2',
+        demoAudioUrl: 'assets/audio/podcast_modulo_3.mp3?v=2',
         demoAudioTitle: 'Gestión de pagos'
     },
     4: {
@@ -1056,794 +1056,693 @@ function escapeHtml(text) {
 
 
 // ========================================================
-
-// LÓGICA DEL SIMULADOR PRÁCTICO INTERACTIVO
-
+// ========================================================
+// LÓGICA DEL SIMULADOR PRÁCTICO INTERACTIVO (MODO CLARO UBER - CÓRDOBA CAPITAL - 50+)
 // ========================================================
 
-
+const SIM_FIXED_ORIGIN = 'Av. Colón 1450, Barrio Alberdi';
+const SIM_FIXED_DESTINATION = 'Hospital Privado Universitario (Av. Naciones Unidas 346)';
 
 const simStepData = {
-
     1: {
-
-        title: "Buscar su destino",
-
-        desc: "Para comenzar a pedir un auto, toque en el celular la barra que dice <strong>\"¿A dónde vas?\"</strong>.",
-
-        hint: "El elemento que debe tocar en la pantalla del celular tiene un resplandor azul parpadeante.",
-
-        progress: 20
-
+        title: "Paso 1: Abrir el buscador",
+        desc: "En la pantalla del celular, toque la barra gris que dice <strong>\"¿A dónde vas?\"</strong> (resaltada con borde azul).",
+        progress: 16.6
     },
-
     2: {
-
-        title: "Escribir su destino",
-
-        desc: "Escriba en el campo del celular el lugar al que quiere ir y toque <strong>Buscar destino</strong>.",
-
-        hint: "Puede escribir el nombre de un lugar o una dirección.",
-
-        progress: 40
-
+        title: "Paso 2: Ingresar el origen y el destino",
+        desc: "Verifique que el origen sea <strong>Av. Colón 1450</strong> y escriba <strong>Hospital Privado</strong> en el destino (o toque directamente la opción <strong>Hospital Privado Universitario</strong> que aparece debajo).",
+        progress: 33.3
     },
-
     3: {
-
-        title: "Elegir auto y método de pago",
-
-        desc: "Revise las opciones de viaje. Puede seleccionar <strong>Efectivo</strong> o <strong>Tarjeta</strong>, y luego tocar el botón negro <strong>'Elegir UberX'</strong>.",
-
-        hint: "Toque 'Comfort' o 'Tarjeta' para practicar cómo cambiar opciones.",
-
-        progress: 60
-
+        title: "Paso 3: Elegir el auto y confirmar",
+        desc: "Elija el tipo de auto (ej. <strong>Essential</strong> por <strong>$ 3.200</strong>) y luego toque el botón negro <strong>\"Elegir Essential ($ 3.200)\"</strong> que está fijo abajo.",
+        progress: 50
     },
-
     4: {
-
-        title: "Confirmar punto de partida",
-
-        desc: "Arrastre el marcador rojo hasta el punto azul, que indica su ubicación actual. Luego toque <strong>Confirmar punto de partida</strong>.",
-
-        hint: "Mantenga presionado el marcador rojo y muévalo hasta el punto azul.",
-
-        progress: 80
-
+        title: "Paso 4: Confirmar punto de partida",
+        desc: "En el mapa, arrastre el puntero hasta hacerlo coincidir con el punto azul sobre <strong>Av. Colón 1450</strong> (o toque el botón <strong>⌖</strong>) y luego presione <strong>\"Confirmar punto de partida\"</strong>.",
+        progress: 66.6
     },
-
     5: {
-
-        title: "¡Viaje confirmado! (Seguridad)",
-
-        desc: "El chofer está en camino. Preste especial atención a la <strong>patente (AA 123 BB)</strong> y el nombre del chofer (Carlos).",
-
-        hint: "Por seguridad, verifique siempre que la patente y el modelo coincidan antes de abrir la puerta.",
-
+        title: "Paso 5: Revisar los datos del chofer",
+        desc: "Verifique la patente <strong>AE 842 KQ</strong>, el auto <strong>Fiat Cronos</strong> y al chofer <strong>Carlos Alberto Pereyra</strong>. Luego toque <strong>\"Subir al auto e iniciar el viaje\"</strong>.",
+        progress: 83.3
+    },
+    6: {
+        title: "Paso 6: Llegar al Hospital Privado",
+        desc: "Siga el recorrido en el mapa de Córdoba y presione el botón negro <strong>\"Llegar a destino y calificar viaje\"</strong> para finalizar.",
         progress: 100
-
     }
-
 };
 
-
+const simCarCatalog = {
+    uberx: {
+        name: "Essential",
+        buttonLabel: "Elegir Essential",
+        price: "$ 3.200",
+        model: "Fiat Cronos Gris Plata"
+    },
+    comfort: {
+        name: "Comfort",
+        buttonLabel: "Elegir Comfort",
+        price: "$ 3.900",
+        model: "Toyota Corolla Gris Plata"
+    },
+    women: {
+        name: "Uber Mujeres",
+        buttonLabel: "Elegir Uber Mujeres",
+        price: "$ 3.200",
+        model: "Volkswagen Polo Gris Plata"
+    }
+};
 
 let currentSimStep = 1;
-
 let simSelectedCar = 'uberx';
-
 let simSelectedPayment = 'cash';
-
+let simSelectedPaymentLabel = 'Efectivo';
+let simOriginAddress = SIM_FIXED_ORIGIN;
+let simDestinationAddress = SIM_FIXED_DESTINATION;
 let simErrorTimeout = null;
-
 let pickupDragPointerId = null;
-
-let pickupMarkerPosition = { left: 70, top: 50 };
-
+let pickupPanStart = { x: 0, y: 0 };
+let pickupMapOffset = { x: 0, y: 0 };
 let simErrorsCount = 0;
-
 let simStartTime = null;
-
 let simCompleted = false;
+let simCurrentRating = 5;
 
-
-
-function updateDestinationSearch() {
-
-    const input = document.getElementById('sim-destination-input');
-
-    const result = document.getElementById('sim-destination-result');
-
-    const destination = input ? input.value.trim() : '';
-
-    if (result) result.textContent = destination ? `Buscar: ${destination}` : 'Buscar destino';
-
+// --- Asistente de Voz / Lectura en Voz Alta (Text-to-Speech) ---
+function toggleSimSpeech() {
+    if (!('speechSynthesis' in window)) {
+        alert('La síntesis de voz no está disponible en su navegador web.');
+        return;
+    }
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        updateTtsButtonState(false);
+        return;
+    }
+    speakSimInstruction();
 }
 
+function speakSimInstruction() {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
 
+    const data = simStepData[currentSimStep];
+    if (!data) return;
+
+    const tmp = document.createElement('div');
+    tmp.innerHTML = data.desc;
+    const cleanDesc = tmp.textContent || tmp.innerText || '';
+
+    const textToSpeak = `${data.title}. ${cleanDesc}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'es-AR';
+    utterance.rate = 0.9;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = () => updateTtsButtonState(true);
+    utterance.onend = () => updateTtsButtonState(false);
+    utterance.onerror = () => updateTtsButtonState(false);
+
+    window.speechSynthesis.speak(utterance);
+}
+
+function updateTtsButtonState(isSpeaking) {
+    const btn = document.getElementById('btn-sim-tts');
+    const label = document.getElementById('sim-tts-label');
+    if (btn) {
+        if (isSpeaking) {
+            btn.classList.add('tts-active');
+            if (label) label.textContent = 'Pausar voz';
+        } else {
+            btn.classList.remove('tts-active');
+            if (label) label.textContent = 'Escuchar instrucción';
+        }
+    }
+}
+
+// Sincronizar etiquetas de origen, destino, auto, precio y pago en todas las pantallas
+function syncSimTripLabels() {
+    const carInfo = simCarCatalog[simSelectedCar] || simCarCatalog.uberx;
+
+    const homeOrigin = document.getElementById('sim-home-origin-label');
+    if (homeOrigin) homeOrigin.textContent = 'Av. Colón 1450, Alberdi';
+
+    const mapRouteSummary = document.getElementById('sim-map-route-summary');
+    if (mapRouteSummary) mapRouteSummary.textContent = 'Av. Colón 1450 ➔ Hospital Privado';
+
+    const pickupAddrLabel = document.getElementById('sim-pickup-address-label');
+    if (pickupAddrLabel) pickupAddrLabel.textContent = 'Av. Colón 1450, Barrio Alberdi (Frente a su puerta)';
+
+    const assignedModel = document.getElementById('sim-assigned-car-model');
+    if (assignedModel) assignedModel.textContent = carInfo.model;
+
+    const detailDest = document.getElementById('sim-detail-dest');
+    if (detailDest) detailDest.textContent = 'Destino: Hospital Privado (Av. Naciones Unidas 346)';
+
+    const detailPricePay = document.getElementById('sim-detail-price-pay');
+    if (detailPricePay) detailPricePay.textContent = `Tarifa fija: ${carInfo.price} · ${simSelectedPaymentLabel}`;
+
+    const intripDestLine = document.getElementById('sim-intrip-dest-line');
+    if (intripDestLine) intripDestLine.textContent = 'Av. Colón 1450 ➔ Hospital Privado';
+
+    const finalPayMethod = document.getElementById('sim-final-pay-method');
+    if (finalPayMethod) finalPayMethod.textContent = simSelectedPaymentLabel;
+
+    const finalPriceAmount = document.getElementById('sim-final-price-amount');
+    if (finalPriceAmount) finalPriceAmount.textContent = carInfo.price;
+}
+
+// Seleccionar el destino fijo del ejercicio (Hospital Privado) y coincidir con el mapa
+function selectFixedTripDestination(event) {
+    if (event) event.stopPropagation();
+    const originInput = document.getElementById('sim-origin-input');
+    const destInput = document.getElementById('sim-destination-input');
+    if (originInput) originInput.value = 'Av. Colón 1450, Barrio Alberdi';
+    if (destInput) destInput.value = 'Hospital Privado (Av. Naciones Unidas 346)';
+    simOriginAddress = SIM_FIXED_ORIGIN;
+    simDestinationAddress = SIM_FIXED_DESTINATION;
+    syncSimTripLabels();
+    simTriggerStep(3, event);
+}
+
+// Compatibilidad por si se llama selectQuickDestination
+function selectQuickDestination(destName, event) {
+    selectFixedTripDestination(event);
+}
+
+// Checklist interactivo de seguridad (Paso 5)
+function toggleSafetyCheck(el, event) {
+    if (event) event.stopPropagation();
+    el.classList.toggle('checked');
+}
+
+// Sub-vistas del Paso 6 (En viaje -> Califica tu viaje)
+function showSimRatingSubscreen(event) {
+    if (event) event.stopPropagation();
+    const inTripView = document.getElementById('sim-subscreen-intrip');
+    const ratingView = document.getElementById('sim-subscreen-rating');
+    if (inTripView) inTripView.style.display = 'none';
+    if (ratingView) ratingView.style.display = 'flex';
+
+    const titleEl = document.getElementById('sim-guide-title');
+    const descEl = document.getElementById('sim-guide-desc');
+    if (titleEl) titleEl.textContent = 'Paso 6: Calificar al chofer';
+    if (descEl) {
+        descEl.innerHTML = '¡Llegó al <strong>Hospital Privado</strong>! Toque las estrellas para calificar a <strong>Carlos Alberto Pereyra</strong> y vea su <strong>Certificado de Práctica</strong>.';
+    }
+}
+
+function backToSimInTrip(event) {
+    if (event) event.stopPropagation();
+    const inTripView = document.getElementById('sim-subscreen-intrip');
+    const ratingView = document.getElementById('sim-subscreen-rating');
+    if (inTripView) inTripView.style.display = 'flex';
+    if (ratingView) ratingView.style.display = 'none';
+}
+
+function rateSimTrip(stars, event) {
+    if (event) event.stopPropagation();
+    simCurrentRating = stars;
+    const starBtns = document.querySelectorAll('.uber-star-btn');
+    starBtns.forEach((btn, idx) => {
+        if (idx < stars) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+        btn.classList.remove('sim-highlight-pulse');
+    });
+    const feedback = document.getElementById('sim-rating-feedback-text');
+    if (feedback) {
+        const messages = {
+            5: '¡Excelente servicio de Carlos Alberto! (5 estrellas ★)',
+            4: 'Muy buen viaje (4 estrellas ★)',
+            3: 'Viaje correcto (3 estrellas ★)',
+            2: 'Podría mejorar (2 estrellas ★)',
+            1: 'Tuve un inconveniente (1 estrella ★)'
+        };
+        feedback.textContent = messages[stars] || '';
+    }
+}
+
+// Modales didácticos simulados
+function openSimShareModal(event) {
+    if (event) event.stopPropagation();
+    syncSimTripLabels();
+    const modal = document.getElementById('sim-modal-share');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeSimShareModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-share');
+    if (modal) modal.style.display = 'none';
+}
+
+function openSimCallModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-call');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeSimCallModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-call');
+    if (modal) modal.style.display = 'none';
+}
+
+function openSimChatModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-chat');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeSimChatModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-chat');
+    if (modal) modal.style.display = 'none';
+}
+
+function sendSimQuickChat(msgText) {
+    const userReply = document.getElementById('sim-chat-user-reply');
+    if (userReply) {
+        userReply.style.display = 'block';
+        userReply.innerHTML = `<strong>Usted:</strong> ${msgText}`;
+    }
+}
+
+function openSimSecurityModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-security');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeSimSecurityModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-security');
+    if (modal) modal.style.display = 'none';
+}
+
+function openSimCertificateModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-certificate');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeSimCertificateModal(event) {
+    if (event) event.stopPropagation();
+    const modal = document.getElementById('sim-modal-certificate');
+    if (modal) modal.style.display = 'none';
+}
+
+// Actualización de búsqueda al escribir el destino fijo
+function updateDestinationSearch() {
+    const input = document.getElementById('sim-destination-input');
+    const result = document.getElementById('sim-destination-result');
+    const destination = input ? input.value.trim() : '';
+    if (result) {
+        result.textContent = destination
+            ? 'Confirmar ruta: Av. Colón 1450 ➔ Hospital Privado'
+            : 'Confirmar ruta: Av. Colón 1450 ➔ Hospital Privado';
+    }
+}
 
 function searchSimulatorDestination(event) {
-
     if (event) event.stopPropagation();
-
-    const input = document.getElementById('sim-destination-input');
-
-    const destination = input ? input.value.trim() : '';
-
-    if (!destination) {
-
-        if (input) input.focus();
-
-        const hint = document.getElementById('sim-hint-text');
-
-        if (hint) hint.textContent = 'Escriba primero el nombre de un lugar o una dirección.';
-
-        return;
-
-    }
-
-    const selectedDestination = document.getElementById('sim-selected-destination');
-
-    if (selectedDestination) selectedDestination.textContent = `Destino: ${destination}`;
-
-    simTriggerStep(3, event);
-
+    selectFixedTripDestination(event);
 }
-
-
 
 function submitDestinationOnEnter(event) {
-
     if (event.key === 'Enter') {
-
         event.preventDefault();
-
-        searchSimulatorDestination(event);
-
+        selectFixedTripDestination(event);
     }
-
 }
 
+// Coordenadas exactas de Av. Colón 1450 en map_background.svg: 35% X, 50% Y (sobre la traza de AV. COLÓN)
+const PICKUP_TARGET_POS = { left: 35, top: 50 };
+let pickupMarkerPos = { left: 68, top: 50 };
 
+// Recentrar el puntero en la ubicación GPS actual en Av. Colón 1450 (Botón real ⌖ de Uber en Paso 4)
+function recenterPickupMap(event) {
+    if (event) event.stopPropagation();
+    pickupMarkerPos = { left: PICKUP_TARGET_POS.left, top: PICKUP_TARGET_POS.top };
+    applyPickupMapTransform(true);
 
-function setPickupMarkerPosition(left, top) {
-
-    const marker = document.getElementById('pickup-marker');
-
-    if (!marker) return;
-
-    pickupMarkerPosition = {
-
-        left: Math.min(92, Math.max(8, left)),
-
-        top: Math.min(85, Math.max(15, top))
-
-    };
-
-    marker.style.left = `${pickupMarkerPosition.left}%`;
-
-    marker.style.top = `${pickupMarkerPosition.top}%`;
-
+    const descEl = document.getElementById('sim-guide-desc');
+    if (descEl) {
+        descEl.innerHTML = '✅ <strong>Puntero ubicado exactamente sobre Av. Colón 1450.</strong> Ahora toque el botón negro <strong>"Confirmar punto de partida"</strong>.';
+    }
 }
 
-
-
-function resetPickupMarker() {
-
+function applyPickupMapTransform(animate) {
     const marker = document.getElementById('pickup-marker');
+    const markerTag = document.getElementById('pickup-marker-tag');
+    const addrLabel = document.getElementById('sim-pickup-address-label');
+    const subStatus = document.getElementById('sim-pickup-substatus');
+    const confirmBtn = document.getElementById('confirm-pickup-btn');
+    const recenterBtn = document.getElementById('btn-pickup-recenter');
 
-    const confirmButton = document.getElementById('confirm-pickup-btn');
+    const dist = Math.hypot(
+        pickupMarkerPos.left - PICKUP_TARGET_POS.left,
+        pickupMarkerPos.top - PICKUP_TARGET_POS.top
+    );
+    const isCentered = dist <= 13;
 
-    pickupDragPointerId = null;
-
-    setPickupMarkerPosition(70, 50);
+    if (isCentered) {
+        pickupMarkerPos = { left: PICKUP_TARGET_POS.left, top: PICKUP_TARGET_POS.top };
+    }
 
     if (marker) {
-
-        marker.classList.remove('pickup-marker-confirmed');
-
-        marker.querySelector('.pickup-tag').textContent = 'Mover aquí';
-
+        marker.style.transition = animate ? 'left 0.22s ease, top 0.22s ease' : 'none';
+        marker.style.left = `${pickupMarkerPos.left}%`;
+        marker.style.top = `${pickupMarkerPos.top}%`;
     }
 
-    if (confirmButton) confirmButton.disabled = true;
-
-}
-
-
-
-function checkPickupMarkerPosition() {
-
-    const map = document.getElementById('pickup-map');
-
-    const marker = document.getElementById('pickup-marker');
-
-    const currentLocation = document.querySelector('.pickup-current-dot');
-
-    const confirmButton = document.getElementById('confirm-pickup-btn');
-
-    if (!map || !marker || !currentLocation || !confirmButton) return;
-
-
-
-    const mapBounds = map.getBoundingClientRect();
-
-    const markerBounds = marker.getBoundingClientRect();
-
-    const locationBounds = currentLocation.getBoundingClientRect();
-
-    const markerX = markerBounds.left + markerBounds.width / 2;
-
-    const markerY = markerBounds.top + markerBounds.height / 2;
-
-    const locationX = locationBounds.left + locationBounds.width / 2;
-
-    const locationY = locationBounds.top + locationBounds.height / 2;
-
-    const closeEnough = Math.hypot(markerX - locationX, markerY - locationY) <= Math.max(24, mapBounds.width * 0.09);
-
-
-
-    if (closeEnough) {
-
-        setPickupMarkerPosition(
-
-            (locationX - mapBounds.left) / mapBounds.width * 100,
-
-            (locationY - mapBounds.top) / mapBounds.height * 100
-
-        );
-
-        marker.classList.add('pickup-marker-confirmed');
-
-        marker.querySelector('.pickup-tag').textContent = 'Punto confirmado';
-
-        confirmButton.disabled = false;
-
-        const hint = document.getElementById('sim-hint-text');
-
-        if (hint) hint.textContent = '¡Bien hecho! Ya puede confirmar el punto de partida.';
-
+    if (isCentered) {
+        if (marker) {
+            marker.classList.add('pickup-marker-confirmed');
+            marker.classList.remove('sim-highlight-pulse');
+        }
+        if (markerTag) markerTag.textContent = '✓ Av. Colón 1450';
+        if (addrLabel) addrLabel.textContent = 'Av. Colón 1450, Barrio Alberdi (Confirmado)';
+        if (subStatus) {
+            subStatus.innerHTML = '✅ Puntero alineado sobre <strong>Av. Colón 1450</strong>';
+            subStatus.style.color = '#15803D';
+        }
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.classList.add('sim-highlight-pulse');
+        }
+        if (recenterBtn) {
+            recenterBtn.classList.remove('sim-highlight-pulse');
+        }
     } else {
-
-        marker.classList.remove('pickup-marker-confirmed');
-
-        marker.querySelector('.pickup-tag').textContent = 'Mover aquí';
-
-        confirmButton.disabled = true;
-
+        if (marker) {
+            marker.classList.remove('pickup-marker-confirmed');
+            marker.classList.add('sim-highlight-pulse');
+        }
+        if (markerTag) markerTag.textContent = 'Arrastrar a Av. Colón 1450';
+        if (addrLabel) addrLabel.textContent = 'Av. Colón 1450, Barrio Alberdi';
+        if (subStatus) {
+            subStatus.innerHTML = 'Arrastre el puntero hasta el punto azul en <strong>Av. Colón 1450</strong>';
+            subStatus.style.color = '#B45309';
+        }
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.classList.remove('sim-highlight-pulse');
+        }
     }
-
 }
 
+function resetPickupMarker() {
+    pickupDragPointerId = null;
+    pickupMarkerPos = { left: 68, top: 50 };
+    applyPickupMapTransform(false);
+}
 
+function updatePickupMarkerFromPointer(clientX, clientY, animate) {
+    const map = document.getElementById('pickup-map');
+    if (!map) return;
+    const rect = map.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    const rawLeft = ((clientX - rect.left) / rect.width) * 100;
+    const rawTop = ((clientY - rect.top) / rect.height) * 100;
+
+    pickupMarkerPos = {
+        left: Math.max(15, Math.min(85, rawLeft)),
+        top: Math.max(22, Math.min(82, rawTop))
+    };
+    applyPickupMapTransform(Boolean(animate));
+
+    const dist = Math.hypot(
+        pickupMarkerPos.left - PICKUP_TARGET_POS.left,
+        pickupMarkerPos.top - PICKUP_TARGET_POS.top
+    );
+    if (dist <= 13) {
+        const descEl = document.getElementById('sim-guide-desc');
+        if (descEl) {
+            descEl.innerHTML = '✅ <strong>¡Excelente! El puntero coincide con Av. Colón 1450.</strong> Ahora toque el botón negro <strong>"Confirmar punto de partida"</strong>.';
+        }
+    }
+}
 
 function startPickupDrag(event) {
-
-    if (event.button !== 0) return;
-
+    if (event.button !== 0 && event.pointerType === 'mouse') return;
     event.preventDefault();
-
     event.stopPropagation();
-
     pickupDragPointerId = event.pointerId;
-
-    event.currentTarget.setPointerCapture(event.pointerId);
-
+    if (event.currentTarget && event.currentTarget.setPointerCapture) {
+        event.currentTarget.setPointerCapture(event.pointerId);
+    }
 }
 
-
+function startPickupMapPan(event) {
+    if (event.target.closest('.uber-floating-back-circle') || event.target.closest('#btn-pickup-recenter')) return;
+    if (event.button !== 0 && event.pointerType === 'mouse') return;
+    event.preventDefault();
+    event.stopPropagation();
+    pickupDragPointerId = event.pointerId;
+    updatePickupMarkerFromPointer(event.clientX, event.clientY, false);
+}
 
 function movePickupMarker(event) {
-
     if (event.pointerId !== pickupDragPointerId) return;
-
-    const map = document.getElementById('pickup-map');
-
-    if (!map) return;
-
     event.preventDefault();
-
-    const bounds = map.getBoundingClientRect();
-
-    setPickupMarkerPosition(
-
-        (event.clientX - bounds.left) / bounds.width * 100,
-
-        (event.clientY - bounds.top) / bounds.height * 100
-
-    );
-
+    updatePickupMarkerFromPointer(event.clientX, event.clientY, false);
 }
-
-
 
 function finishPickupDrag(event) {
-
     if (event.pointerId !== pickupDragPointerId) return;
-
     pickupDragPointerId = null;
-
-    checkPickupMarkerPosition();
-
+    applyPickupMapTransform(true);
 }
-
-
-
-function movePickupMarkerWithKeyboard(event) {
-
-    const steps = {
-
-        ArrowUp: [0, -4],
-
-        ArrowDown: [0, 4],
-
-        ArrowLeft: [-4, 0],
-
-        ArrowRight: [4, 0]
-
-    };
-
-    const step = steps[event.key];
-
-    if (!step) return;
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-    setPickupMarkerPosition(pickupMarkerPosition.left + step[0], pickupMarkerPosition.top + step[1]);
-
-    checkPickupMarkerPosition();
-
-}
-
-
 
 document.addEventListener('pointermove', movePickupMarker);
-
 document.addEventListener('pointerup', finishPickupDrag);
-
 document.addEventListener('pointercancel', finishPickupDrag);
 
-
-
-// Manejador inteligente de clics en la pantalla del teléfono virtual
-
+// Manejador de clics fuera de los botones activos
 function handlePhoneMisclick(event) {
-
-    // Si el clic provino de una acción válida para el paso actual, no es error
-
     if (event.target.closest('.sim-valid-action') || 
-
         event.target.closest('.sim-screen-back') || 
-
-        event.target.closest('.sim-phone-bottom-sheet')) {
-
+        event.target.closest('.sim-phone-bottom-sheet') ||
+        event.target.closest('.sim-dialog-box')) {
         return;
-
     }
-
     triggerPhoneError();
-
 }
-
-
 
 function triggerPhoneError() {
-
     simErrorsCount++;
-
     if (!simStartTime) simStartTime = Date.now();
-
-
 
     const phone = document.getElementById('sim-phone-device');
-
     const screen = document.querySelector('.phone-screen');
-
     const errorBadge = document.getElementById('sim-error-badge');
 
-
-
-    // Vibración del marco del celular en rojo
-
     if (phone) {
-
         phone.classList.remove('shake-error');
-
-        void phone.offsetWidth; // Forzar reflow para reiniciar la animación
-
+        void phone.offsetWidth;
         phone.classList.add('shake-error');
-
     }
-
-
-
-    // Destello rojo en la pantalla táctil
 
     if (screen) {
-
         screen.classList.remove('screen-error-flash');
-
         void screen.offsetWidth;
-
         screen.classList.add('screen-error-flash');
-
     }
-
-
-
-    // Mostrar cartel de aviso flotante
 
     if (errorBadge) {
-
+        errorBadge.textContent = '💡 Toque el botón con borde azul';
         errorBadge.style.display = 'block';
-
     }
-
-
-
-    // Mensaje de ayuda en el panel lateral
-
-    const hintEl = document.getElementById('sim-hint-text');
-
-    if (hintEl) {
-
-        hintEl.innerHTML = '<strong style="color: #d32f2f;">⚠️ Opción incorrecta:</strong> Toque el elemento resaltado en azul parpadeante para continuar.';
-
-    }
-
-
-
-    // Quitar estados de error tras 1.4 segundos
 
     if (simErrorTimeout) clearTimeout(simErrorTimeout);
-
     simErrorTimeout = setTimeout(() => {
-
         if (phone) phone.classList.remove('shake-error');
-
         if (screen) screen.classList.remove('screen-error-flash');
-
         if (errorBadge) errorBadge.style.display = 'none';
-
-        const data = simStepData[currentSimStep];
-
-        if (data && hintEl) hintEl.textContent = data.hint;
-
-    }, 1400);
-
+    }, 1600);
 }
 
-
-
+// Cambio de paso principal (Pasos 1 a 6)
 function simTriggerStep(step, event) {
-
-    if (event) event.stopPropagation(); // Evitar error
-
-
+    if (event) event.stopPropagation();
 
     if (!simStartTime) simStartTime = Date.now();
-
-
-
-    // Cerrar hoja de pago si estaba abierta
-
     closePaymentSheet();
-
-
-
     currentSimStep = step;
+    syncSimTripLabels();
 
-
-
-    // Actualizar pantallas del teléfono virtual
-
-    for (let i = 1; i <= 5; i++) {
-
+    for (let i = 1; i <= 6; i++) {
         const screen = document.getElementById(`sim-screen-${i}`);
-
         if (screen) {
-
             screen.style.display = (i === step) ? 'flex' : 'none';
-
         }
-
     }
 
+    if (step === 6) {
+        const inTripView = document.getElementById('sim-subscreen-intrip');
+        const ratingView = document.getElementById('sim-subscreen-rating');
+        if (inTripView) inTripView.style.display = 'flex';
+        if (ratingView) ratingView.style.display = 'none';
+    }
 
-
-    // Actualizar panel de guía pedagógico
+    for (let s = 1; s <= 6; s++) {
+        const dot = document.getElementById(`sim-step-dot-${s}`);
+        if (dot) {
+            dot.classList.remove('active', 'completed');
+            if (s === step) {
+                dot.classList.add('active');
+            } else if (s < step) {
+                dot.classList.add('completed');
+            }
+        }
+    }
 
     const data = simStepData[step];
-
     if (data) {
-
-        const stepNumEl = document.getElementById('sim-step-number');
-
         const progressEl = document.getElementById('sim-progress-fill');
-
         const titleEl = document.getElementById('sim-guide-title');
-
         const descEl = document.getElementById('sim-guide-desc');
 
-        const hintEl = document.getElementById('sim-hint-text');
-
-
-
-        if (stepNumEl) stepNumEl.textContent = step;
-
         if (progressEl) progressEl.style.width = `${data.progress}%`;
-
         if (titleEl) titleEl.textContent = data.title;
-
         if (descEl) descEl.innerHTML = data.desc;
-
-        if (hintEl) hintEl.textContent = data.hint;
-
     }
-
-
-
-    // Mostrar/ocultar botón de paso anterior en el panel lateral
 
     const prevBtn = document.getElementById('btn-sim-prev');
-
     if (prevBtn) {
-
         prevBtn.style.display = (step > 1) ? 'inline-block' : 'none';
-
     }
-
-
 
     if (step === 4) {
-
         resetPickupMarker();
-
     }
-
-
-
-    // Actualizar texto del botón de confirmación en paso 3
 
     if (step === 3) {
-
         updateCarConfirmButton();
-
     }
 
-
-
-    // Registrar finalización exitosa del simulador en el paso 5
-
-    if (step === 5) {
-
-        if (!simCompleted) {
-
-            simCompleted = true;
-
-            const tiempoSeg = Math.round((Date.now() - (simStartTime || Date.now())) / 1000);
-
+    if (step === 6 && !simCompleted) {
+        simCompleted = true;
+        const tiempoSeg = Math.round((Date.now() - (simStartTime || Date.now())) / 1000);
+        if (typeof guardarResultadoSimulador === 'function') {
             guardarResultadoSimulador(simErrorsCount, tiempoSeg);
-
-            const successCard = document.querySelector('.sim-success-card');
-
-            if (successCard) {
-
-                const badge = simErrorsCount === 0
-
-                    ? '<div style="margin-top: 8px; font-size: 0.85rem; color: #166534; font-weight: bold;">⭐ ¡Excelente! Completó la práctica sin cometer errores.</div>'
-
-                    : `<div style="margin-top: 8px; font-size: 0.85rem; color: #334155;">Errores cometidos durante la práctica: <strong>${simErrorsCount}</strong>.</div>`;
-
-                successCard.innerHTML = `🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.${badge}`;
-
-            }
-
         }
-
     }
-
 }
-
-
 
 function simPrevStep() {
-
     if (currentSimStep > 1) {
-
         simTriggerStep(currentSimStep - 1);
-
     }
-
 }
-
-
 
 function restartSimulator() {
-
     simSelectedCar = 'uberx';
-
     simSelectedPayment = 'cash';
-
+    simSelectedPaymentLabel = 'Efectivo';
+    simOriginAddress = SIM_FIXED_ORIGIN;
+    simDestinationAddress = SIM_FIXED_DESTINATION;
     simErrorsCount = 0;
-
     simStartTime = Date.now();
-
     simCompleted = false;
 
-    const successCard = document.querySelector('.sim-success-card');
+    document.querySelectorAll('.sim-check-item').forEach(item => item.classList.remove('checked'));
+    const userReply = document.getElementById('sim-chat-user-reply');
+    if (userReply) userReply.style.display = 'none';
 
-    if (successCard) {
-
-        successCard.innerHTML = '🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.';
-
-    }
+    const originInput = document.getElementById('sim-origin-input');
+    if (originInput) originInput.value = 'Av. Colón 1450, Barrio Alberdi';
 
     const destinationInput = document.getElementById('sim-destination-input');
-
     if (destinationInput) destinationInput.value = '';
-
     updateDestinationSearch();
-
     resetPickupMarker();
-
     selectCarOption('uberx');
-
     choosePayment('cash', '💵', 'Efectivo');
-
+    rateSimTrip(5);
     simTriggerStep(1);
-
 }
-
-
 
 function selectCarOption(type, event) {
-
     if (event) event.stopPropagation();
+    simSelectedCar = simCarCatalog[type] ? type : 'uberx';
 
-    simSelectedCar = type;
+    const ids = {
+        uberx: 'car-uberx',
+        comfort: 'car-comfort',
+        women: 'car-women'
+    };
 
-
-
-    const uberxEl = document.getElementById('car-uberx');
-
-    const comfortEl = document.getElementById('car-comfort');
-
-
-
-    if (type === 'uberx') {
-
-        if (uberxEl) uberxEl.classList.add('selected');
-
-        if (comfortEl) comfortEl.classList.remove('selected');
-
-    } else {
-
-        if (comfortEl) comfortEl.classList.add('selected');
-
-        if (uberxEl) uberxEl.classList.remove('selected');
-
-    }
+    Object.keys(ids).forEach(key => {
+        const el = document.getElementById(ids[key]);
+        if (el) {
+            el.classList.toggle('selected', key === simSelectedCar);
+        }
+    });
 
     updateCarConfirmButton();
-
+    syncSimTripLabels();
 }
-
-
-
-// Abrir selector de método de pago (Hoja inferior dentro del celular)
 
 function openPaymentSheet(event) {
-
     if (event) event.stopPropagation();
-
     const sheet = document.getElementById('sim-payment-sheet');
-
     if (sheet) sheet.style.display = 'block';
-
 }
-
-
 
 function closePaymentSheet(event) {
-
     if (event) event.stopPropagation();
-
     const sheet = document.getElementById('sim-payment-sheet');
-
     if (sheet) sheet.style.display = 'none';
-
 }
-
-
 
 function choosePayment(method, icon, text, event) {
-
     if (event) event.stopPropagation();
-
     simSelectedPayment = method;
-
-
-
-    // Actualizar fila principal
+    simSelectedPaymentLabel = text;
 
     const iconEl = document.getElementById('sim-current-pay-icon');
-
     const textEl = document.getElementById('sim-current-pay-text');
-
     if (iconEl) iconEl.textContent = icon;
-
     if (textEl) textEl.textContent = text;
 
+    const options = {
+        cash: { opt: 'pay-opt-cash', check: 'pay-check-cash' },
+        card: { opt: 'pay-opt-card', check: 'pay-check-card' },
+        visa: { opt: 'pay-opt-visa', check: 'pay-check-visa' }
+    };
 
-
-    // Actualizar selección visual en la hoja
-
-    const optCash = document.getElementById('pay-opt-cash');
-
-    const optCard = document.getElementById('pay-opt-card');
-
-    const checkCash = document.getElementById('pay-check-cash');
-
-    const checkCard = document.getElementById('pay-check-card');
-
-
-
-    if (method === 'cash') {
-
-        if (optCash) optCash.classList.add('selected');
-
-        if (optCard) optCard.classList.remove('selected');
-
-        if (checkCash) checkCash.style.display = 'inline';
-
-        if (checkCard) checkCard.style.display = 'none';
-
-    } else {
-
-        if (optCard) optCard.classList.add('selected');
-
-        if (optCash) optCash.classList.remove('selected');
-
-        if (checkCard) checkCard.style.display = 'inline';
-
-        if (checkCash) checkCash.style.display = 'none';
-
-    }
-
-
+    Object.keys(options).forEach(key => {
+        const optEl = document.getElementById(options[key].opt);
+        const checkEl = document.getElementById(options[key].check);
+        const isSelected = (key === method);
+        if (optEl) optEl.classList.toggle('selected', isSelected);
+        if (checkEl) checkEl.style.display = isSelected ? 'inline-flex' : 'none';
+    });
 
     updateCarConfirmButton();
-
+    syncSimTripLabels();
     closePaymentSheet();
-
 }
-
-
 
 function updateCarConfirmButton() {
-
-    const btnConfirm = document.querySelector('.uber-cars-sheet .uber-confirm-btn');
-
+    const btnConfirm = document.getElementById('sim-choose-car-btn');
+    const carInfo = simCarCatalog[simSelectedCar] || simCarCatalog.uberx;
     if (btnConfirm) {
-
-        const carName = (simSelectedCar === 'uberx') ? 'UberX' : 'Comfort';
-
-        const payName = (simSelectedPayment === 'cash') ? 'Efectivo' : 'Tarjeta';
-
-        btnConfirm.textContent = `Elegir ${carName} (${payName})`;
-
+        btnConfirm.textContent = `${carInfo.buttonLabel} (${carInfo.price})`;
     }
-
 }
 
 
-
-// ========================================================
 
 // ACTIVIDAD: ORDENÁ LOS PASOS (Drag & Drop)
 

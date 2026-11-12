@@ -5117,7 +5117,7 @@ body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
     background-color: #f3f2ee;
 
 
-    background-image: url('assets/map_background.svg');
+    background-image: url('assets/img/map_background.svg');
 
 
     background-size: cover;
@@ -6570,15 +6570,850 @@ body.high-contrast .sim-controls #btn-sim-prev:focus-visible {
 
 
 .uber-confirm-btn:disabled {
-
-
     cursor: not-allowed;
-
-
     opacity: 0.55;
-
-
 }
+
+/* ========================================================
+   ESTILOS PREMIUM DEL SIMULADOR PARA ADULTOS MAYORES (50+)
+   ======================================================== */
+
+/* Banner de tranquilidad y seguridad psicológica */
+.sim-safety-banner {
+    background: #E8F5E9;
+    color: #1B5E20;
+    border: 1.5px solid #A5D6A7;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 auto 24px;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.dark-mode .sim-safety-banner {
+    background: #14321A;
+    color: #A7F3D0;
+    border-color: #059669;
+}
+
+body.high-contrast .sim-safety-banner {
+    background: #000000;
+    color: #FFD000;
+    border: 2px solid #FFD000;
+}
+
+/* Selector de modalidad: Modo Guiado vs Modo Desafío */
+.sim-mode-selector {
+    display: flex;
+    gap: 8px;
+    background: #F1F5F9;
+    padding: 6px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+body.dark-mode .sim-mode-selector {
+    background: #1E293B;
+}
+
+.sim-mode-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #475569;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+}
+
+body.dark-mode .sim-mode-btn {
+    color: #94A3B8;
+}
+
+.sim-mode-btn.active {
+    background: #FFFFFF;
+    color: var(--secondary-color);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .sim-mode-btn.active {
+    background: #334155;
+    color: #38BDF8;
+}
+
+body.high-contrast .sim-mode-btn.active {
+    background: #FFD000;
+    color: #000000;
+    border: 2px solid #FFFFFF;
+}
+
+/* Stepper visual interactivo con los 5 pasos */
+.sim-stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 0 4px;
+}
+
+.sim-step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+}
+
+.sim-step-item:hover {
+    transform: translateY(-2px);
+}
+
+.sim-step-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #E2E8F0;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #CBD5E1;
+    transition: all 0.25s ease;
+}
+
+.sim-step-item.active .sim-step-circle {
+    background: var(--secondary-color);
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(39, 110, 241, 0.35);
+    transform: scale(1.1);
+}
+
+.sim-step-item.completed .sim-step-circle {
+    background: #16A34A;
+    color: #FFFFFF;
+    border-color: #15803D;
+}
+
+.sim-step-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #64748B;
+    margin-top: 4px;
+    text-align: center;
+    max-width: 65px;
+    line-height: 1.2;
+}
+
+.sim-step-item.active .sim-step-label {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+body.dark-mode .sim-step-circle {
+    background: #334155;
+    color: #CBD5E1;
+    border-color: #475569;
+}
+
+body.dark-mode .sim-step-item.active .sim-step-circle {
+    background: #38BDF8;
+    color: #0F172A;
+}
+
+body.high-contrast .sim-step-circle {
+    background: #000000;
+    color: #FFFFFF;
+    border: 2px solid #FFD000;
+}
+
+body.high-contrast .sim-step-item.active .sim-step-circle {
+    background: #FFD000;
+    color: #000000;
+    border-color: #FFFFFF;
+}
+
+/* Barra de herramientas de accesibilidad en el panel */
+.sim-a11y-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #E2E8F0;
+}
+
+body.dark-mode .sim-a11y-bar {
+    background: #1E293B;
+    border-color: #334155;
+}
+
+.sim-tts-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--secondary-color);
+    color: var(--secondary-color);
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 40px;
+}
+
+.sim-tts-btn:hover {
+    background: #EFF6FF;
+}
+
+.sim-tts-btn.tts-active {
+    background: var(--secondary-color);
+    color: #FFFFFF;
+    animation: simPulseAnim 1.4s infinite;
+}
+
+body.dark-mode .sim-tts-btn {
+    background: #0F172A;
+    border-color: #38BDF8;
+    color: #38BDF8;
+}
+
+body.dark-mode .sim-tts-btn:hover {
+    background: #1E293B;
+}
+
+.sim-font-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sim-font-btn {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #334155;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 38px;
+    min-width: 38px;
+}
+
+.sim-font-btn:hover {
+    background: #F1F5F9;
+}
+
+body.dark-mode .sim-font-btn {
+    background: #334155;
+    border-color: #475569;
+    color: #F1F5F9;
+}
+
+/* Modificadores de tamaño de texto del panel */
+.sim-guide-panel.font-size-small p {
+    font-size: 1rem !important;
+}
+.sim-guide-panel.font-size-large p {
+    font-size: 1.3rem !important;
+    line-height: 1.75 !important;
+}
+.sim-guide-panel.font-size-large h3 {
+    font-size: 1.85rem !important;
+}
+.sim-guide-panel.font-size-xlarge p {
+    font-size: 1.45rem !important;
+    line-height: 1.8 !important;
+}
+.sim-guide-panel.font-size-xlarge h3 {
+    font-size: 2rem !important;
+}
+
+/* Destinos rápidos de 1 toque (Pantalla 2) */
+.sim-quick-destinations {
+    margin-top: 10px;
+    padding: 0 4px;
+}
+
+.sim-quick-dest-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #64748B;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sim-quick-dest-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.sim-dest-chip {
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 10px 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.sim-dest-chip:hover, .sim-dest-chip:focus-visible {
+    border-color: var(--secondary-color);
+    background: #EFF6FF;
+    transform: translateY(-1px);
+}
+
+.sim-dest-chip-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.sim-dest-chip-text strong {
+    display: block;
+    font-size: 0.82rem;
+    color: #1E293B;
+    line-height: 1.2;
+}
+
+.sim-dest-chip-text span {
+    font-size: 0.7rem;
+    color: #64748B;
+}
+
+/* Botón de auto-alineación en Punto de Partida (Pantalla 4) */
+.sim-pickup-auto-btn {
+    background: #15803D;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 10px rgba(21, 128, 61, 0.25);
+    transition: all 0.2s ease;
+}
+
+.sim-pickup-auto-btn:hover {
+    background: #166534;
+    transform: translateY(-1px);
+}
+
+body.high-contrast .sim-pickup-auto-btn {
+    background: #FFD000;
+    color: #000000;
+    border: 2px solid #FFFFFF;
+}
+
+/* Pantalla 5: Hoja del chofer y verificación */
+.uber-driver-sheet {
+    flex: 1;
+    background: #FFFFFF;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 16px;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.driver-arrival-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    background: #F8FAFC;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+}
+
+.driver-arrival-time {
+    background: #000000;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.driver-arrival-status {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+/* Tarjeta realista de Patente Vehicular */
+.license-plate-banner {
+    background: #FFFFFF;
+    border: 2.5px solid #000000;
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+    margin: 8px 0 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.license-plate-banner::before {
+    content: 'ARG';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: #1E40AF;
+    letter-spacing: 0.5px;
+    background: #DBEAFE;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.plate-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #64748B;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.plate-number {
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.45rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: #000000;
+}
+
+/* Tarjeta del Conductor */
+.driver-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+}
+
+.driver-avatar {
+    font-size: 2rem;
+    background: #FFFFFF;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #CBD5E1;
+    flex-shrink: 0;
+}
+
+.driver-details strong {
+    font-size: 1rem;
+    display: block;
+    color: #0F172A;
+}
+
+.driver-details p {
+    font-size: 0.8rem;
+    color: #64748B;
+    margin: 2px 0 0;
+}
+
+/* Checklist interactivo de Seguridad: Las 3 Reglas de Oro */
+.sim-safety-checklist {
+    background: #FEF3C7;
+    border: 1.5px solid #FCD34D;
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.sim-safety-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #92400E;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sim-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(180, 83, 9, 0.2);
+    font-size: 0.82rem;
+    color: #78350F;
+    cursor: pointer;
+}
+
+.sim-check-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sim-check-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid #B45309;
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #15803D;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.sim-check-item.checked .sim-check-box {
+    background: #15803D;
+    border-color: #15803D;
+    color: #FFFFFF;
+}
+
+.sim-check-item.checked span {
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+
+/* Fila de botones de acción del conductor */
+.driver-actions-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.driver-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 10px;
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1E293B;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+}
+
+.driver-action-btn:hover {
+    background: #F1F5F9;
+    border-color: #94A3B8;
+}
+
+/* Tarjeta final de éxito y certificado */
+.sim-success-card {
+    background: #F0FDF4;
+    border: 1.5px solid #BBF7D0;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    color: #166534;
+    line-height: 1.45;
+    margin-top: auto;
+}
+
+.sim-cert-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background: #166534;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.sim-cert-btn:hover {
+    background: #14532D;
+}
+
+/* ========================================================
+   MODALES SIMULADOS EDUCATIVOS (WHATSAPP, LLAMADA, CERTIFICADO)
+   ======================================================== */
+
+.sim-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: fadeInModal 0.25s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.sim-dialog-box {
+    background: #FFFFFF;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    position: relative;
+    animation: scaleInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleInModal {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Modal simulado de WhatsApp */
+.sim-wa-header {
+    background: #075E54;
+    color: #FFFFFF;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sim-wa-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #128C7E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.sim-wa-title h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #FFFFFF;
+}
+
+.sim-wa-title span {
+    font-size: 0.75rem;
+    color: #D1FAE5;
+}
+
+.sim-wa-body {
+    background: #ECE5DD;
+    background-image: radial-gradient(#D5CBBF 1px, transparent 1px);
+    background-size: 16px 16px;
+    padding: 20px 16px;
+    min-height: 200px;
+}
+
+.sim-wa-bubble {
+    background: #DCF8C6;
+    padding: 12px 14px;
+    border-radius: 12px 12px 0 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    margin-left: auto;
+    max-width: 90%;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: #111827;
+}
+
+.sim-wa-footer {
+    padding: 14px 18px;
+    background: #F8FAFC;
+    border-top: 1px solid #E2E8F0;
+    text-align: right;
+}
+
+/* Modal simulado de Llamada Telefónica */
+.sim-call-screen {
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 36px 20px 24px;
+    text-align: center;
+}
+
+.sim-call-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #1E293B;
+    border: 3px solid #38BDF8;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+}
+
+.sim-call-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.sim-call-status {
+    font-size: 0.9rem;
+    color: #38BDF8;
+    margin-bottom: 24px;
+}
+
+.sim-call-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.sim-call-hangup {
+    background: #EF4444;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
+.sim-call-hangup:hover {
+    transform: scale(1.08);
+}
+
+/* Modal Certificado de Práctica */
+.sim-cert-box {
+    border: 4px double #1E3A8A;
+    border-radius: 18px;
+    padding: 24px;
+    background: #FFFFFF;
+    text-align: center;
+}
+
+.sim-cert-icon {
+    font-size: 3.2rem;
+    margin-bottom: 8px;
+}
+
+.sim-cert-badge {
+    background: #DBEAFE;
+    color: #1E40AF;
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.sim-cert-title {
+    font-size: 1.4rem;
+    color: #0F172A;
+    margin-bottom: 8px;
+}
+
+.sim-cert-checklist {
+    text-align: left;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #334155;
+}
+
+.sim-cert-checklist li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.sim-cert-checklist li:last-child {
+    margin-bottom: 0;
+}
+
 
 
 
@@ -9545,3 +10380,2353 @@ body.high-contrast .module-contents-list li::before {
         margin: 10px auto !important;
     }
 }
+
+/* ==========================================================================
+   SIMULADOR INTERACTIVO UBER MODO CLARO OFICIAL (CÓRDOBA CAPITAL - 6 PASOS)
+   ========================================================================== */
+
+/* Forzar que la pantalla del celular virtual del simulador mantenga siempre el
+   Modo Claro oficial de Uber (#FFFFFF / #F3F4F6 / #111111) incluso si la web
+   está en modo oscuro, garantizando fidelidad visual y legibilidad +50 */
+#sim-phone-device .phone-status-bar {
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 4px 16px !important;
+    height: 24px !important;
+    flex-shrink: 0 !important;
+    font-weight: 700;
+}
+
+#sim-phone-device .phone-screen {
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+}
+
+#sim-phone-device .sim-screen {
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    position: relative !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    flex: 1 1 0% !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+}
+
+/* Stepper de 6 instancias compacto y legible */
+.sim-stepper {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px !important;
+}
+
+.sim-step-item {
+    min-width: 0;
+    padding: 6px 2px !important;
+}
+
+.sim-step-label {
+    font-size: 0.74rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Tarjeta limpia del viaje específico a realizar en el panel de guía */
+#sim-guide-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px !important;
+}
+
+#sim-guide-title {
+    font-size: 1.35rem !important;
+    margin: 4px 0 0 !important;
+    line-height: 1.3;
+}
+
+#sim-guide-desc {
+    font-size: 1.08rem !important;
+    line-height: 1.55 !important;
+    margin: 0 !important;
+}
+
+.sim-fixed-trip-card {
+    background: #F8FAFC;
+    border: 2px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.dark-mode .sim-fixed-trip-card {
+    background: #1E293B;
+    border-color: #475569;
+    color: #F8FAFC;
+}
+
+.sim-fixed-trip-heading {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0284C7;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+body.dark-mode .sim-fixed-trip-heading {
+    color: #38BDF8;
+}
+
+.sim-fixed-trip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.98rem;
+}
+
+.sim-fixed-dot {
+    font-size: 0.85rem;
+    width: 16px;
+    text-align: center;
+}
+
+.sim-fixed-dot.origin {
+    color: #16A34A;
+}
+
+.sim-fixed-dot.dest {
+    color: #111111;
+}
+
+body.dark-mode .sim-fixed-dot.dest {
+    color: #F8FAFC;
+}
+
+.sim-clean-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.sim-clean-actions .sim-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0 !important;
+}
+
+.uber-specific-route-helper {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #1D4ED8;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+}
+
+/* ==========================================================================
+   PASO 1: PANTALLA DE INICIO DE UBER (MODO CLARO - captura-uber-inicio.jpeg)
+   ========================================================================== */
+.uber-home-light {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 14px 12px;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    justify-content: space-between;
+}
+
+.uber-home-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.uber-loc-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    padding: 4px 6px;
+    cursor: pointer;
+    text-align: left;
+    color: #111111 !important;
+}
+
+.uber-loc-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    flex-shrink: 0;
+}
+
+.uber-loc-texts {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.uber-loc-label {
+    font-size: 0.72rem;
+    color: #4B5563 !important;
+    font-weight: 600;
+}
+
+.uber-loc-street {
+    font-size: 0.85rem;
+    color: #111111 !important;
+    font-weight: 800;
+}
+
+.uber-cart-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #E5E7EB;
+    background: #F9FAFB !important;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pestañas superiores Uber / Uber Eats / Envíos */
+.uber-top-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 2px solid #E5E7EB;
+    margin-bottom: 10px;
+}
+
+.uber-top-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 4px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #6B7280 !important;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.uber-top-tab.active {
+    color: #111111 !important;
+    border-bottom-color: #111111;
+}
+
+/* Píldora principal "¿A dónde vas?" + botón "Más tarde" */
+.uber-search-pill-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #EEEEEE !important;
+    border-radius: 999px;
+    padding: 8px 10px 8px 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.uber-search-pill-bar:hover {
+    transform: translateY(-1px);
+}
+
+.uber-search-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.uber-search-lens {
+    font-size: 1.1rem;
+}
+
+.uber-search-placeholder {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #111111 !important;
+}
+
+.uber-later-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border-radius: 999px;
+    padding: 6px 11px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Destino sugerido con promoción roja */
+.uber-promo-dest-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: #FFFFFF !important;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.uber-promo-dest-card:hover {
+    background: #F9FAFB !important;
+}
+
+.uber-promo-dest-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.uber-promo-dest-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.uber-promo-dest-info strong {
+    font-size: 0.86rem;
+    color: #111111 !important;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.uber-promo-dest-info p {
+    font-size: 0.75rem;
+    color: #4B5563 !important;
+    margin: 2px 0;
+}
+
+.uber-promo-red-tag {
+    font-size: 0.72rem;
+    color: #C81E1E !important;
+    font-weight: 700;
+}
+
+/* Encabezado "Para ti ›" */
+.uber-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 4px 0 6px;
+}
+
+.uber-section-header h5 {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #111111 !important;
+}
+
+.uber-chevron-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #111111;
+}
+
+/* Grilla de 4 tarjetas "Para ti" */
+.uber-for-you-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.uber-service-card {
+    position: relative;
+    background: #F3F4F6 !important;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 14px 4px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    color: #111111 !important;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.uber-service-card:hover {
+    background: #E5E7EB !important;
+    transform: translateY(-1px);
+}
+
+.uber-service-badge {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 999px;
+    white-space: nowrap;
+    color: #FFFFFF !important;
+}
+
+.uber-service-badge.promo {
+    background: #C81E1E;
+}
+
+.uber-service-badge.news {
+    background: #2563EB;
+}
+
+.uber-service-illus {
+    font-size: 1.45rem;
+    line-height: 1;
+}
+
+.uber-service-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #111111 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Barra de navegación inferior oficial de Uber */
+.uber-bottom-nav-pill {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: #FFFFFF !important;
+    border: 1px solid #E5E7EB;
+    border-radius: 999px;
+    padding: 6px 8px;
+    margin-top: auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.uber-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #6B7280 !important;
+    gap: 1px;
+}
+
+.uber-nav-item.active {
+    color: #111111 !important;
+    font-weight: 800;
+}
+
+.uber-nav-icon {
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   PASO 2: PLANIFICA TU VIAJE (captura-uber-planificatuorigen/viaje.jpeg)
+   ========================================================================== */
+.uber-plan-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 14px 12px;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+}
+
+.uber-plan-title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #111111 !important;
+}
+
+.uber-plan-pills-row {
+    display: flex;
+    gap: 8px;
+    margin: 6px 0 10px;
+}
+
+.uber-plan-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.uber-route-box-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.uber-route-double-box {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    border: 2px solid #111111;
+    border-radius: 12px;
+    background: #FFFFFF !important;
+    padding: 6px 10px;
+    gap: 10px;
+}
+
+.uber-route-timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0;
+}
+
+.timeline-circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #111111;
+}
+
+.timeline-line {
+    width: 2px;
+    flex: 1;
+    min-height: 18px;
+    background: #111111;
+    margin: 2px 0;
+}
+
+.timeline-square {
+    width: 8px;
+    height: 8px;
+    background: #111111;
+}
+
+.uber-route-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.uber-origin-select {
+    width: 100%;
+    border: none;
+    background: transparent !important;
+    color: #111111 !important;
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 4px 0;
+    outline: none;
+    cursor: pointer;
+}
+
+.uber-field-divider {
+    height: 1px;
+    background: #E5E7EB;
+    margin: 4px 0;
+}
+
+.uber-route-fields .route-field {
+    width: 100%;
+    border: none !important;
+    background: #F3F4F6 !important;
+    color: #111111 !important;
+    font-size: 0.86rem;
+    font-weight: 600;
+    padding: 5px 8px !important;
+    border-radius: 6px;
+}
+
+.uber-add-stop-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Chips de lugares guardados (Casa / Consultorio) */
+.uber-saved-places-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.uber-saved-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #F3F4F6 !important;
+    color: #111111 !important;
+    border: 1px solid #E5E7EB;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.uber-saved-chip:hover {
+    background: #E5E7EB !important;
+}
+
+/* Lista de destinos de Córdoba con distancia en km */
+.uber-cordoba-places-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.uber-place-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-bottom: 1px solid #F3F4F6;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #FFFFFF !important;
+    transition: background 0.15s;
+}
+
+.uber-place-row:hover {
+    background: #F3F4F6 !important;
+}
+
+.uber-place-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 42px;
+}
+
+.uber-place-pin-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #EEEEEE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+}
+
+.uber-place-km {
+    font-size: 0.66rem;
+    color: #6B7280 !important;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.uber-place-center {
+    flex: 1;
+    min-width: 0;
+}
+
+.uber-place-center strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #111111 !important;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.uber-place-center p {
+    margin: 2px 0 0;
+    font-size: 0.74rem;
+    color: #4B5563 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   PASO 3: MAPA DE RUTA + OPCIONES DE AUTO Y PAGO (captura-uber-elige.jpeg)
+   ========================================================================== */
+#sim-screen-3 .sim-map-route {
+    height: 112px !important;
+    min-height: 92px !important;
+    max-height: 23% !important;
+    position: relative;
+    flex: 0 0 auto !important;
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.uber-floating-back-circle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 12;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border: 1px solid #D1D5DB;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uber-map-route-pill {
+    position: absolute;
+    top: 10px;
+    left: 54px;
+    right: 12px;
+    z-index: 11;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border-radius: 999px;
+    padding: 6px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.route-pill-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.uber-route-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.uber-map-eta-bubble {
+    position: absolute;
+    z-index: 6;
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    border-radius: 8px;
+    padding: 3px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.uber-map-eta-bubble strong {
+    font-size: 0.82rem;
+    color: #FFFFFF !important;
+}
+
+.uber-map-eta-bubble span {
+    font-size: 0.62rem;
+    color: #E5E7EB !important;
+}
+
+.uber-map-car-sprite {
+    position: absolute;
+    z-index: 6;
+    font-size: 1.35rem;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.28));
+}
+
+.uber-google-watermark {
+    position: absolute;
+    bottom: 6px;
+    left: 10px;
+    z-index: 6;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #4B5563;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1px 5px;
+    border-radius: 4px;
+}
+
+.uber-gps-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    z-index: 8;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border: 1px solid #D1D5DB;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hoja inferior de vehículos con botón Elegir SIEMPRE visible en Mobile y Desktop */
+.uber-cars-sheet {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    padding: 6px 10px 8px !important;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    overflow: hidden !important;
+}
+
+.uber-cars-sheet .sheet-drag-handle {
+    margin: 0 auto 4px !important;
+    flex-shrink: 0;
+}
+
+.uber-sheet-heading-compact {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #111111 !important;
+    text-align: center;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+}
+
+.uber-vehicles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 4px;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow-y: auto;
+}
+
+.uber-sticky-confirm-footer {
+    margin-top: auto;
+    flex: 0 0 auto !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 15;
+}
+
+.uber-sticky-confirm-footer .uber-payment-row {
+    padding: 5px 10px !important;
+    margin: 0 !important;
+    border-radius: 9px !important;
+}
+
+.uber-car-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 8px !important;
+    margin-bottom: 0 !important;
+    border: 2px solid #E5E7EB !important;
+    border-radius: 10px !important;
+    background: #FFFFFF !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.uber-car-option.selected {
+    border-color: #111111 !important;
+    background: #F9FAFB !important;
+}
+
+.uber-car-thumb {
+    font-size: 1.35rem;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.uber-car-texts {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.uber-car-title-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.uber-car-title-row strong {
+    font-size: 0.84rem;
+    color: #111111 !important;
+    font-weight: 800;
+}
+
+.uber-cap-badge {
+    font-size: 0.68rem;
+    color: #374151 !important;
+    font-weight: 600;
+}
+
+.uber-fast-badge {
+    display: inline-block;
+    align-self: flex-start;
+    background: #DBEAFE;
+    color: #1D4ED8 !important;
+    font-size: 0.64rem;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+.car-info-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.car-price {
+    font-size: 0.86rem !important;
+    font-weight: 800 !important;
+    color: #111111 !important;
+}
+
+.promo-red-dot {
+    color: #DC2626 !important;
+}
+
+.car-old-price {
+    font-size: 0.72rem;
+    color: #6B7280 !important;
+    text-decoration: line-through;
+}
+
+.uber-cash-green-badge {
+    width: 26px;
+    height: 18px;
+    border-radius: 4px;
+    background: #DCFCE7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.uber-confirm-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+}
+
+.uber-confirm-row .uber-confirm-btn {
+    flex: 1;
+    margin: 0 !important;
+    padding: 10px 10px !important;
+    font-size: 0.92rem !important;
+    min-height: 40px !important;
+}
+
+.uber-schedule-square-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    border: none;
+    font-size: 1.05rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Hoja "Paga con" (captura-uber-pago.jpeg) */
+#sim-payment-sheet {
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    padding: 14px !important;
+    max-height: 92%;
+    overflow-y: auto;
+}
+
+.uber-pay-sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.uber-pay-sheet-header h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #111111 !important;
+}
+
+.uber-pay-profile-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.uber-pay-tab {
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: #EEEEEE;
+    color: #4B5563;
+}
+
+.uber-pay-tab.active {
+    background: #111111;
+    color: #FFFFFF;
+}
+
+.uber-cash-balance-card {
+    background: #F3F4F6;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.uber-cash-small {
+    display: block;
+    font-size: 0.72rem;
+    color: #4B5563;
+}
+
+.uber-cash-amount {
+    font-size: 0.92rem;
+    color: #111111;
+    font-weight: 800;
+}
+
+.uber-toggle-off {
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: #CBD5E1;
+    position: relative;
+}
+
+.uber-toggle-off::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #FFFFFF;
+}
+
+.uber-pay-section-title {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #4B5563;
+    margin: 6px 0;
+}
+
+.uber-add-payment-row {
+    padding: 8px 4px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111111;
+    border-top: 1px solid #F3F4F6;
+}
+
+/* ==========================================================================
+   PASO 4 Y PASO 5: MINIATURA STREET VIEW, CONDUCTOR EN CAMINO Y DETALLES
+   ========================================================================== */
+.uber-streetview-thumb {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    z-index: 8;
+    width: 54px;
+    height: 44px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #93C5FD 0%, #E5E7EB 60%, #9CA3AF 100%);
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.sv-building {
+    font-size: 1.2rem;
+}
+
+.sv-arrows {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    background: rgba(17, 17, 17, 0.75);
+    color: #FFFFFF;
+    font-size: 0.6rem;
+    padding: 0 3px;
+    border-radius: 3px;
+}
+
+.uber-safety-pill-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 12;
+    background: #FFFFFF !important;
+    color: #1D4ED8 !important;
+    border: 1.5px solid #BFDBFE;
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.uber-map-callout-dark {
+    position: absolute;
+    z-index: 7;
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    white-space: nowrap;
+}
+
+.uber-map-km-badge {
+    position: absolute;
+    z-index: 7;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border: 1.5px solid #111111;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+#sim-screen-5 .sim-map-driver {
+    height: 108px !important;
+    min-height: 92px !important;
+    max-height: 22% !important;
+    position: relative;
+    flex: 0 0 auto !important;
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+#sim-screen-5 .uber-driver-sheet {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    padding: 6px 10px 8px !important;
+    overflow-y: auto;
+}
+
+#sim-screen-5 .sheet-drag-handle {
+    margin: 0 auto 4px !important;
+    flex-shrink: 0;
+}
+
+.uber-trip-countdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.uber-trip-status-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #111111 !important;
+}
+
+.uber-eta-blue-box {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 7px;
+    flex-shrink: 0;
+}
+
+/* Tarjeta de Conductor + Auto + Patente AE 842 KQ */
+.uber-driver-hero-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 6px 8px;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.uber-driver-visual-cluster {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.uber-driver-photo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #E2E8F0;
+    border: 2px solid #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    z-index: 2;
+}
+
+.uber-car-render {
+    font-size: 1.65rem;
+    margin-left: -8px;
+    z-index: 1;
+}
+
+.uber-rating-pill {
+    position: absolute;
+    bottom: -4px;
+    left: 2px;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border: 1px solid #CBD5E1;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1px 5px;
+    z-index: 3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.uber-vehicle-identity {
+    text-align: right;
+}
+
+.uber-plate-number {
+    display: inline-block;
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    font-size: 0.88rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    margin-bottom: 1px;
+}
+
+.uber-car-model-text {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #111111 !important;
+}
+
+.uber-driver-name-blue {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #2563EB !important;
+}
+
+/* Barra "Enviar mensaje a Carlos" + botón llamada */
+.uber-contact-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.uber-msg-pill-btn {
+    flex: 1;
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    border: none;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.uber-msg-pill-btn:hover {
+    background: #E2E8F0 !important;
+}
+
+.uber-call-round-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    border: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#sim-screen-5 .sim-safety-checklist {
+    padding: 7px 9px !important;
+    margin-bottom: 5px !important;
+    border-radius: 10px !important;
+    flex-shrink: 0;
+}
+
+#sim-screen-5 .sim-safety-title {
+    font-size: 0.76rem !important;
+    margin-bottom: 3px !important;
+}
+
+#sim-screen-5 .sim-check-item {
+    padding: 3px 0 !important;
+    font-size: 0.74rem !important;
+}
+
+/* Detalles del viaje en Modo Claro */
+.uber-trip-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 4px;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+}
+
+.uber-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+}
+
+.detail-icon {
+    width: 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #111111;
+    flex-shrink: 0;
+}
+
+.detail-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.detail-body strong {
+    color: #111111 !important;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-body span {
+    color: #4B5563 !important;
+    font-size: 0.68rem;
+}
+
+.uber-grey-pill-btn {
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    border: none;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#sim-screen-5 .uber-confirm-btn {
+    padding: 10px 10px !important;
+    font-size: 0.88rem !important;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   PASO 6: EN VIAJE HACIA DESTINO (6A) Y CALIFICA TU VIAJE (6B)
+   ========================================================================== */
+.uber-intrip-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1 1 0%;
+    min-height: 0;
+}
+
+.sim-map-intrip {
+    flex: 1 1 0% !important;
+    min-height: 120px !important;
+    height: auto !important;
+    position: relative;
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.uber-intrip-sheet {
+    flex: 0 0 auto !important;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    padding: 8px 12px 10px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.uber-intrip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.uber-intrip-label {
+    font-size: 0.72rem;
+    color: #2563EB !important;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.uber-intrip-eta {
+    margin: 2px 0 0;
+    font-size: 0.92rem;
+    color: #111111 !important;
+}
+
+.uber-seatbelt-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #EFF6FF !important;
+    border: 1px solid #BFDBFE;
+    border-radius: 10px;
+    padding: 7px 10px;
+    margin: 6px 0;
+}
+
+.seatbelt-icon {
+    font-size: 1.25rem;
+}
+
+.uber-seatbelt-banner p {
+    margin: 0;
+    font-size: 0.76rem;
+    color: #1E3A8A !important;
+    line-height: 1.3;
+}
+
+.uber-intrip-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.uber-intrip-summary-row strong {
+    display: block;
+    font-size: 0.78rem;
+    color: #111111 !important;
+}
+
+.uber-intrip-summary-row span {
+    font-size: 0.72rem;
+    color: #4B5563 !important;
+}
+
+.uber-intrip-sheet .uber-confirm-btn {
+    padding: 10px 10px !important;
+    font-size: 0.88rem !important;
+}
+
+/* Sub-vista 6B: Califica tu viaje (Modo Claro) */
+.uber-rating-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    flex: 1 1 0%;
+    min-height: 0;
+    padding: 8px 12px 10px;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.uber-rating-top-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.uber-skip-pill {
+    background: #EEEEEE !important;
+    color: #111111 !important;
+    border: none;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.uber-rating-driver-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #F1F5F9;
+    border: 2px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.uber-rating-title {
+    margin: 4px 0 1px;
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: #111111 !important;
+}
+
+.uber-rating-subtitle {
+    margin: 0 0 4px;
+    font-size: 0.76rem;
+    color: #4B5563 !important;
+}
+
+.uber-stars-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 2px 0;
+}
+
+.uber-star-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #E5E7EB;
+    background: #F9FAFB !important;
+    color: #CBD5E1 !important;
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.uber-star-btn.active {
+    color: #F59E0B !important;
+    border-color: #FBBF24;
+    background: #FFFBEB !important;
+}
+
+.uber-star-btn:hover {
+    transform: scale(1.08);
+}
+
+.uber-rating-feedback {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #15803D !important;
+    margin: 2px 0 4px;
+}
+
+.uber-receipt-mini {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    color: #334155 !important;
+    margin-bottom: 4px;
+}
+
+.uber-receipt-mini strong {
+    color: #111111 !important;
+    font-size: 0.86rem;
+}
+
+.uber-rating-view .sim-success-card {
+    padding: 8px 10px !important;
+    font-size: 0.78rem !important;
+    background: #F0FDF4 !important;
+    color: #166534 !important;
+    border: 1.5px solid #86EFAC !important;
+    width: 100%;
+}
+
+/* ==========================================================================
+   PASO 4: ALINEACIÓN EXACTA MAPA + PUNTERO SOBRE AV. COLÓN 1450
+   ========================================================================== */
+#sim-screen-4 #pickup-map {
+    flex: 1 1 0% !important;
+    min-height: 165px !important;
+    height: auto !important;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+#sim-screen-4 #pickup-map:active {
+    cursor: grabbing;
+}
+
+#sim-screen-4 .uber-pickup-sheet {
+    flex: 0 0 auto !important;
+    padding: 8px 12px 10px !important;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+}
+
+#sim-screen-4 .uber-pickup-sheet .sheet-drag-handle {
+    margin: 0 auto 4px !important;
+}
+
+#sim-screen-4 .uber-pickup-sheet .uber-confirm-btn {
+    padding: 10px 12px !important;
+    font-size: 0.92rem !important;
+}
+
+/* Marcadores exactos en porcentaje sobre los mapas de ruta (Pasos 3, 5 y 6) */
+.uber-map-exact-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+    pointer-events: none;
+}
+
+.uber-map-exact-dot.origin {
+    border-radius: 50%;
+    background: #16A34A;
+    border: 2.5px solid #FFFFFF;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.uber-map-exact-dot.dest {
+    background: #111111;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Punto azul de ubicación GPS fijo en (35%, 50%) = AV. COLÓN 1450 en map_background.svg */
+#pickup-map #pickup-target-location {
+    position: absolute !important;
+    left: 35% !important;
+    top: 50% !important;
+    width: 22px !important;
+    height: 22px !important;
+    transform: translate(-50%, -50%) !important;
+    pointer-events: none;
+    z-index: 5;
+    display: block !important;
+}
+
+#pickup-map #pickup-target-location .pickup-current-dot {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: #2563EB !important;
+    border: 4px solid #FFFFFF !important;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 8px rgba(37, 99, 235, 0.22);
+}
+
+#pickup-map #pickup-target-location .pickup-current-tag {
+    position: absolute;
+    top: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1.5px solid #2563EB;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+}
+
+/* Puntero arrastrable cuya punta inferior (50%, 100%) coincide al píxel con (left, top) */
+#pickup-map #pickup-marker {
+    position: absolute !important;
+    left: 68%;
+    top: 50%;
+    transform: translate(-50%, -100%) !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    cursor: grab;
+    z-index: 9;
+    touch-action: none;
+}
+
+#pickup-map #pickup-marker:active {
+    cursor: grabbing;
+}
+
+#pickup-map #pickup-marker .pickup-tag {
+    background: #111827 !important;
+    color: #FFFFFF !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    padding: 4px 9px !important;
+    border-radius: 999px !important;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pickup-map #pickup-marker.pickup-marker-confirmed .pickup-tag {
+    background: #15803D !important;
+    color: #FFFFFF !important;
+}
+
+#pickup-map #pickup-marker .pickup-pin-svg {
+    display: block;
+    width: 32px;
+    height: 38px;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+}
+
+#pickup-map #pickup-marker.pickup-marker-confirmed .pickup-pin-svg path {
+    fill: #15803D !important;
+}
+
+.uber-gps-btn {
+    cursor: pointer;
+}
+
+.uber-pickup-address-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F3F4F6;
+    border-radius: 10px;
+    padding: 6px 10px;
+    margin-top: 4px;
+}
+
+.uber-pickup-search-badge {
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   MODALES DEL SIMULADOR Y CERTIFICADO FINAL: ALTA LEGIBILIDAD Y CONTRASTE
+   (WhatsApp, Llamada, Chat, Seguridad y Certificado)
+   ========================================================================== */
+.sim-modal-overlay {
+    padding: 12px !important;
+}
+
+.sim-dialog-box.sim-readable-modal,
+#sim-modal-certificate .sim-dialog-box {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 2px solid #CBD5E1 !important;
+    border-radius: 20px !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45) !important;
+    padding: 0 !important;
+}
+
+.sim-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px !important;
+    gap: 10px;
+}
+
+.sim-modal-header-wa {
+    background: #075E54 !important;
+    color: #FFFFFF !important;
+}
+
+.sim-modal-header-dark {
+    background: #111827 !important;
+    color: #FFFFFF !important;
+}
+
+.sim-modal-header-blue {
+    background: #1E3A8A !important;
+    color: #FFFFFF !important;
+}
+
+.sim-modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sim-call-avatar-sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.sim-modal-title-text {
+    margin: 0 !important;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    line-height: 1.25 !important;
+}
+
+.sim-modal-subtitle-text {
+    display: block;
+    font-size: 0.82rem !important;
+    color: #E2E8F0 !important;
+    font-weight: 500 !important;
+    margin-top: 2px;
+}
+
+.sim-modal-close-x {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #FFFFFF !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sim-modal-content-pad {
+    padding: 18px !important;
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+}
+
+/* Modal 1: WhatsApp */
+.sim-wa-body-clean {
+    background: #EFEAE2 !important;
+}
+
+.sim-wa-bubble-clean {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border-left: 5px solid #16A34A !important;
+    border-radius: 12px !important;
+    padding: 14px 16px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+.sim-wa-main-line {
+    margin: 0 0 10px !important;
+    font-size: 0.98rem !important;
+    line-height: 1.45 !important;
+    color: #0F172A !important;
+}
+
+.sim-wa-main-line strong {
+    color: #0F172A !important;
+}
+
+.sim-wa-info-box {
+    background: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 10px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.55 !important;
+    color: #0F172A !important;
+}
+
+.sim-wa-info-box div,
+.sim-wa-info-box strong {
+    color: #0F172A !important;
+}
+
+.sim-wa-link-line {
+    margin: 0 !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: #0369A1 !important;
+}
+
+.sim-wa-link-line span {
+    text-decoration: underline;
+    color: #0369A1 !important;
+}
+
+.sim-wa-time-stamp {
+    display: block;
+    text-align: right;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    margin-top: 6px;
+}
+
+/* Modal 2: Llamada con el conductor */
+.sim-call-driver-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 14px !important;
+}
+
+.sim-call-driver-emoji {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #DBEAFE !important;
+    border: 2px solid #2563EB !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+    flex-shrink: 0;
+}
+
+.sim-call-driver-name {
+    display: block;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+}
+
+.sim-call-driver-car {
+    display: block;
+    font-size: 0.86rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    margin-top: 2px;
+}
+
+.sim-call-speech-card {
+    background: #FEFCE8 !important;
+    border: 2px solid #FACC15 !important;
+    border-radius: 14px !important;
+    padding: 14px 16px !important;
+    color: #0F172A !important;
+}
+
+.sim-call-speech-label {
+    display: block;
+    font-size: 0.85rem !important;
+    font-weight: 800 !important;
+    color: #854D0E !important;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.sim-call-speech-card p,
+.sim-call-speech-card strong {
+    margin: 0 !important;
+    font-size: 0.98rem !important;
+    line-height: 1.5 !important;
+    color: #0F172A !important;
+}
+
+.sim-call-hangup-full-btn {
+    width: 100%;
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 13px 16px !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* Modal 3: Chat con el conductor */
+.sim-uber-chat-body {
+    background: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    margin-bottom: 14px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sim-chat-msg {
+    padding: 10px 14px !important;
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.45 !important;
+}
+
+.sim-chat-msg.driver {
+    background: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    color: #0F172A !important;
+    align-self: flex-start;
+}
+
+.sim-chat-msg.driver strong {
+    color: #0F172A !important;
+}
+
+.sim-chat-msg.user {
+    background: #1D4ED8 !important;
+    color: #FFFFFF !important;
+    align-self: flex-end;
+}
+
+.sim-chat-msg.user strong {
+    color: #FFFFFF !important;
+}
+
+.sim-chat-quick-label {
+    display: block;
+    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    margin-bottom: 8px;
+}
+
+.sim-chat-quick-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sim-chat-reply-btn {
+    width: 100%;
+    text-align: left;
+    background: #EFF6FF !important;
+    color: #0F172A !important;
+    border: 1.5px solid #93C5FD !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+.sim-chat-reply-btn:hover {
+    background: #DBEAFE !important;
+}
+
+/* Modal 4: Kit de Seguridad */
+.sim-sec-intro {
+    font-size: 0.95rem !important;
+    line-height: 1.45 !important;
+    color: #0F172A !important;
+    margin: 0 0 12px !important;
+}
+
+.sim-sec-intro strong {
+    color: #0F172A !important;
+}
+
+.sim-sec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.uber-sec-item-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px !important;
+    background: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 12px !important;
+    cursor: pointer;
+}
+
+.uber-sec-icon {
+    font-size: 1.45rem;
+    flex-shrink: 0;
+}
+
+.uber-sec-texts strong {
+    display: block;
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    margin-bottom: 2px;
+}
+
+.uber-sec-texts span {
+    display: block;
+    font-size: 0.85rem !important;
+    color: #334155 !important;
+    line-height: 1.35 !important;
+}
+
+/* Pie de botones de los modales */
+.sim-modal-footer-clean {
+    padding: 12px 18px 16px !important;
+    background: #F8FAFC !important;
+    border-top: 1px solid #E2E8F0 !important;
+}
+
+.sim-modal-primary-btn {
+    width: 100%;
+    background: #111827 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 0.98rem !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+}
+
+.sim-modal-secondary-btn {
+    width: 100%;
+    background: #F1F5F9 !important;
+    color: #0F172A !important;
+    border: 2px solid #94A3B8 !important;
+    border-radius: 12px !important;
+    padding: 11px 16px !important;
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+}
+
+/* Modal 5: Certificado Final de Práctica */
+#sim-modal-certificate .sim-cert-box {
+    border: 3px solid #1D4ED8 !important;
+    border-radius: 18px !important;
+    padding: 20px 18px !important;
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    text-align: center;
+}
+
+#sim-modal-certificate .sim-cert-icon {
+    font-size: 2.8rem !important;
+    margin-bottom: 6px !important;
+}
+
+#sim-modal-certificate .sim-cert-badge {
+    background: #DBEAFE !important;
+    color: #1E3A8A !important;
+    display: inline-block;
+    padding: 5px 14px !important;
+    border-radius: 999px !important;
+    font-size: 0.8rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 8px !important;
+}
+
+#sim-modal-certificate .sim-cert-title {
+    font-size: 1.45rem !important;
+    font-weight: 900 !important;
+    color: #0F172A !important;
+    margin: 0 0 6px !important;
+}
+
+#sim-modal-certificate .sim-cert-desc,
+#sim-modal-certificate .sim-cert-desc strong {
+    font-size: 0.96rem !important;
+    line-height: 1.45 !important;
+    color: #1E293B !important;
+    margin: 0 0 12px !important;
+}
+
+#sim-modal-certificate .sim-cert-checklist {
+    text-align: left;
+    background: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    margin: 12px 0 16px !important;
+    color: #0F172A !important;
+}
+
+#sim-modal-certificate .sim-cert-list-heading {
+    display: block;
+    font-size: 0.94rem !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    margin-bottom: 8px !important;
+}
+
+#sim-modal-certificate .sim-cert-checklist ul {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#sim-modal-certificate .sim-cert-checklist li {
+    list-style: none;
+    display: flex;
+    align-items: flex-start !important;
+    gap: 8px;
+    margin-bottom: 8px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.4 !important;
+    color: #0F172A !important;
+}
+
+#sim-modal-certificate .sim-cert-checklist li span,
+#sim-modal-certificate .sim-cert-checklist li strong {
+    color: #0F172A !important;
+}
+
+.sim-cert-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+@media (max-width: 480px) {
+    .sim-cert-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+

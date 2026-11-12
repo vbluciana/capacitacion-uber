@@ -16,7 +16,7 @@
     <title>Capacitación sobre Uber</title>
 
 
-    <link rel="stylesheet" href="style.css?v=36">
+    <link rel="stylesheet" href="style.css?v=42">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -413,865 +413,864 @@
 
 
         <!-- VISTA: SIMULADOR PRÁCTICO INTERACTIVO -->
-
-
         <div id="view-simulador" class="tab-view" style="display: none;">
 
-
             <header class="header">
-
-
                 <div class="container header-content">
-
-
-                    <h1>Simulador Práctico Interactivo</h1>
-
-
-                    <p class="subtitle">Aprenda a pedir su viaje paso a paso en un celular virtual seguro y sin riesgos.</p>
-
-
+                    <h1>Simulador Práctico</h1>
+                    <p class="subtitle">Practique cómo pedir un viaje específico en Córdoba paso a paso y sin riesgos.</p>
                 </div>
-
-
             </header>
-
-
-
-
 
             <section class="container simulator-container">
 
+                <!-- Panel lateral de guía: limpio, despejado y pensado para personas mayores -->
+                <div class="sim-guide-panel" id="sim-guide-panel">
 
-                <!-- Panel lateral de guía pedagógica -->
-
-
-                <div class="sim-guide-panel">
-
-
-                    <div class="sim-guide-badge">
-
-
-                        <span>Paso <strong id="sim-step-number">1</strong> de 5</span>
-
-
+                    <!-- Indicador de pasos simple (1 al 6) -->
+                    <div class="sim-stepper" role="navigation" aria-label="Pasos de la práctica">
+                        <button type="button" class="sim-step-item active" id="sim-step-dot-1" onclick="simTriggerStep(1, event)" aria-label="Paso 1">
+                            <span class="sim-step-circle">1</span>
+                            <span class="sim-step-label">Inicio</span>
+                        </button>
+                        <button type="button" class="sim-step-item" id="sim-step-dot-2" onclick="simTriggerStep(2, event)" aria-label="Paso 2">
+                            <span class="sim-step-circle">2</span>
+                            <span class="sim-step-label">Ruta</span>
+                        </button>
+                        <button type="button" class="sim-step-item" id="sim-step-dot-3" onclick="simTriggerStep(3, event)" aria-label="Paso 3">
+                            <span class="sim-step-circle">3</span>
+                            <span class="sim-step-label">Auto</span>
+                        </button>
+                        <button type="button" class="sim-step-item" id="sim-step-dot-4" onclick="simTriggerStep(4, event)" aria-label="Paso 4">
+                            <span class="sim-step-circle">4</span>
+                            <span class="sim-step-label">Partida</span>
+                        </button>
+                        <button type="button" class="sim-step-item" id="sim-step-dot-5" onclick="simTriggerStep(5, event)" aria-label="Paso 5">
+                            <span class="sim-step-circle">5</span>
+                            <span class="sim-step-label">Chofer</span>
+                        </button>
+                        <button type="button" class="sim-step-item" id="sim-step-dot-6" onclick="simTriggerStep(6, event)" aria-label="Paso 6">
+                            <span class="sim-step-circle">6</span>
+                            <span class="sim-step-label">Llegada</span>
+                        </button>
                     </div>
 
-
-
-
-
-                    <div class="sim-progress-bar">
-
-
-                        <div id="sim-progress-fill" style="width: 20%;"></div>
-
-
+                    <div class="sim-progress-bar" aria-label="Progreso">
+                        <div id="sim-progress-fill" style="width: 16.6%;"></div>
                     </div>
 
-
-
-
-
-                    <h3 id="sim-guide-title">Buscar su destino</h3>
-
-
-                    <p id="sim-guide-desc">Para comenzar a pedir un auto, toque en el celular la barra que dice <strong>"¿A dónde vas?"</strong>.</p>
-
-
-
-
-
-                    <div class="sim-hint-box">
-
-
-                        <span class="sim-hint-icon">💡</span>
-
-
-                        <span id="sim-hint-text">El elemento que debe tocar en la pantalla del celular tiene un resplandor azul parpadeante.</span>
-
-
+                    <!-- Tarjeta fija con el viaje específico a simular -->
+                    <div class="sim-fixed-trip-card" aria-label="Datos del viaje a realizar">
+                        <span class="sim-fixed-trip-heading">📍 Viaje a realizar en esta práctica:</span>
+                        <div class="sim-fixed-trip-row">
+                            <span class="sim-fixed-dot origin">●</span>
+                            <span><strong>Origen:</strong> Av. Colón 1450</span>
+                        </div>
+                        <div class="sim-fixed-trip-row">
+                            <span class="sim-fixed-dot dest">■</span>
+                            <span><strong>Destino:</strong> Hospital Privado (Av. Naciones Unidas 346)</span>
+                        </div>
                     </div>
 
+                    <!-- Título e instrucción breve y clara -->
+                    <h3 id="sim-guide-title">Paso 1: Abrir el buscador</h3>
+                    <p id="sim-guide-desc">En la pantalla del celular, toque la barra gris que dice <strong>"¿A dónde vas?"</strong> (resaltada con borde azul).</p>
 
-
-
-
-                    <div class="sim-controls">
-
-
-                        <button type="button" id="btn-sim-prev" class="btn-secondary" style="display: none; margin-right: 10px;" onclick="simPrevStep()">← Paso anterior</button>
-
-
-                        <button type="button" class="btn-secondary" onclick="restartSimulator()">🔄 Reiniciar ejercicio</button>
-
-
+                    <!-- Botón de lectura por voz y controles básicos -->
+                    <div class="sim-clean-actions">
+                        <button type="button" id="btn-sim-tts" class="sim-tts-btn" onclick="toggleSimSpeech()" aria-label="Escuchar instrucción en voz alta">
+                            <span aria-hidden="true">🔊</span> <span id="sim-tts-label">Escuchar instrucción</span>
+                        </button>
+                        <div class="sim-controls">
+                            <button type="button" id="btn-sim-prev" class="btn-secondary" style="display: none;" onclick="simPrevStep()">← Paso anterior</button>
+                            <button type="button" class="btn-secondary" onclick="restartSimulator()">🔄 Reiniciar</button>
+                        </div>
                     </div>
-
 
                 </div>
 
-
-
-
-
-                <!-- Marco del Teléfono Virtual -->
-
-
+                <!-- Marco del Teléfono Virtual (Modo Claro Uber Oficial) -->
                 <div class="phone-wrapper">
-
 
                     <div class="phone-device" id="sim-phone-device">
 
-
-                        <!-- Barra de estado superior del celular -->
-
-
+                        <!-- Barra de estado superior del celular (Modo Claro) -->
                         <div class="phone-status-bar">
-
-
-                            <span class="phone-time">12:30</span>
-
-
+                            <span class="phone-time">10:27</span>
                             <div class="phone-notch"></div>
-
-
                             <div class="phone-icons">
-
-
+                                <span>4G</span>
                                 <span>📶</span>
-
-
                                 <span>🔋</span>
-
-
                             </div>
-
-
                         </div>
 
-
-
-
-
-                        <!-- Pantalla interactiva (con detector de clics erróneos) -->
-
-
+                        <!-- Pantalla interactiva -->
                         <div class="phone-screen" onclick="handlePhoneMisclick(event)">
 
+                            <!-- Cartel de guía flotante cuando toca fuera -->
+                            <div id="sim-error-badge" class="sim-error-badge" style="display: none;">💡 Toque el botón con borde azul</div>
 
-                            <!-- Cartel de error flotante en la pantalla -->
-
-
-                            <div id="sim-error-badge" class="sim-error-badge" style="display: none;">⚠️ Opción incorrecta</div>
-
-
-
-
-
-                            <!-- PANTALLA 1: Inicio de Uber -->
-
-
+                            <!-- =========================================================
+                                 PANTALLA 1: INICIO DE UBER (Modo Claro sin descuentos)
+                                 ========================================================= -->
                             <div id="sim-screen-1" class="sim-screen active">
-
-
-                                <div class="sim-map sim-map-home">
-
-
-                                    <div class="map-grid"></div>
-
-
-                                    <div class="map-car" style="top: 30%; left: 30%;">🚗</div>
-
-
-                                    <div class="map-car" style="top: 20%; left: 70%;">🚗</div>
-
-
-                                    <div class="map-user-pin" style="top: 60%; left: 50%;">
-
-
-                                        <div class="user-pulse"></div>
-
-
-                                        <div class="user-dot"></div>
-
-
+                                <div class="uber-home-light">
+                                    <!-- Encabezado de Ubicación Actual en Córdoba -->
+                                    <div class="uber-home-top-bar">
+                                        <button type="button" class="uber-loc-pill sim-valid-action" onclick="simTriggerStep(2, event)" aria-label="Ubicación actual: Av. Colón 1450">
+                                            <span class="uber-loc-dot"></span>
+                                            <div class="uber-loc-texts">
+                                                <span class="uber-loc-label">Ubicación actual ▾</span>
+                                                <strong class="uber-loc-street" id="sim-home-origin-label">Av. Colón 1450, Alberdi</strong>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="uber-cart-icon-btn sim-valid-action" onclick="simTriggerStep(2, event)" aria-label="Carrito">
+                                            🛒
+                                        </button>
                                     </div>
 
-
-                                </div>
-
-
-
-
-
-                                <div class="uber-home-sheet">
-
-
-                                    <h4 style="font-size: 1.15rem; margin-bottom: 12px; font-weight: 700;">Buenas tardes</h4>
-
-
-                                    <!-- Botón interactivo con efecto de resalte (Única acción válida del paso 1) -->
-
-
-                                    <div class="uber-search-bar sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(2, event)">
-
-
-                                        <span style="font-size: 1.2rem;">🔍</span>
-
-
-                                        <span style="color: #444; font-weight: 500;">¿A dónde vas?</span>
-
-
+                                    <!-- Pestañas superiores: Uber / Uber Eats / Envíos -->
+                                    <div class="uber-top-tabs">
+                                        <div class="uber-top-tab active">
+                                            <span class="uber-tab-car-icon">🚗</span>
+                                            <span>Uber</span>
+                                        </div>
+                                        <div class="uber-top-tab">
+                                            <span class="uber-tab-eats-icon">🥗</span>
+                                            <span>Uber Eats</span>
+                                        </div>
+                                        <div class="uber-top-tab">
+                                            <span class="uber-tab-pkg-icon">🛍️</span>
+                                            <span>Envíos</span>
+                                        </div>
                                     </div>
 
+                                    <!-- Barra principal "¿A dónde vas?" + botón "Más tarde" -->
+                                    <div class="uber-search-pill-bar sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(2, event)" role="button" tabindex="0" aria-label="¿A dónde vas? Toque aquí para ingresar las direcciones">
+                                        <div class="uber-search-left">
+                                            <span class="uber-search-lens" aria-hidden="true">🔍</span>
+                                            <span class="uber-search-placeholder">¿A dónde vas?</span>
+                                        </div>
+                                        <div class="uber-later-chip">
+                                            <span aria-hidden="true">📅</span>
+                                            <span>Más tarde</span>
+                                        </div>
+                                    </div>
 
+                                    <!-- Destino reciente del ejercicio (sin carteles de descuento) -->
+                                    <div class="uber-promo-dest-card sim-valid-action" onclick="simTriggerStep(2, event)" role="button" tabindex="0">
+                                        <div class="uber-promo-dest-icon">🕒</div>
+                                        <div class="uber-promo-dest-info">
+                                            <strong>Hospital Privado Universitario</strong>
+                                            <p>Av. Naciones Unidas 346, Córdoba</p>
+                                        </div>
+                                    </div>
 
+                                    <!-- Sección "Para ti ›" limpia y sin etiquetas de descuento -->
+                                    <div class="uber-section-header">
+                                        <h5>Para ti</h5>
+                                        <span class="uber-chevron-circle">›</span>
+                                    </div>
 
+                                    <div class="uber-for-you-grid">
+                                        <button type="button" class="uber-service-card sim-valid-action" onclick="simTriggerStep(2, event)">
+                                            <div class="uber-service-illus">🚗</div>
+                                            <span class="uber-service-name">Viaje</span>
+                                        </button>
+                                        <button type="button" class="uber-service-card sim-valid-action" onclick="simTriggerStep(2, event)">
+                                            <div class="uber-service-illus">🚙</div>
+                                            <span class="uber-service-name">Comfort</span>
+                                        </button>
+                                        <button type="button" class="uber-service-card sim-valid-action" onclick="simTriggerStep(2, event)">
+                                            <div class="uber-service-illus">📦</div>
+                                            <span class="uber-service-name">Envíos</span>
+                                        </button>
+                                        <button type="button" class="uber-service-card sim-valid-action" onclick="simTriggerStep(2, event)">
+                                            <div class="uber-service-illus">🌸</div>
+                                            <span class="uber-service-name">Mujeres</span>
+                                        </button>
+                                    </div>
 
+                                    <!-- Dirección guardada en Córdoba -->
                                     <div class="uber-recent-list">
-
-
-                                        <div class="uber-recent-item">
-
-
-                                            <span class="recent-icon">🕒</span>
-
-
-                                            <div>
-
-
-                                                <strong>Hospital Central</strong>
-
-
-                                                <p>Av. San Martín 1540</p>
-
-
-                                            </div>
-
-
-                                        </div>
-
-
-                                        <div class="uber-recent-item">
-
-
+                                        <div class="uber-recent-item sim-valid-action" onclick="simTriggerStep(2, event)">
                                             <span class="recent-icon">🏠</span>
-
-
                                             <div>
-
-
                                                 <strong>Casa</strong>
-
-
-                                                <p>Av. Rivadavia 2500</p>
-
-
+                                                <p>Av. Colón 1450, Barrio Alberdi</p>
                                             </div>
-
-
                                         </div>
-
-
                                     </div>
 
-
+                                    <!-- Barra de navegación inferior oficial de Uber -->
+                                    <div class="uber-bottom-nav-pill">
+                                        <div class="uber-nav-item active">
+                                            <span class="uber-nav-icon">🏠</span>
+                                            <span>Inicio</span>
+                                        </div>
+                                        <div class="uber-nav-item">
+                                            <span class="uber-nav-icon">⊞</span>
+                                            <span>Opciones</span>
+                                        </div>
+                                        <div class="uber-nav-item">
+                                            <span class="uber-nav-icon">🧾</span>
+                                            <span>Actividad</span>
+                                        </div>
+                                        <div class="uber-nav-item">
+                                            <span class="uber-nav-icon">👤</span>
+                                            <span>Cuenta</span>
+                                        </div>
+                                    </div>
                                 </div>
-
-
                             </div>
 
-
-
-
-
-                            <!-- PANTALLA 2: Elegir Destino -->
-
-
+                            <!-- =========================================================
+                                 PANTALLA 2: PLANIFICA TU VIAJE (Origen: Av. Colón 1450 -> Destino: Hospital Privado)
+                                 ========================================================= -->
                             <div id="sim-screen-2" class="sim-screen" style="display: none;">
-
-
-                                <div class="uber-dest-header">
-
-
-                                    <button class="sim-back-btn sim-screen-back" onclick="simTriggerStep(1, event)">←</button>
-
-
-                                    <span style="font-weight: 700; font-size: 1.05rem;">¿A dónde va?</span>
-
-
-                                </div>
-
-
-
-
-
-                                <div class="uber-route-inputs">
-
-
-                                    <div class="route-input-row">
-
-
-                                        <span class="dot-origin">🟢</span>
-
-
-                                        <input type="text" value="Av. Rivadavia 2500 (Ubicación actual)" readonly class="route-field">
-
-
+                                <div class="uber-plan-screen">
+                                    <!-- Encabezado "← Planifica tu viaje" -->
+                                    <div class="uber-dest-header">
+                                        <button type="button" class="sim-back-btn sim-screen-back" onclick="simTriggerStep(1, event)" aria-label="Volver al inicio">←</button>
+                                        <span class="uber-plan-title">Planifica tu viaje</span>
                                     </div>
 
-
-                                    <div class="route-input-row">
-
-
-                                        <span class="dot-dest">🔴</span>
-
-
-                                        <input type="text" id="sim-destination-input" placeholder="Escriba su destino" class="route-field target-dest sim-valid-action" autocomplete="off" oninput="updateDestinationSearch()" onkeydown="submitDestinationOnEnter(event)">
-
-
-                                    </div>
-
-
-                                </div>
-
-
-
-
-
-                                <div class="uber-dest-suggestions">
-
-
-                                    <p id="sim-destination-prompt" style="font-size: 0.85rem; color: #666; margin: 12px 0 8px 12px;">Escriba el lugar al que quiere ir.</p>
-
-
-                                    <div class="uber-suggestion-card sim-highlight-pulse sim-valid-action" onclick="searchSimulatorDestination(event)">
-
-
-                                        <div class="sugg-icon">🔍</div>
-
-
-                                        <div class="sugg-info">
-
-
-                                            <strong id="sim-destination-result">Buscar destino</strong>
-
-
-                                            <p>Toque aquí para continuar</p>
-
-
+                                    <!-- Píldoras "🕒 Iniciar viaje ▾" y "👤 Para mí ▾" -->
+                                    <div class="uber-plan-pills-row">
+                                        <div class="uber-plan-pill">
+                                            <span>🕒</span>
+                                            <span>Iniciar viaje</span>
+                                            <span>▾</span>
                                         </div>
-
-
-                                        <span class="sugg-arrow">➔</span>
-
-
+                                        <div class="uber-plan-pill">
+                                            <span>👤</span>
+                                            <span>Para mí</span>
+                                            <span>▾</span>
+                                        </div>
                                     </div>
 
+                                    <!-- Caja doble con borde negro grueso: Origen (Av. Colón 1450) y Destino (Hospital Privado) -->
+                                    <div class="uber-route-box-wrapper">
+                                        <div class="uber-route-double-box">
+                                            <div class="uber-route-timeline" aria-hidden="true">
+                                                <span class="timeline-circle"></span>
+                                                <span class="timeline-line"></span>
+                                                <span class="timeline-square"></span>
+                                            </div>
+                                            <div class="uber-route-fields">
+                                                <div class="uber-field-row origin-row">
+                                                    <input type="text" id="sim-origin-input" value="Av. Colón 1450, Barrio Alberdi" placeholder="Origen: Av. Colón 1450" class="route-field sim-valid-action" autocomplete="off" aria-label="Dirección de origen: Av. Colón 1450">
+                                                </div>
+                                                <div class="uber-field-divider"></div>
+                                                <div class="uber-field-row dest-row">
+                                                    <input type="text" id="sim-destination-input" placeholder="Escriba: Hospital Privado" class="route-field target-dest sim-valid-action" autocomplete="off" oninput="updateDestinationSearch()" onkeydown="submitDestinationOnEnter(event)" aria-label="Escriba el destino: Hospital Privado">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="uber-add-stop-btn" aria-label="Agregar parada">+</button>
+                                    </div>
 
+                                    <!-- Instrucción interna clara para completar el destino del ejercicio -->
+                                    <div class="uber-specific-route-helper">
+                                        <span>👇 Toque el destino del ejercicio o escríbalo arriba:</span>
+                                    </div>
+
+                                    <!-- Resultado coincidente con el mapa de Córdoba Capital -->
+                                    <div class="uber-cordoba-places-list">
+                                        <div class="uber-place-row sim-highlight-pulse sim-valid-action" onclick="selectFixedTripDestination(event)" role="button" tabindex="0">
+                                            <div class="uber-place-left">
+                                                <div class="uber-place-pin-circle">📍</div>
+                                                <span class="uber-place-km">3.8 km</span>
+                                            </div>
+                                            <div class="uber-place-center">
+                                                <strong>Hospital Privado Universitario</strong>
+                                                <p>Av. Naciones Unidas 346, Córdoba Capital</p>
+                                            </div>
+                                            <span class="sugg-arrow" style="font-weight: 800; color: #111;">➔</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón grande para confirmar si el usuario escribió con el teclado -->
+                                    <div class="uber-dest-suggestions">
+                                        <div class="uber-suggestion-card sim-valid-action" onclick="searchSimulatorDestination(event)">
+                                            <div class="sugg-icon">🔍</div>
+                                            <div class="sugg-info">
+                                                <strong id="sim-destination-result">Confirmar ruta: Av. Colón 1450 ➔ Hospital Privado</strong>
+                                                <p id="sim-destination-prompt">Toque aquí para ver el recorrido en el mapa</p>
+                                            </div>
+                                            <span class="sugg-arrow">➔</span>
+                                        </div>
+                                    </div>
                                 </div>
-
-
                             </div>
 
-
-
-
-
-                            <!-- PANTALLA 3: Opciones de Auto y Precio -->
-
-
+                            <!-- =========================================================
+                                 PANTALLA 3: ELEGIR AUTO Y PAGO (Precios estables y botón Elegir SIEMPRE visible)
+                                 ========================================================= -->
                             <div id="sim-screen-3" class="sim-screen" style="display: none;">
-
-
+                                <!-- Mapa superior Modo Claro con la ruta exacta Av. Colón 1450 -> Hospital Privado -->
                                 <div class="sim-map sim-map-route">
+                                    <button type="button" class="uber-floating-back-circle sim-screen-back" onclick="simTriggerStep(2, event)" aria-label="Volver a planificar ruta">←</button>
 
+                                    <div class="uber-map-route-pill sim-valid-action" onclick="simTriggerStep(2, event)" title="Direcciones del viaje">
+                                        <span class="route-pill-pin">📍</span>
+                                        <span class="route-pill-text" id="sim-map-route-summary">Av. Colón 1450 ➔ Hospital Privado</span>
+                                    </div>
 
-                                    <button class="sim-screen-back" onclick="simTriggerStep(2, event)">← Volver</button>
+                                    <!-- Trazo vectorial sincronizado con AV. COLÓN 1450 (35%, 50%) y Hospital Privado (65%, 78%) -->
+                                    <svg class="uber-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                        <path d="M 35 50 L 48 64 L 65 78" fill="none" stroke="#111111" stroke-width="3.5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="uber-map-exact-dot origin" style="left: 35%; top: 50%;" aria-hidden="true"></span>
+                                    <span class="uber-map-exact-dot dest" style="left: 65%; top: 78%;" aria-hidden="true"></span>
 
+                                    <div class="uber-map-callout-dark" style="top: 48%; left: 33%; transform: translate(-100%, -120%);">Av. Colón 1450</div>
+                                    <div class="uber-map-callout-dark" style="top: 78%; left: 63%; transform: translate(-100%, -50%);">Hospital Privado</div>
 
-                                    <div class="map-grid"></div>
-
-
-                                    <div class="map-pin-start" style="top: 70%; left: 40%;">🟢</div>
-
-
-                                    <div class="map-pin-end" style="top: 25%; left: 65%;">🔴</div>
-
-
+                                    <div class="uber-map-car-sprite" style="top: 50%; left: 52%; transform: translate(-50%, -50%);">🚘</div>
+                                    <button type="button" class="uber-gps-btn" aria-label="Centrar mapa">⌖</button>
                                 </div>
 
-
-
-
-
+                                <!-- Hoja inferior compacta: opciones sin descuentos y botón Elegir fijo a la vista -->
                                 <div class="uber-cars-sheet">
-
-
                                     <div class="sheet-drag-handle"></div>
+                                    <div class="uber-sheet-heading-compact">Elige un viaje</div>
 
-
-                                    <h5 style="margin-bottom: 8px; font-weight: 700; font-size: 0.95rem;">Opciones de viaje disponibles</h5>
-
-
-                                    <p id="sim-selected-destination" style="margin-bottom: 8px; color: #64748B; font-size: 0.8rem;"></p>
-
-
-
-
-
-                                    <!-- Opción UberX recomendada -->
-
-
-                                    <div class="uber-car-option selected sim-highlight-pulse sim-valid-action" id="car-uberx" onclick="selectCarOption('uberx', event)">
-
-
-                                        <div class="car-info-left">
-
-
-                                            <span style="font-size: 1.6rem;">🚗</span>
-
-
-                                            <div>
-
-
-                                                <strong>UberX</strong>
-
-
-                                                <span class="car-time">🕒 3 min de espera</span>
-
-
+                                    <!-- Lista compacta de vehículos con precios estables -->
+                                    <div class="uber-vehicles-list">
+                                        <!-- 1. Essential (UberX) -->
+                                        <div class="uber-car-option selected sim-valid-action" id="car-uberx" onclick="selectCarOption('uberx', event)" role="button" tabindex="0">
+                                            <div class="car-info-left">
+                                                <div class="uber-car-thumb">🚗</div>
+                                                <div class="uber-car-texts">
+                                                    <div class="uber-car-title-row">
+                                                        <strong>Essential (UberX)</strong>
+                                                        <span class="uber-cap-badge">👤 4</span>
+                                                    </div>
+                                                    <span class="car-time">4 min • Auto estándar</span>
+                                                </div>
                                             </div>
-
-
-                                        </div>
-
-
-                                        <div class="car-info-right">
-
-
-                                            <span class="car-price">$1.450</span>
-
-
-                                        </div>
-
-
-                                    </div>
-
-
-
-
-
-                                    <!-- Opción Comfort -->
-
-
-                                    <div class="uber-car-option sim-valid-action" id="car-comfort" onclick="selectCarOption('comfort', event)">
-
-
-                                        <div class="car-info-left">
-
-
-                                            <span style="font-size: 1.6rem;">🚙</span>
-
-
-                                            <div>
-
-
-                                                <strong>Comfort</strong>
-
-
-                                                <span class="car-time">🕒 5 min de espera</span>
-
-
+                                            <div class="car-info-right">
+                                                <span class="car-price">$ 3.200</span>
                                             </div>
-
-
                                         </div>
 
-
-                                        <div class="car-info-right">
-
-
-                                            <span class="car-price">$2.100</span>
-
-
+                                        <!-- 2. Comfort -->
+                                        <div class="uber-car-option sim-valid-action" id="car-comfort" onclick="selectCarOption('comfort', event)" role="button" tabindex="0">
+                                            <div class="car-info-left">
+                                                <div class="uber-car-thumb">🚙</div>
+                                                <div class="uber-car-texts">
+                                                    <div class="uber-car-title-row">
+                                                        <strong>Comfort</strong>
+                                                        <span class="uber-cap-badge">👤 4</span>
+                                                    </div>
+                                                    <span class="car-time">6 min • Autos más amplios</span>
+                                                </div>
+                                            </div>
+                                            <div class="car-info-right">
+                                                <span class="car-price">$ 3.900</span>
+                                            </div>
                                         </div>
 
-
+                                        <!-- 3. Uber Mujeres -->
+                                        <div class="uber-car-option sim-valid-action" id="car-women" onclick="selectCarOption('women', event)" role="button" tabindex="0">
+                                            <div class="car-info-left">
+                                                <div class="uber-car-thumb">🌸🚗</div>
+                                                <div class="uber-car-texts">
+                                                    <div class="uber-car-title-row">
+                                                        <strong>Uber Mujeres</strong>
+                                                        <span class="uber-cap-badge">👤 4</span>
+                                                    </div>
+                                                    <span class="car-time">5 min • Conductora mujer</span>
+                                                </div>
+                                            </div>
+                                            <div class="car-info-right">
+                                                <span class="car-price">$ 3.200</span>
+                                            </div>
+                                        </div>
                                     </div>
 
-
-
-
-
-                                    <!-- Fila de método de pago estilo original con selector emergente -->
-
-
-                                    <div class="uber-payment-row sim-valid-action" onclick="openPaymentSheet(event)">
-
-
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-
-
-                                            <span id="sim-current-pay-icon" style="font-size: 1.1rem;">💵</span>
-
-
-                                            <span id="sim-current-pay-text" style="font-weight: 600; font-size: 0.9rem;">Efectivo</span>
-
-
+                                    <!-- Pie fijo SIEMPRE visible: Método de pago + Botón negro de confirmación -->
+                                    <div class="uber-sticky-confirm-footer">
+                                        <div class="uber-payment-row sim-valid-action" onclick="openPaymentSheet(event)" role="button" tabindex="0" aria-label="Método de pago seleccionado: Efectivo. Toque para cambiar">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span id="sim-current-pay-icon" class="uber-cash-green-badge">💵</span>
+                                                <span id="sim-current-pay-text" style="font-weight: 700; font-size: 0.88rem; color: #111;">Efectivo</span>
+                                            </div>
+                                            <span class="pay-change-link">Cambiar pago ›</span>
                                         </div>
 
-
-                                        <span class="pay-change-link">Cambiar ➔</span>
-
-
+                                        <div class="uber-confirm-row">
+                                            <button type="button" id="sim-choose-car-btn" class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(4, event)">
+                                                Elegir Essential ($ 3.200)
+                                            </button>
+                                            <button type="button" class="uber-schedule-square-btn sim-valid-action" onclick="simTriggerStep(4, event)" aria-label="Programar viaje">
+                                                📅
+                                            </button>
+                                        </div>
                                     </div>
-
-
-
-
-
-                                    <!-- Botón de confirmar auto -->
-
-
-                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="simTriggerStep(4, event)">
-
-
-                                        Elegir UberX
-
-
-                                    </button>
-
-
                                 </div>
-
-
                             </div>
 
-
-
-
-
-                            <!-- Hoja desplegable de selección de método de pago (Bottom Sheet) -->
-
-
+                            <!-- =========================================================
+                                 HOJA "PAGA CON" (Modo Claro con datos ficticios de Córdoba)
+                                 ========================================================= -->
                             <div id="sim-payment-sheet" class="sim-phone-bottom-sheet" style="display: none;" onclick="event.stopPropagation()">
-
-
-                                <div class="sheet-drag-handle"></div>
-
-
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-
-
-                                    <h5 style="margin: 0; font-size: 0.95rem; font-weight: bold;">Seleccionar método de pago</h5>
-
-
-                                    <button type="button" class="sheet-close-btn sim-screen-back" onclick="closePaymentSheet(event)">&times;</button>
-
-
+                                <div class="uber-pay-sheet-header">
+                                    <button type="button" class="sheet-close-btn sim-screen-back" onclick="closePaymentSheet(event)" aria-label="Cerrar selector de pago">✕</button>
+                                    <h5>Paga con</h5>
                                 </div>
 
+                                <div class="uber-pay-section-title">Seleccione cómo desea abonar el viaje:</div>
 
-
-
-
-                                <div class="payment-modal-option selected sim-valid-action" id="pay-opt-cash" onclick="choosePayment('cash', '💵', 'Efectivo', event)">
-
-
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-
-
-                                        <span style="font-size: 1.4rem;">💵</span>
-
-
+                                <!-- Opción 1: Efectivo -->
+                                <div class="payment-modal-option selected sim-valid-action" id="pay-opt-cash" onclick="choosePayment('cash', '💵', 'Efectivo', event)" role="button" tabindex="0">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span class="uber-cash-green-badge">💵</span>
                                         <div>
-
-
-                                            <strong style="font-size: 0.9rem; display: block;">Efectivo</strong>
-
-
-                                            <span style="font-size: 0.75rem; color: #64748B;">Pagar al chofer al finalizar</span>
-
-
+                                            <strong style="font-size: 0.92rem; display: block; color: #111;">Efectivo</strong>
+                                            <span style="font-size: 0.76rem; color: #64748B;">Pagar en mano al conductor al llegar</span>
                                         </div>
-
-
                                     </div>
-
-
                                     <span class="pay-check-icon" id="pay-check-cash">✓</span>
-
-
                                 </div>
 
-
-
-
-
-                                <div class="payment-modal-option sim-valid-action" id="pay-opt-card" onclick="choosePayment('card', '💳', 'Tarjeta (**** 4321)', event)">
-
-
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-
-
-                                        <span style="font-size: 1.4rem;">💳</span>
-
-
+                                <!-- Opción 2: Mastercard inventada realista (MARTA ELENA SOSA) -->
+                                <div class="payment-modal-option sim-valid-action" id="pay-opt-card" onclick="choosePayment('card', '💳', 'Mastercard •••• 5824', event)" role="button" tabindex="0">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span class="uber-mc-badge">💳</span>
                                         <div>
-
-
-                                            <strong style="font-size: 0.9rem; display: block;">Tarjeta de Débito / Crédito</strong>
-
-
-                                            <span style="font-size: 0.75rem; color: #64748B;">Visa terminada en 4321</span>
-
-
+                                            <strong style="font-size: 0.9rem; display: block; color: #111;">Mastercard •••• 5824</strong>
+                                            <span style="font-size: 0.74rem; color: #64748B;">(MARTA ELENA SOSA) · Banco de Córdoba</span>
                                         </div>
-
-
                                     </div>
-
-
                                     <span class="pay-check-icon" id="pay-check-card" style="display: none;">✓</span>
-
-
                                 </div>
 
-
+                                <!-- Opción 3: Visa Débito inventada realista (MARTA ELENA SOSA) -->
+                                <div class="payment-modal-option sim-valid-action" id="pay-opt-visa" onclick="choosePayment('visa', '💳', 'Visa Débito •••• 9103', event)" role="button" tabindex="0">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span class="uber-visa-badge">💳</span>
+                                        <div>
+                                            <strong style="font-size: 0.9rem; display: block; color: #111;">Visa Débito •••• 9103</strong>
+                                            <span style="font-size: 0.74rem; color: #64748B;">(MARTA ELENA SOSA) · Débito automático</span>
+                                        </div>
+                                    </div>
+                                    <span class="pay-check-icon" id="pay-check-visa" style="display: none;">✓</span>
+                                </div>
                             </div>
 
-
-
-
-
-                            <!-- PANTALLA 4: Confirmar Punto de Recogida -->
-
-
+                            <!-- =========================================================
+                                 PANTALLA 4: CONFIRMAR PUNTO DE PARTIDA (Mapa y puntero alineados sobre AV. COLÓN 1450)
+                                 ========================================================= -->
                             <div id="sim-screen-4" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-pickup sim-valid-action" id="pickup-map" onpointerdown="startPickupMapPan(event)" aria-label="Mapa de punto de partida en Av. Colón 1450. Arrastre el puntero hasta el punto azul en Av. Colón 1450 o toque el botón GPS para centrar">
+                                    <button type="button" class="uber-floating-back-circle sim-screen-back" onclick="simTriggerStep(3, event)" aria-label="Volver a selección de vehículo">←</button>
 
-
-                                <div class="sim-map sim-map-pickup" id="pickup-map">
-
-
-                                    <button class="sim-screen-back" onclick="simTriggerStep(3, event)">← Volver</button>
-
-
-                                    <div class="map-grid"></div>
-
-
-                                    <div class="pickup-current-location" aria-label="Su ubicación actual">
-
-
+                                    <!-- Punto azul de ubicación exacta sobre AV. COLÓN 1450 (35%, 50% del mapa) -->
+                                    <div class="pickup-current-location" id="pickup-target-location" aria-label="Su ubicación en Av. Colón 1450">
                                         <span class="pickup-current-dot"></span>
-
-
-                                        <span class="pickup-current-tag">Su ubicación</span>
-
-
+                                        <span class="pickup-current-tag">Tu ubicación: Av. Colón 1450</span>
                                     </div>
 
-
-                                    <button type="button" class="pickup-marker sim-valid-action" id="pickup-marker" aria-label="Arrastre el marcador rojo hasta el punto azul de su ubicación actual" onpointerdown="startPickupDrag(event)" onkeydown="movePickupMarkerWithKeyboard(event)">
-
-
-                                        <span class="pickup-pin">📍</span>
-
-
-                                        <span class="pickup-tag">Mover aquí</span>
-
-
+                                    <!-- Puntero arrastrable cuya punta inferior apunta exactamente a la coordenada sobre Av. Colón -->
+                                    <button type="button" class="pickup-marker sim-highlight-pulse sim-valid-action" id="pickup-marker" onpointerdown="startPickupDrag(event)" aria-label="Puntero de punto de partida. Arrastre hasta hacer coincidir con Av. Colón 1450">
+                                        <span class="pickup-tag" id="pickup-marker-tag">Arrastrar a Av. Colón 1450</span>
+                                        <svg class="pickup-pin-svg" width="32" height="38" viewBox="0 0 32 38" aria-hidden="true">
+                                            <path d="M16 1C8.82 1 3 6.82 3 14c0 9.4 13 23 13 23s13-13.6 13-23C29 6.82 23.18 1 16 1z" fill="#111827" stroke="#FFFFFF" stroke-width="2"/>
+                                            <circle cx="16" cy="14" r="5" fill="#FFFFFF"/>
+                                        </svg>
                                     </button>
 
+                                    <div class="uber-streetview-thumb" aria-hidden="true">
+                                        <div class="sv-building">🏢</div>
+                                        <span class="sv-arrows">⇄</span>
+                                    </div>
 
+                                    <!-- Botón real de Uber (⌖) para centrar automáticamente el puntero en Av. Colón 1450 -->
+                                    <button type="button" class="uber-gps-btn sim-valid-action" id="btn-pickup-recenter" onclick="recenterPickupMap(event)" title="Centrar en Av. Colón 1450" aria-label="Centrar puntero en Av. Colón 1450">⌖</button>
                                 </div>
-
-
-
-
 
                                 <div class="uber-pickup-sheet">
-
-
                                     <div class="sheet-drag-handle"></div>
+                                    <h4 style="font-size: 0.98rem; margin-bottom: 3px; color: #111; font-weight: 800;">Confirma el punto de partida</h4>
+                                    <div class="uber-pickup-address-row">
+                                        <p id="sim-pickup-address-label" style="color: #111; font-size: 0.86rem; margin: 0; font-weight: 700;">Av. Colón 1450, Barrio Alberdi</p>
+                                        <span class="uber-pickup-search-badge">📍</span>
+                                    </div>
+                                    <p id="sim-pickup-substatus" style="color: #4B5563; font-size: 0.76rem; margin: 4px 0 8px;">Haga coincidir el puntero con el punto azul sobre <strong>Av. Colón 1450</strong></p>
 
-
-                                    <h4>Punto de partida</h4>
-
-
-                                    <p style="color: #444; font-size: 0.9rem; margin: 4px 0 14px;">Av. Rivadavia 2500 (Frente a su puerta)</p>
-
-
-
-
-
-                                    <button class="uber-confirm-btn sim-highlight-pulse sim-valid-action" id="confirm-pickup-btn" onclick="simTriggerStep(5, event)" disabled>
-
-
+                                    <button type="button" class="uber-confirm-btn sim-valid-action" id="confirm-pickup-btn" onclick="simTriggerStep(5, event)" disabled>
                                         Confirmar punto de partida
+                                    </button>
+                                </div>
+                            </div>
 
-
+                            <!-- =========================================================
+                                 PANTALLA 5: CONDUCTOR EN CAMINO (Modo Claro, sin descuentos, botón siempre visible)
+                                 ========================================================= -->
+                            <div id="sim-screen-5" class="sim-screen" style="display: none;">
+                                <div class="sim-map sim-map-driver">
+                                    <button type="button" class="uber-floating-back-circle sim-screen-back" onclick="simTriggerStep(4, event)" aria-label="Volver">⌄</button>
+                                    <button type="button" class="uber-safety-pill-btn sim-valid-action" onclick="openSimSecurityModal(event)">
+                                        <span>🛡️</span> Seguridad
                                     </button>
 
+                                    <!-- Puntero y ruta sobre AV. COLÓN 1450 (35%, 50%) -->
+                                    <svg class="uber-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                        <path d="M 65 50 L 35 50" fill="none" stroke="#111111" stroke-width="4" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+                                    </svg>
+                                    <span class="uber-map-exact-dot origin" style="left: 35%; top: 50%;" aria-hidden="true"></span>
 
+                                    <div class="uber-map-callout-dark" style="top: 46%; left: 35%; transform: translate(-50%, -100%);">
+                                        Av. Colón 1450 ›
+                                    </div>
+
+                                    <div class="map-driver-car" style="top: 50%; left: 65%; transform: translate(-50%, -50%);">🚘</div>
+
+                                    <button type="button" class="uber-gps-btn" aria-label="Centrar en el mapa">⌖</button>
                                 </div>
-
-
-                            </div>
-
-
-
-
-
-                            <!-- PANTALLA 5: Conductor Asignado / En camino -->
-
-
-                            <div id="sim-screen-5" class="sim-screen" style="display: none;">
-
-
-                                <div class="sim-map sim-map-driver">
-
-
-                                    <div class="map-grid"></div>
-
-
-                                    <div class="map-driver-car" style="top: 25%; left: 45%;">🚗</div>
-
-
-                                    <div class="map-destination-pin" style="top: 50%; left: 50%;">🟢</div>
-
-
-                                </div>
-
-
-
-
 
                                 <div class="uber-driver-sheet">
+                                    <div class="sheet-drag-handle"></div>
 
-
-                                    <div class="driver-arrival-header">
-
-
-                                        <span class="driver-arrival-time">Llega en 3 min</span>
-
-
-                                        <span class="driver-arrival-status">Toyota Corolla Blanco</span>
-
-
+                                    <div class="uber-trip-countdown-row">
+                                        <span class="uber-trip-status-title">El auto llega a Av. Colón 1450 en</span>
+                                        <span class="uber-eta-blue-box">4 min</span>
                                     </div>
 
-
-
-
-
-                                    <!-- Tarjeta destacada de la Patente -->
-
-
-                                    <div class="license-plate-banner">
-
-
-                                        <span class="plate-label">PATENTE DEL AUTO:</span>
-
-
-                                        <strong class="plate-number">AA 123 BB</strong>
-
-
+                                    <!-- Tarjeta principal: Conductor + Auto + Patente AE 842 KQ -->
+                                    <div class="uber-driver-hero-card">
+                                        <div class="uber-driver-visual-cluster">
+                                            <div class="uber-driver-photo" aria-hidden="true">👨‍🦳</div>
+                                            <div class="uber-car-render" aria-hidden="true">🚘</div>
+                                            <span class="uber-rating-pill">4.95 ★</span>
+                                        </div>
+                                        <div class="uber-vehicle-identity">
+                                            <div class="uber-plate-number" aria-label="Patente AE 842 KQ">AE 842 KQ</div>
+                                            <div class="uber-car-model-text" id="sim-assigned-car-model">Fiat Cronos Gris Plata</div>
+                                            <div class="uber-driver-name-blue">CARLOS ALBERTO PEREYRA</div>
+                                        </div>
                                     </div>
 
+                                    <!-- Barra de mensaje + llamada -->
+                                    <div class="uber-contact-bar-row">
+                                        <button type="button" class="uber-msg-pill-btn sim-valid-action" onclick="openSimChatModal(event)">
+                                            <span>💬</span>
+                                            <span>Enviar mensaje a Carlos...</span>
+                                        </button>
+                                        <button type="button" class="uber-call-round-btn sim-valid-action" onclick="openSimCallModal(event)" aria-label="Llamar al conductor">
+                                            📞
+                                        </button>
+                                    </div>
 
+                                    <!-- Checklist de verificación antes de subir -->
+                                    <div class="sim-safety-checklist">
+                                        <div class="sim-safety-title">
+                                            <span>🛡️</span> Verifique antes de subir al auto:
+                                        </div>
+                                        <div class="sim-check-item sim-valid-action" onclick="toggleSafetyCheck(this, event)">
+                                            <span class="sim-check-box">✓</span>
+                                            <span>1. Patente <strong>AE 842 KQ</strong> y auto <strong>Fiat Cronos</strong></span>
+                                        </div>
+                                        <div class="sim-check-item sim-valid-action" onclick="toggleSafetyCheck(this, event)">
+                                            <span class="sim-check-box">✓</span>
+                                            <span>2. Conductor <strong>Carlos Alberto Pereyra</strong></span>
+                                        </div>
+                                    </div>
 
+                                    <!-- Resumen del recorrido y pago (sin promociones) -->
+                                    <div class="uber-trip-details-list">
+                                        <div class="uber-detail-row">
+                                            <span class="detail-icon">■</span>
+                                            <div class="detail-body">
+                                                <strong id="sim-detail-dest">Destino: Hospital Privado (Av. Naciones Unidas 346)</strong>
+                                                <span id="sim-detail-price-pay">Tarifa fija: $ 3.200 · Efectivo</span>
+                                            </div>
+                                            <button type="button" class="uber-grey-pill-btn sim-valid-action" onclick="openSimShareModal(event)">📤 Compartir</button>
+                                        </div>
+                                    </div>
 
+                                    <button type="button" class="uber-confirm-btn sim-highlight-pulse sim-valid-action" style="margin-top: auto;" onclick="simTriggerStep(6, event)">
+                                        🚗 Subir al auto e iniciar el viaje ➔
+                                    </button>
+                                </div>
+                            </div>
 
-                                    <!-- Datos del conductor -->
+                            <!-- =========================================================
+                                 PANTALLA 6: EN VIAJE AL HOSPITAL PRIVADO Y CALIFICACIÓN FINAL
+                                 ========================================================= -->
+                            <div id="sim-screen-6" class="sim-screen" style="display: none;">
 
+                                <!-- SUB-VISTA 6A: EN VIAJE HACIA HOSPITAL PRIVADO -->
+                                <div id="sim-subscreen-intrip" class="uber-intrip-view">
+                                    <div class="sim-map sim-map-intrip">
+                                        <button type="button" class="uber-floating-back-circle sim-screen-back" onclick="simTriggerStep(5, event)" aria-label="Volver al paso anterior">←</button>
+                                        <button type="button" class="uber-safety-pill-btn sim-valid-action" onclick="openSimSecurityModal(event)">
+                                            <span>🛡️</span> Seguridad
+                                        </button>
 
-                                    <div class="driver-profile-card">
+                                        <svg class="uber-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                            <path d="M 35 50 L 48 64 L 65 78" fill="none" stroke="#111111" stroke-width="3.5" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+                                        </svg>
+                                        <span class="uber-map-exact-dot origin" style="left: 35%; top: 50%;" aria-hidden="true"></span>
+                                        <span class="uber-map-exact-dot dest" style="left: 65%; top: 78%;" aria-hidden="true"></span>
 
-
-                                        <div class="driver-avatar">👨‍✈️</div>
-
-
-                                        <div class="driver-details">
-
-
-                                            <strong>Carlos</strong>
-
-
-                                            <p>⭐ 4.95 (Más de 1.500 viajes)</p>
-
-
+                                        <div class="uber-map-callout-dark" id="sim-intrip-map-dest" style="top: 78%; left: 63%; transform: translate(-100%, -50%);">
+                                            Hospital Privado ›
                                         </div>
 
-
+                                        <div class="map-driver-car" style="top: 64%; left: 48%; transform: translate(-50%, -50%);">🚘</div>
+                                        <button type="button" class="uber-gps-btn" aria-label="Centrar mapa">⌖</button>
                                     </div>
 
+                                    <div class="uber-intrip-sheet">
+                                        <div class="sheet-drag-handle"></div>
+                                        <div class="uber-intrip-header">
+                                            <div>
+                                                <span class="uber-intrip-label">En viaje hacia su destino</span>
+                                                <h4 class="uber-intrip-eta">Llegada estimada: <strong>10:45 A. M.</strong></h4>
+                                            </div>
+                                            <span class="uber-eta-blue-box">6 min</span>
+                                        </div>
 
+                                        <div class="uber-seatbelt-banner">
+                                            <span class="seatbelt-icon">🛡️</span>
+                                            <p><strong>Viaje en curso:</strong> Recuerde usar el cinturón de seguridad hasta llegar al Hospital Privado.</p>
+                                        </div>
 
+                                        <div class="uber-intrip-summary-row">
+                                            <div>
+                                                <strong>Fiat Cronos Gris Plata · AE 842 KQ</strong>
+                                                <span id="sim-intrip-dest-line">Av. Colón 1450 ➔ Hospital Privado</span>
+                                            </div>
+                                            <button type="button" class="uber-grey-pill-btn sim-valid-action" onclick="openSimShareModal(event)">📤 Compartir</button>
+                                        </div>
 
-
-                                    <!-- Botones de seguridad recomendados -->
-
-
-                                    <div class="driver-actions-row">
-
-
-                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Se abriría WhatsApp para compartir su viaje con un familiar.')">
-
-
-                                            <span>📤</span> Compartir viaje
-
-
+                                        <button type="button" class="uber-confirm-btn sim-highlight-pulse sim-valid-action" onclick="showSimRatingSubscreen(event)">
+                                            🏁 Llegar a destino y calificar viaje ➔
                                         </button>
-
-
-                                        <button class="driver-action-btn sim-valid-action" onclick="alert('Simulación: Llamando al chofer Carlos...')">
-
-
-                                            <span>📞</span> Llamar
-
-
-                                        </button>
-
-
                                     </div>
-
-
-
-
-
-                                    <!-- Mensaje final de éxito -->
-
-
-                                    <div class="sim-success-card">
-
-
-                                        🎉 <strong>¡Excelente trabajo!</strong> Ha completado todo el proceso de pedir un viaje.
-
-
-                                    </div>
-
-
                                 </div>
 
+                                <!-- SUB-VISTA 6B: CALIFICA TU VIAJE -->
+                                <div id="sim-subscreen-rating" class="uber-rating-view" style="display: none;">
+                                    <div class="uber-rating-top-bar">
+                                        <button type="button" class="sim-back-btn sim-screen-back" onclick="backToSimInTrip(event)" aria-label="Volver al mapa del viaje">←</button>
+                                        <button type="button" class="uber-skip-pill sim-valid-action" onclick="openSimCertificateModal(event)">Omitir</button>
+                                    </div>
+
+                                    <div class="uber-rating-driver-avatar">👨‍🦳</div>
+
+                                    <h4 class="uber-rating-title">Califica tu viaje</h4>
+                                    <p class="uber-rating-subtitle" id="sim-rating-trip-subtitle">Viaje hacia Hospital Privado (Av. Naciones Unidas 346)</p>
+
+                                    <div class="uber-stars-row" role="group" aria-label="Calificación de 1 a 5 estrellas">
+                                        <button type="button" class="uber-star-btn active sim-valid-action" onclick="rateSimTrip(1, event)" aria-label="1 estrella">★</button>
+                                        <button type="button" class="uber-star-btn active sim-valid-action" onclick="rateSimTrip(2, event)" aria-label="2 estrellas">★</button>
+                                        <button type="button" class="uber-star-btn active sim-valid-action" onclick="rateSimTrip(3, event)" aria-label="3 estrellas">★</button>
+                                        <button type="button" class="uber-star-btn active sim-valid-action" onclick="rateSimTrip(4, event)" aria-label="4 estrellas">★</button>
+                                        <button type="button" class="uber-star-btn active sim-highlight-pulse sim-valid-action" onclick="rateSimTrip(5, event)" aria-label="5 estrellas">★</button>
+                                    </div>
+                                    <div id="sim-rating-feedback-text" class="uber-rating-feedback">¡Excelente servicio de Carlos Alberto! (5 estrellas)</div>
+
+                                    <div class="uber-receipt-mini">
+                                        <span>Total abonado (<span id="sim-final-pay-method">Efectivo</span>):</span>
+                                        <strong id="sim-final-price-amount">$ 3.200</strong>
+                                    </div>
+
+                                    <div class="sim-success-card">
+                                        <div>🎉 <strong>¡Práctica completada!</strong> Realizó todo el viaje desde Av. Colón 1450 hasta el Hospital Privado.</div>
+                                        <button type="button" class="sim-cert-btn sim-highlight-pulse sim-valid-action" onclick="openSimCertificateModal(event)">
+                                            <span>🏅</span> Ver mi Certificado de Práctica
+                                        </button>
+                                    </div>
+                                </div>
 
                             </div>
 
-
-
-
-
                         </div>
-
 
                     </div>
 
-
                 </div>
-
 
             </section>
 
+            <!-- MODAL SIMULADO 1: COMPARTIR VIAJE POR WHATSAPP (Alta legibilidad) -->
+            <div id="sim-modal-share" class="sim-modal-overlay" style="display: none;" onclick="closeSimShareModal(event)">
+                <div class="sim-dialog-box sim-readable-modal" onclick="event.stopPropagation()">
+                    <div class="sim-modal-header sim-modal-header-wa">
+                        <div class="sim-modal-header-left">
+                            <div class="sim-wa-avatar">👤</div>
+                            <div>
+                                <h4 class="sim-modal-title-text">Hija Laura (WhatsApp)</h4>
+                                <span class="sim-modal-subtitle-text">Compartiendo viaje en tiempo real</span>
+                            </div>
+                        </div>
+                        <button type="button" class="sim-modal-close-x" onclick="closeSimShareModal(event)" aria-label="Cerrar">✕</button>
+                    </div>
+                    <div class="sim-modal-content-pad sim-wa-body-clean">
+                        <div class="sim-wa-bubble-clean">
+                            <p class="sim-wa-main-line">Hola hija, ya salgo en Uber desde <strong id="sim-wa-origin">Av. Colón 1450</strong> hacia <strong id="sim-wa-dest">Hospital Privado Universitario</strong>.</p>
+                            <div class="sim-wa-info-box">
+                                <div>🚗 <strong>Auto:</strong> Fiat Cronos Gris Plata</div>
+                                <div>🔢 <strong>Patente:</strong> AE 842 KQ</div>
+                                <div>👨‍🦳 <strong>Chofer:</strong> Carlos Alberto Pereyra (4.95 ★)</div>
+                            </div>
+                            <p class="sim-wa-link-line">
+                                📍 Seguimiento en vivo: <span>uber.com/viaje/cba-seguro</span>
+                            </p>
+                            <span class="sim-wa-time-stamp">Enviado 10:31 ✓✓</span>
+                        </div>
+                    </div>
+                    <div class="sim-modal-footer-clean">
+                        <button type="button" class="sim-modal-primary-btn" onclick="closeSimShareModal(event)">✓ Entendido, volver al simulador</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL SIMULADO 2: LLAMADA AL CONDUCTOR (Alta legibilidad) -->
+            <div id="sim-modal-call" class="sim-modal-overlay" style="display: none;" onclick="closeSimCallModal(event)">
+                <div class="sim-dialog-box sim-readable-modal" onclick="event.stopPropagation()">
+                    <div class="sim-modal-header sim-modal-header-dark">
+                        <div class="sim-modal-header-left">
+                            <div class="sim-call-avatar-sm">📞</div>
+                            <div>
+                                <h4 class="sim-modal-title-text">Llamada con el conductor</h4>
+                                <span class="sim-modal-subtitle-text">Llamada segura a través de la app Uber</span>
+                            </div>
+                        </div>
+                        <button type="button" class="sim-modal-close-x" onclick="closeSimCallModal(event)" aria-label="Cerrar llamada">✕</button>
+                    </div>
+                    <div class="sim-modal-content-pad">
+                        <div class="sim-call-driver-badge">
+                            <div class="sim-call-driver-emoji">👨‍🦳</div>
+                            <div>
+                                <strong class="sim-call-driver-name">Carlos Alberto Pereyra</strong>
+                                <span class="sim-call-driver-car">Fiat Cronos Gris Plata • Patente AE 842 KQ</span>
+                            </div>
+                        </div>
+                        <div class="sim-call-speech-card">
+                            <span class="sim-call-speech-label">🔊 Carlos Alberto dice:</span>
+                            <p>«¡Buen día! Soy Carlos Alberto. Ya estoy llegando por <strong>Av. Colón al 1450</strong> con el <strong>Fiat Cronos Gris Plata (patente AE 842 KQ)</strong>. Tómese su tiempo para salir, lo espero en la puerta.»</p>
+                        </div>
+                    </div>
+                    <div class="sim-modal-footer-clean">
+                        <button type="button" class="sim-call-hangup-full-btn" onclick="closeSimCallModal(event)">
+                            📞 Cortar llamada y volver al viaje
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL SIMULADO 3: ENVIAR MENSAJE AL CONDUCTOR (Alta legibilidad) -->
+            <div id="sim-modal-chat" class="sim-modal-overlay" style="display: none;" onclick="closeSimChatModal(event)">
+                <div class="sim-dialog-box sim-readable-modal" onclick="event.stopPropagation()">
+                    <div class="sim-modal-header sim-modal-header-dark">
+                        <div class="sim-modal-header-left">
+                            <div class="sim-call-avatar-sm">💬</div>
+                            <div>
+                                <h4 class="sim-modal-title-text">Chat con Carlos Alberto</h4>
+                                <span class="sim-modal-subtitle-text">Fiat Cronos Gris Plata • AE 842 KQ</span>
+                            </div>
+                        </div>
+                        <button type="button" class="sim-modal-close-x" onclick="closeSimChatModal(event)" aria-label="Cerrar chat">✕</button>
+                    </div>
+                    <div class="sim-modal-content-pad">
+                        <div class="sim-uber-chat-body" id="sim-chat-messages">
+                            <div class="sim-chat-msg driver">
+                                <strong>Carlos Alberto:</strong> ¡Hola! Estoy en camino hacia Av. Colón 1450.
+                            </div>
+                            <div class="sim-chat-msg user" id="sim-chat-user-reply" style="display: none;"></div>
+                        </div>
+                        <div class="sim-uber-chat-quick-replies">
+                            <span class="sim-chat-quick-label">Toque un mensaje rápido para responderle:</span>
+                            <div class="sim-chat-quick-grid">
+                                <button type="button" class="sim-chat-reply-btn" onclick="sendSimQuickChat('¡Hola Carlos! Ya estoy saliendo a la puerta.')">👋 «Ya estoy saliendo a la puerta»</button>
+                                <button type="button" class="sim-chat-reply-btn" onclick="sendSimQuickChat('Te espero en la vereda de Av. Colón 1450.')">📍 «Te espero en Av. Colón 1450»</button>
+                                <button type="button" class="sim-chat-reply-btn" onclick="sendSimQuickChat('Muchas gracias, ahí te veo.')">👍 «Muchas gracias, ahí te veo»</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sim-modal-footer-clean">
+                        <button type="button" class="sim-modal-primary-btn" onclick="closeSimChatModal(event)">Volver a la pantalla del viaje</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL SIMULADO 4: CENTRO DE SEGURIDAD DE UBER (Alta legibilidad) -->
+            <div id="sim-modal-security" class="sim-modal-overlay" style="display: none;" onclick="closeSimSecurityModal(event)">
+                <div class="sim-dialog-box sim-readable-modal" onclick="event.stopPropagation()">
+                    <div class="sim-modal-header sim-modal-header-blue">
+                        <div class="sim-modal-header-left">
+                            <div class="sim-call-avatar-sm">🛡️</div>
+                            <div>
+                                <h4 class="sim-modal-title-text">Kit de Seguridad de Uber</h4>
+                                <span class="sim-modal-subtitle-text">Disponible durante todo su viaje</span>
+                            </div>
+                        </div>
+                        <button type="button" class="sim-modal-close-x" onclick="closeSimSecurityModal(event)" aria-label="Cerrar">✕</button>
+                    </div>
+                    <div class="sim-modal-content-pad">
+                        <p class="sim-sec-intro">Al tocar el botón azul <strong>«🛡️ Seguridad»</strong> en el mapa, usted cuenta con estas herramientas de ayuda:</p>
+                        <div class="sim-sec-list">
+                            <button type="button" class="uber-sec-item-btn" onclick="closeSimSecurityModal(event); openSimShareModal(event);">
+                                <span class="uber-sec-icon">📤</span>
+                                <div class="uber-sec-texts">
+                                    <strong>Compartir mi viaje con familiares</strong>
+                                    <span>Envía por WhatsApp su recorrido en vivo y la patente AE 842 KQ</span>
+                                </div>
+                            </button>
+                            <div class="uber-sec-item-btn">
+                                <span class="uber-sec-icon">🚓</span>
+                                <div class="uber-sec-texts">
+                                    <strong>Asistencia de Emergencia 911 (Córdoba)</strong>
+                                    <span>Muestra en pantalla su ubicación exacta y los datos del auto</span>
+                                </div>
+                            </div>
+                            <div class="uber-sec-item-btn">
+                                <span class="uber-sec-icon">🎧</span>
+                                <div class="uber-sec-texts">
+                                    <strong>Soporte de Seguridad de Uber 24/7</strong>
+                                    <span>Atención inmediata ante cualquier consulta en el trayecto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sim-modal-footer-clean">
+                        <button type="button" class="sim-modal-primary-btn" onclick="closeSimSecurityModal(event)">Entendido, volver al viaje</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL SIMULADO 5: CERTIFICADO DE LOGRO (Alta legibilidad) -->
+            <div id="sim-modal-certificate" class="sim-modal-overlay" style="display: none;" onclick="closeSimCertificateModal(event)">
+                <div class="sim-dialog-box sim-readable-modal" onclick="event.stopPropagation()">
+                    <div class="sim-cert-box">
+                        <div class="sim-cert-icon">🏅</div>
+                        <span class="sim-cert-badge">PRÁCTICA COMPLETADA CON ÉXITO</span>
+                        <h3 class="sim-cert-title">¡Felicitaciones!</h3>
+                        <p class="sim-cert-desc">Completó todo el recorrido simulado desde <strong>Av. Colón 1450</strong> hasta el <strong>Hospital Privado</strong> en Córdoba Capital.</p>
+                        
+                        <div class="sim-cert-checklist">
+                            <strong class="sim-cert-list-heading">Lo que practicó en este ejercicio:</strong>
+                            <ul>
+                                <li><span>✅</span> <span>Ingresar el destino (<strong>Hospital Privado</strong>) desde <strong>Av. Colón 1450</strong>.</span></li>
+                                <li><span>✅</span> <span>Elegir el tipo de auto y el medio de pago (Efectivo o Tarjeta).</span></li>
+                                <li><span>✅</span> <span>Hacer coincidir el puntero en el mapa con su puerta en <strong>Av. Colón 1450</strong>.</span></li>
+                                <li><span>✅</span> <span>Verificar patente (<strong>AE 842 KQ</strong>), auto (<strong>Fiat Cronos</strong>) y chofer antes de subir.</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="sim-cert-actions">
+                            <button type="button" class="sim-modal-secondary-btn" onclick="restartSimulator(); closeSimCertificateModal(event);">🔄 Practicar de nuevo</button>
+                            <button type="button" class="sim-modal-primary-btn" onclick="closeSimCertificateModal(event)">✓ Finalizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -1321,12 +1320,12 @@
                         <ul style="margin-top: 20px; list-style: none;">
 
 
-                            <li style="margin-bottom: 10px;"><a href="assets/Guía para crear cuenta y solicitar viaje.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
+                            <li style="margin-bottom: 10px;"><a href="assets/docs/Guía para crear cuenta y solicitar viaje.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Guía para crear cuenta y solicitar viaje</a></li>
 
 
-                            <li style="margin-bottom: 10px;"><a href="assets/Medio de pago.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Medio de pago</a></li>
+                            <li style="margin-bottom: 10px;"><a href="assets/docs/Medio de pago.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Medio de pago</a></li>
 
-                            <li style="margin-bottom: 10px;"><a href="assets/Gestion de Imprevistos.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Gestión de imprevistos</a></li>
+                            <li style="margin-bottom: 10px;"><a href="assets/docs/Gestion de Imprevistos.pdf" download style="color: var(--secondary-color); font-weight: bold; text-decoration: none; cursor: pointer;">📥 Gestión de imprevistos</a></li>
 
                         </ul>
 
@@ -1350,9 +1349,9 @@
 
                             <li style="margin-bottom: 10px;"><a href="assets/videos/VIdeoFinal-iniciosesion-Uber.mp4" download="Como-iniciar-sesion-en-Uber.mp4" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Video: Iniciar sesión</a></li>
 
-                            <li style="margin-bottom: 10px;"><a href="assets/podcast_modulo_2.mp3" download="podcast_pedir_un_viaje.mp3" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Podcast: Pedir un viaje</a></li>
+                            <li style="margin-bottom: 10px;"><a href="assets/audio/podcast_modulo_2.mp3" download="podcast_pedir_un_viaje.mp3" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Podcast: Pedir un viaje</a></li>
 
-                            <li><a href="assets/podcast_modulo_3.mp3?v=2" download="podcast_medio_de_pago.mp3" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Podcast: Medio de pago</a></li>
+                            <li><a href="assets/audio/podcast_modulo_3.mp3?v=2" download="podcast_medio_de_pago.mp3" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">📥 Podcast: Medio de pago</a></li>
 
                         </ul>
 
@@ -2271,7 +2270,7 @@
 
 
 
-    <script src="script.js?v=13"></script>
+    <script src="script.js?v=20"></script>
 
 
 

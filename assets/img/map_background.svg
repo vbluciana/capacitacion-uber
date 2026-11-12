@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <style>
+      .land { fill: #f1f3f4; }
+      .park { fill: #ceead6; stroke: #b8dfc2; stroke-width: 1; }
+      .river { fill: none; stroke: #8ab4f8; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
+      .river-edge { fill: none; stroke: #669df6; stroke-width: 16; stroke-linecap: round; stroke-linejoin: round; opacity: 0.4; }
+      .canada { fill: none; stroke: #a0c2f9; stroke-width: 6; }
+      .road-local { fill: none; stroke: #ffffff; stroke-width: 6.5; stroke-linecap: round; }
+      .road-local-casing { fill: none; stroke: #dadce0; stroke-width: 8.5; stroke-linecap: round; }
+      .road-arterial { fill: none; stroke: #ffffff; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+      .road-arterial-casing { fill: none; stroke: #cdd1d6; stroke-width: 15; stroke-linecap: round; stroke-linejoin: round; }
+      .road-avenue { fill: none; stroke: #fef0c7; stroke-width: 20; stroke-linecap: round; stroke-linejoin: round; }
+      .road-avenue-casing { fill: none; stroke: #d9be82; stroke-width: 24; stroke-linecap: round; stroke-linejoin: round; }
+      .label-neighborhood { font-family: 'Roboto', 'Outfit', Arial, sans-serif; font-size: 11px; fill: #5f6368; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; opacity: 0.85; }
+      .label-park { font-family: 'Roboto', 'Outfit', Arial, sans-serif; font-size: 10.5px; fill: #188038; font-weight: 700; letter-spacing: 0.4px; }
+      .label-street { font-family: 'Roboto', 'Outfit', Arial, sans-serif; font-size: 10.5px; fill: #4b5563; font-weight: 700; }
+      .label-colon-main { font-family: 'Roboto', 'Outfit', Arial, sans-serif; font-size: 13px; fill: #111827; font-weight: 900; letter-spacing: 0.4px; }
+      .poi-origin { fill: #16a34a; stroke: #ffffff; stroke-width: 2.5; }
+      .poi-hosp { fill: #dc2626; stroke: #ffffff; stroke-width: 2.5; }
+      .label-poi { font-family: 'Roboto', 'Outfit', Arial, sans-serif; font-size: 11px; fill: #111827; font-weight: 800; }
+    </style>
+  </defs>
+
+  <!-- Base Land -->
+  <rect width="600" height="600" class="land" />
+
+  <!-- Green Parks in Córdoba Capital -->
+  <path d="M 190 45 Q 270 35 350 65 L 345 120 Q 260 105 190 100 Z" class="park" />
+  <path d="M 430 410 Q 500 390 575 415 L 585 555 Q 485 565 425 505 Z" class="park" />
+  <!-- Plaza Colón (Barrio Alberdi, junto a Av. Colón 1450) -->
+  <rect x="85" y="232" width="68" height="48" rx="6" class="park" />
+  <path d="M 55 445 Q 115 435 160 475 L 150 555 Q 85 560 45 520 Z" class="park" />
+
+  <!-- Río Suquía -->
+  <path d="M 0 125 Q 140 165 280 150 T 600 175" class="river-edge" />
+  <path d="M 0 125 Q 140 165 280 150 T 600 175" class="river" />
+
+  <!-- Arroyo La Cañada -->
+  <path d="M 295 600 Q 305 440 315 300 T 325 152" class="canada" />
+
+  <!-- Secondary Grid Casing -->
+  <g class="road-local-casing">
+    <line x1="0" y1="70" x2="600" y2="70" />
+    <line x1="0" y1="225" x2="600" y2="225" />
+    <line x1="0" y1="435" x2="600" y2="435" />
+    <line x1="0" y1="525" x2="600" y2="525" />
+
+    <line x1="75" y1="0" x2="75" y2="600" />
+    <line x1="155" y1="0" x2="155" y2="600" />
+    <line x1="210" y1="0" x2="210" y2="600" />
+    <line x1="285" y1="0" x2="285" y2="600" />
+    <line x1="390" y1="0" x2="390" y2="600" />
+    <line x1="485" y1="0" x2="485" y2="600" />
+  </g>
+
+  <!-- Secondary Grid Fill -->
+  <g class="road-local">
+    <line x1="0" y1="70" x2="600" y2="70" />
+    <line x1="0" y1="225" x2="600" y2="225" />
+    <line x1="0" y1="435" x2="600" y2="435" />
+    <line x1="0" y1="525" x2="600" y2="525" />
+
+    <line x1="75" y1="0" x2="75" y2="600" />
+    <line x1="155" y1="0" x2="155" y2="600" />
+    <line x1="210" y1="0" x2="210" y2="600" />
+    <line x1="285" y1="0" x2="285" y2="600" />
+    <line x1="390" y1="0" x2="390" y2="600" />
+    <line x1="485" y1="0" x2="485" y2="600" />
+  </g>
+
+  <!-- Main Avenues Casing:
+       1) AV. COLÓN corre horizontalmente en y = 300 (exactamente 50% vertical del mapa).
+          El punto (x=210, y=300) es 35% X, 50% Y = Av. Colón 1450.
+       2) AV. NACIONES UNIDAS corre en y = 368 (con Hospital Privado en x=390, y=368 = 65% X). -->
+  <path d="M 0 368 L 600 368" class="road-arterial-casing" />
+  <path d="M 210 300 L 285 335 L 390 368" class="road-arterial-casing" />
+  <path d="M 0 300 L 600 300" class="road-avenue-casing" />
+
+  <!-- Main Avenues Fill -->
+  <path d="M 0 368 L 600 368" class="road-arterial" />
+  <path d="M 210 300 L 285 335 L 390 368" class="road-arterial" />
+  <path d="M 0 300 L 600 300" class="road-avenue" />
+
+  <!-- Neighborhood & Park Labels -->
+  <text x="82" y="215" class="label-neighborhood">BARRIO ALBERDI</text>
+  <text x="345" y="215" class="label-neighborhood">CENTRO</text>
+  <text x="92" y="260" class="label-park">Pza. Colón</text>
+
+  <!-- Street Labels: AV. COLÓN claramente rotulada a lo largo de y = 300 (50% del mapa) -->
+  <text x="22" y="304" class="label-colon-main">AV. COLÓN</text>
+  <text x="224" y="304" class="label-colon-main">AV. COLÓN 1450</text>
+  <text x="415" y="304" class="label-colon-main">AV. COLÓN</text>
+
+  <!-- Destino en Av. Naciones Unidas -->
+  <text x="125" y="372" class="label-street">Av. Naciones Unidas</text>
+
+  <!-- Marcador cartográfico exacto de Av. Colón 1450 en (210, 300) = (35%, 50%) -->
+  <circle cx="210" cy="300" r="6" class="poi-origin" />
+
+  <!-- Marcador cartográfico de Hospital Privado en (390, 368) = (65%, 61.3%) -->
+  <circle cx="390" cy="368" r="6" class="poi-hosp" />
+  <text x="399" y="372" class="label-poi">Hospital Privado</text>
+</svg>
