@@ -3039,7 +3039,8 @@ body.high-contrast .admin-footer-btn:focus-visible {
 
 
 
-.demo-wrapper iframe {
+.demo-wrapper iframe,
+.demo-wrapper video {
 
 
     position: absolute;
@@ -3057,6 +3058,11 @@ body.high-contrast .admin-footer-btn:focus-visible {
     border: none;
 
 
+}
+
+.demo-wrapper video {
+    object-fit: contain;
+    background-color: #000;
 }
 
 

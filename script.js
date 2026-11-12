@@ -233,7 +233,7 @@ const moduleDefinitions = {
 
         guideUrl: 'https://www.canva.com/design/DAHX8hIW2g4/s2kbGXi2XHgoSO36PWaQPw/view?embed',
 
-        demoUrl: 'https://www.youtube.com/embed/ERVRVqlHwJk'
+        demoUrl: 'assets/videos/VIdeoFinal-iniciosesion-Uber.mp4'
 
     },
 
@@ -257,7 +257,7 @@ const moduleDefinitions = {
     4: {
         title: 'Módulo 4: Gestión de Imprevistos y Soporte',
         guideUrl: 'https://www.canva.com/design/DAHYwxFbfEc/sgddke-4jicx80EQ2ztUJg/view?embed',
-        demoUrl: 'https://www.youtube.com/embed/Ux4J6Fsbryg'
+        demoUrl: 'assets/videos/Video-Gestion-Imprevistos-Uber.MP4'
     }
 };
 const totalModules = Object.keys(moduleDefinitions).length;
@@ -463,6 +463,8 @@ function switchCanvaModalView(view) {
 
     const demoIframe = document.getElementById('demo-iframe');
 
+    const demoVideo = document.getElementById('demo-video');
+
     const demoAudioPlayer = document.getElementById('demo-audio-player');
     const demoAudio = document.getElementById('demo-audio');
     const demoAudioTitle = demoAudioPlayer ? demoAudioPlayer.querySelector('h3') : null;
@@ -475,6 +477,10 @@ function switchCanvaModalView(view) {
 
     const showDemoVideo = !showGuide && Boolean(currentCanvaDemoUrl);
 
+    const isLocalMp4Video = showDemoVideo && /\.(mp4|webm|ogg)(\?.*)?$/i.test(currentCanvaDemoUrl);
+
+    const showDemoIframe = showDemoVideo && !isLocalMp4Video;
+
     const showDemoAudio = !showGuide && Boolean(currentCanvaDemoAudioUrl);
 
     if (canvaWrapper) canvaWrapper.style.display = showGuide ? 'block' : 'none';
@@ -482,8 +488,19 @@ function switchCanvaModalView(view) {
     if (demoWrapper) demoWrapper.classList.toggle('audio-demo', showDemoAudio);
     if (canvaIframe) canvaIframe.src = showGuide ? currentCanvaGuideUrl : '';
     if (demoIframe) {
-        demoIframe.src = showDemoVideo ? currentCanvaDemoUrl : '';
-        demoIframe.style.display = showDemoVideo ? 'block' : 'none';
+        demoIframe.src = showDemoIframe ? currentCanvaDemoUrl : '';
+        demoIframe.style.display = showDemoIframe ? 'block' : 'none';
+    }
+    if (demoVideo) {
+        if (isLocalMp4Video) {
+            if (demoVideo.getAttribute('src') !== currentCanvaDemoUrl) {
+                demoVideo.src = currentCanvaDemoUrl;
+            }
+            demoVideo.style.display = 'block';
+        } else {
+            demoVideo.pause();
+            demoVideo.style.display = 'none';
+        }
     }
     if (demoAudioPlayer) demoAudioPlayer.style.display = showDemoAudio ? 'block' : 'none';
     if (demoAudioTitle) demoAudioTitle.textContent = currentCanvaDemoAudioTitle;
@@ -524,9 +541,17 @@ function stopCanvaModalMedia() {
 
     const demoIframe = document.getElementById('demo-iframe');
 
+    const demoVideo = document.getElementById('demo-video');
+
     const demoAudio = document.getElementById('demo-audio');
     if (canvaIframe) canvaIframe.src = '';
     if (demoIframe) demoIframe.src = '';
+    if (demoVideo) {
+        demoVideo.pause();
+        demoVideo.currentTime = 0;
+        demoVideo.removeAttribute('src');
+        demoVideo.load();
+    }
     if (demoAudio) {
         demoAudio.pause();
         demoAudio.currentTime = 0;
