@@ -208,6 +208,15 @@ document.addEventListener('keydown', function(event) {
 
         stopCanvaModalMedia();
 
+        if (typeof simPaymentSheetOpen === 'function' && simPaymentSheetOpen()) {
+            closePaymentSheet();
+        }
+        document.querySelectorAll('.sim-modal-overlay').forEach(overlay => {
+            if (overlay.style.display === 'flex' || overlay.style.display === 'block') {
+                overlay.style.display = 'none';
+            }
+        });
+
     }
 
 });
@@ -1148,6 +1157,7 @@ let simSelectedPayment = 'cash';
 let simSelectedPaymentLabel = 'Efectivo';
 let simOriginAddress = SIM_FIXED_ORIGIN;
 let simDestinationAddress = SIM_FIXED_DESTINATION;
+let simLastValidDestText = '';
 let simErrorTimeout = null;
 let pickupDragPointerId = null;
 let pickupPanStart = { x: 0, y: 0 };
@@ -1155,6 +1165,8 @@ let pickupMapOffset = { x: 0, y: 0 };
 let simErrorsCount = 0;
 let simStartTime = null;
 let simCompleted = false;
+let simResultSaved = false;
+let simWasPickupCentered = false;
 let simCurrentRating = 5;
 
 // --- Asistente de Voz / Lectura en Voz Alta (Text-to-Speech) ---
@@ -1225,6 +1237,12 @@ function syncSimTripLabels() {
     const assignedModel = document.getElementById('sim-assigned-car-model');
     if (assignedModel) assignedModel.textContent = carInfo.model;
 
+    const checkCarModel = document.getElementById('sim-check-car-model');
+    if (checkCarModel) checkCarModel.textContent = carInfo.model.split(' ').slice(0, 2).join(' ');
+
+    const intripCarLine = document.getElementById('sim-intrip-car-line');
+    if (intripCarLine) intripCarLine.textContent = `${carInfo.model} · AE 842 KQ`;
+
     const detailDest = document.getElementById('sim-detail-dest');
     if (detailDest) detailDest.textContent = 'Destino: Hospital Privado (Av. Naciones Unidas 346)';
 
@@ -1242,14 +1260,36 @@ function syncSimTripLabels() {
 }
 
 // Seleccionar el destino fijo del ejercicio (Hospital Privado) y coincidir con el mapa
-function selectFixedTripDestination(event) {
+function selectFixedTripDestination(event, skipInputCheck) {
     if (event) event.stopPropagation();
     const originInput = document.getElementById('sim-origin-input');
     const destInput = document.getElementById('sim-destination-input');
+
+    // Si el usuario escribió en el campo de destino, validar que coincida exactamente con Hospital Privado / Hospital Privado Universitario
+    if (!skipInputCheck && destInput && destInput.value.trim() !== '') {
+        const error = validateSimDestinationText(destInput.value);
+        if (error) {
+            destInput.classList.add('input-error');
+            const prompt = document.getElementById('sim-destination-prompt');
+            if (prompt) {
+                prompt.textContent = error;
+                prompt.classList.remove('prompt-ok');
+                prompt.classList.add('prompt-error');
+            }
+            triggerPhoneError(error);
+            return;
+        }
+    }
+
     if (originInput) originInput.value = 'Av. Colón 1450, Barrio Alberdi';
-    if (destInput) destInput.value = 'Hospital Privado (Av. Naciones Unidas 346)';
+    if (destInput) {
+        destInput.value = 'Hospital Privado Universitario';
+        destInput.classList.remove('input-error');
+    }
     simOriginAddress = SIM_FIXED_ORIGIN;
     simDestinationAddress = SIM_FIXED_DESTINATION;
+    simLastValidDestText = 'Hospital Privado Universitario';
+    clearPhoneError();
     syncSimTripLabels();
     simTriggerStep(3, event);
 }
@@ -1260,14 +1300,29 @@ function selectQuickDestination(destName, event) {
 }
 
 // Checklist interactivo de seguridad (Paso 5)
+function updateBoardCarButtonState() {
+    const checks = document.querySelectorAll('#sim-screen-5 .sim-check-item');
+    const done = document.querySelectorAll('#sim-screen-5 .sim-check-item.checked');
+    const allChecked = checks.length > 0 && done.length >= checks.length;
+    const btn = document.getElementById('sim-board-car-btn');
+    if (btn) {
+        btn.setAttribute('aria-disabled', allChecked ? 'false' : 'true');
+        btn.classList.toggle('sim-highlight-pulse', allChecked);
+    }
+}
+
 function toggleSafetyCheck(el, event) {
     if (event) event.stopPropagation();
-    el.classList.toggle('checked');
+    const isChecked = el.classList.toggle('checked');
+    el.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+    updateBoardCarButtonState();
+    clearPhoneError();
 }
 
 // Sub-vistas del Paso 6 (En viaje -> Califica tu viaje)
 function showSimRatingSubscreen(event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     const inTripView = document.getElementById('sim-subscreen-intrip');
     const ratingView = document.getElementById('sim-subscreen-rating');
     if (inTripView) inTripView.style.display = 'none';
@@ -1275,30 +1330,37 @@ function showSimRatingSubscreen(event) {
 
     const titleEl = document.getElementById('sim-guide-title');
     const descEl = document.getElementById('sim-guide-desc');
-    if (titleEl) titleEl.textContent = 'Paso 6: Calificar al chofer';
+    if (titleEl) titleEl.textContent = 'Paso 6: Calificar y finalizar';
     if (descEl) {
-        descEl.innerHTML = '¡Llegó al <strong>Hospital Privado</strong>! Toque las estrellas para calificar a <strong>Carlos Alberto Pereyra</strong> y vea su <strong>Certificado de Práctica</strong>.';
+        descEl.innerHTML = '¡Llegó al <strong>Hospital Privado</strong>! Toque las estrellas para calificar el viaje o toque <strong>"Omitir"</strong> para abrir su certificado y finalizar.';
     }
 }
 
 function backToSimInTrip(event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     const inTripView = document.getElementById('sim-subscreen-intrip');
     const ratingView = document.getElementById('sim-subscreen-rating');
     if (inTripView) inTripView.style.display = 'flex';
     if (ratingView) ratingView.style.display = 'none';
+    const titleEl = document.getElementById('sim-guide-title');
+    const descEl = document.getElementById('sim-guide-desc');
+    if (titleEl) titleEl.textContent = simStepData[6].title;
+    if (descEl) descEl.innerHTML = simStepData[6].desc;
 }
+
+let simRatingGiven = 0;
+let simSkippedRating = false;
+let simCertTimer = null;
 
 function rateSimTrip(stars, event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     simCurrentRating = stars;
-    const starBtns = document.querySelectorAll('.uber-star-btn');
-    starBtns.forEach((btn, idx) => {
-        if (idx < stars) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
+    simRatingGiven = stars;
+    simSkippedRating = false;
+    document.querySelectorAll('.uber-star-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx < stars);
         btn.classList.remove('sim-highlight-pulse');
     });
     const feedback = document.getElementById('sim-rating-feedback-text');
@@ -1312,6 +1374,91 @@ function rateSimTrip(stars, event) {
         };
         feedback.textContent = messages[stars] || '';
     }
+    // Calificar finaliza la simulación y abre el certificado de práctica de inmediato
+    if (simCertTimer) {
+        clearTimeout(simCertTimer);
+        simCertTimer = null;
+    }
+    finishSimulation(false);
+}
+
+function skipSimRating(event) {
+    if (event) event.stopPropagation();
+    if (simCertTimer) {
+        clearTimeout(simCertTimer);
+        simCertTimer = null;
+    }
+    simRatingGiven = 0;
+    simCurrentRating = 0;
+    simSkippedRating = true;
+    document.querySelectorAll('.uber-star-btn').forEach(btn => {
+        btn.classList.remove('active', 'sim-highlight-pulse');
+    });
+    const feedback = document.getElementById('sim-rating-feedback-text');
+    if (feedback) {
+        feedback.textContent = 'Calificación omitida';
+    }
+    finishSimulation(true);
+}
+
+function finishSimulation(skipped) {
+    if (currentSimStep !== 6) return;
+    if (simCertTimer) {
+        clearTimeout(simCertTimer);
+        simCertTimer = null;
+    }
+    clearPhoneError();
+    simSkippedRating = Boolean(skipped);
+    simCompleted = true;
+
+    if (!simResultSaved) {
+        simResultSaved = true;
+        const tiempoSeg = Math.round((Date.now() - (simStartTime || Date.now())) / 1000);
+        if (typeof guardarResultadoSimulador === 'function') {
+            guardarResultadoSimulador(simErrorsCount, tiempoSeg);
+        }
+    }
+
+    const ratingLine = document.getElementById('sim-cert-rating');
+    if (ratingLine) {
+        ratingLine.textContent = skipped || !simRatingGiven
+            ? 'Calificación del viaje: omitida'
+            : 'Calificación del viaje: ' + '★'.repeat(simRatingGiven) + '☆'.repeat(5 - simRatingGiven) + ' (' + simRatingGiven + ' de 5)';
+    }
+    const card = document.getElementById('sim-success-card');
+    if (card) card.style.display = 'block';
+
+    const dot6 = document.getElementById('sim-step-dot-6');
+    if (dot6) dot6.classList.add('completed');
+
+    const titleEl = document.getElementById('sim-guide-title');
+    const descEl = document.getElementById('sim-guide-desc');
+    if (titleEl) titleEl.textContent = '¡Práctica completada!';
+    if (descEl) {
+        descEl.innerHTML = 'Completó todo el recorrido y obtuvo su <strong>Certificado de Práctica</strong>. Puede volver a abrirlo o presionar <strong>"Reiniciar"</strong> para practicar otra vez.';
+    }
+
+    openSimCertificateModal();
+}
+
+function resetSimRating() {
+    if (simCertTimer) {
+        clearTimeout(simCertTimer);
+        simCertTimer = null;
+    }
+    simRatingGiven = 0;
+    simSkippedRating = false;
+    simCurrentRating = 0;
+    document.querySelectorAll('.uber-star-btn').forEach((btn, idx) => {
+        btn.classList.remove('active');
+        btn.classList.toggle('sim-highlight-pulse', idx === 4);
+    });
+    const feedback = document.getElementById('sim-rating-feedback-text');
+    if (feedback) feedback.textContent = 'Toque las estrellas para calificar el viaje (o toque Omitir)';
+    const card = document.getElementById('sim-success-card');
+    if (card) card.style.display = 'none';
+    const ratingLine = document.getElementById('sim-cert-rating');
+    if (ratingLine) ratingLine.textContent = '';
 }
 
 // Modales didácticos simulados
@@ -1356,7 +1503,7 @@ function sendSimQuickChat(msgText) {
     const userReply = document.getElementById('sim-chat-user-reply');
     if (userReply) {
         userReply.style.display = 'block';
-        userReply.innerHTML = `<strong>Usted:</strong> ${msgText}`;
+        userReply.innerHTML = `<strong>Usted:</strong> ${escapeHtml(msgText)}`;
     }
 }
 
@@ -1373,7 +1520,7 @@ function closeSimSecurityModal(event) {
 }
 
 function openSimCertificateModal(event) {
-    if (event) event.stopPropagation();
+    if (event && event.stopPropagation) event.stopPropagation();
     const modal = document.getElementById('sim-modal-certificate');
     if (modal) modal.style.display = 'flex';
 }
@@ -1388,23 +1535,120 @@ function closeSimCertificateModal(event) {
 function updateDestinationSearch() {
     const input = document.getElementById('sim-destination-input');
     const result = document.getElementById('sim-destination-result');
-    const destination = input ? input.value.trim() : '';
-    if (result) {
-        result.textContent = destination
-            ? 'Confirmar ruta: Av. Colón 1450 ➔ Hospital Privado'
-            : 'Confirmar ruta: Av. Colón 1450 ➔ Hospital Privado';
+    const prompt = document.getElementById('sim-destination-prompt');
+    const card = document.getElementById('sim-destination-confirm-card');
+    const placeRow = document.querySelector('#sim-screen-2 .uber-place-row');
+    if (!input) return;
+
+    const rawValue = input.value;
+    const trimmed = rawValue.trim();
+
+    if (!trimmed) {
+        simLastValidDestText = '';
+        input.classList.remove('input-error');
+        if (result) result.textContent = 'Confirmar destino escrito';
+        if (prompt) {
+            prompt.textContent = 'Escriba "Hospital Privado" arriba y luego toque aquí';
+            prompt.classList.remove('prompt-error', 'prompt-ok');
+        }
+        if (card) card.classList.remove('sim-highlight-pulse');
+        if (placeRow) placeRow.classList.add('sim-highlight-pulse');
+        return;
     }
+
+    const normalized = normalizeSimText(rawValue);
+    const targetFull = 'hospital privado universitario';
+    const isPrefix = targetFull.startsWith(normalized);
+
+    if (!isPrefix) {
+        const errorMsg = validateSimDestinationText(rawValue);
+        input.classList.add('input-error');
+        if (result) result.textContent = '❌ Dirección no válida para esta práctica';
+        if (prompt) {
+            prompt.textContent = errorMsg;
+            prompt.classList.add('prompt-error');
+            prompt.classList.remove('prompt-ok');
+        }
+        if (card) card.classList.remove('sim-highlight-pulse');
+        if (placeRow) placeRow.classList.remove('sim-highlight-pulse');
+        triggerPhoneError(errorMsg);
+        return;
+    }
+
+    simLastValidDestText = rawValue;
+    input.classList.remove('input-error');
+    if (placeRow) placeRow.classList.add('sim-highlight-pulse');
+
+    const validationError = validateSimDestinationText(trimmed);
+    if (!validationError) {
+        clearPhoneError();
+        if (result) result.textContent = 'Confirmar ruta: Av. Colón 1450 ➔ Hospital Privado';
+        if (prompt) {
+            prompt.textContent = '✅ Destino correcto. Toque aquí o presione Enter para continuar';
+            prompt.classList.add('prompt-ok');
+            prompt.classList.remove('prompt-error');
+        }
+        if (card) card.classList.add('sim-highlight-pulse');
+    } else {
+        if (result) result.textContent = 'Escribiendo: "' + trimmed + '"';
+        if (prompt) {
+            prompt.textContent = 'Complete "Hospital Privado" o "Hospital Privado Universitario"';
+            prompt.classList.remove('prompt-error', 'prompt-ok');
+        }
+        if (card) card.classList.remove('sim-highlight-pulse');
+    }
+}
+
+function normalizeSimText(text) {
+    return String(text || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// Devuelve null SOLO si el texto es exactamente "Hospital Privado" o "Hospital Privado Universitario"
+function validateSimDestinationText(raw) {
+    const text = normalizeSimText(raw);
+    if (!text) return 'Escriba "Hospital Privado" o toque "Hospital Privado Universitario".';
+    if (text === 'hospital privado' || text === 'hospital privado universitario') return null;
+    if (/^\d+$/.test(text)) return 'Eso es solo un número. Escriba "Hospital Privado" o "Hospital Privado Universitario".';
+    if (text.includes('colon') || text.includes('alberdi') || text === 'casa') {
+        return 'Esa es su dirección de origen (Av. Colón 1450). El destino debe ser "Hospital Privado".';
+    }
+    if (text === 'hospital') return 'Falta precisar qué hospital. Escriba "Hospital Privado" o "Hospital Privado Universitario".';
+    if ('hospital privado universitario'.startsWith(text)) {
+        return 'Texto incompleto. Escriba "Hospital Privado" o "Hospital Privado Universitario" completo.';
+    }
+    if (text.length < 3) return 'El texto es muy corto. Escriba "Hospital Privado".';
+    const shown = String(raw).trim().slice(0, 30);
+    return 'No coincide "' + shown + '". Solo se permite "Hospital Privado" o "Hospital Privado Universitario".';
 }
 
 function searchSimulatorDestination(event) {
     if (event) event.stopPropagation();
-    selectFixedTripDestination(event);
+    const input = document.getElementById('sim-destination-input');
+    const prompt = document.getElementById('sim-destination-prompt');
+    const error = validateSimDestinationText(input ? input.value : '');
+    if (error) {
+        if (input) {
+            input.classList.add('input-error');
+            input.focus();
+        }
+        if (prompt) {
+            prompt.textContent = error;
+            prompt.classList.remove('prompt-ok');
+            prompt.classList.add('prompt-error');
+        }
+        triggerPhoneError(error);
+        return;
+    }
+    clearPhoneError();
+    selectFixedTripDestination(event, true);
 }
 
 function submitDestinationOnEnter(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-        selectFixedTripDestination(event);
+        searchSimulatorDestination(event);
     }
 }
 
@@ -1415,13 +1659,9 @@ let pickupMarkerPos = { left: 68, top: 50 };
 // Recentrar el puntero en la ubicación GPS actual en Av. Colón 1450 (Botón real ⌖ de Uber en Paso 4)
 function recenterPickupMap(event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     pickupMarkerPos = { left: PICKUP_TARGET_POS.left, top: PICKUP_TARGET_POS.top };
     applyPickupMapTransform(true);
-
-    const descEl = document.getElementById('sim-guide-desc');
-    if (descEl) {
-        descEl.innerHTML = '✅ <strong>Puntero ubicado exactamente sobre Av. Colón 1450.</strong> Ahora toque el botón negro <strong>"Confirmar punto de partida"</strong>.';
-    }
 }
 
 function applyPickupMapTransform(animate) {
@@ -1431,6 +1671,7 @@ function applyPickupMapTransform(animate) {
     const subStatus = document.getElementById('sim-pickup-substatus');
     const confirmBtn = document.getElementById('confirm-pickup-btn');
     const recenterBtn = document.getElementById('btn-pickup-recenter');
+    const descEl = document.getElementById('sim-guide-desc');
 
     const dist = Math.hypot(
         pickupMarkerPos.left - PICKUP_TARGET_POS.left,
@@ -1460,12 +1701,16 @@ function applyPickupMapTransform(animate) {
             subStatus.style.color = '#15803D';
         }
         if (confirmBtn) {
-            confirmBtn.disabled = false;
+            confirmBtn.setAttribute('aria-disabled', 'false');
             confirmBtn.classList.add('sim-highlight-pulse');
         }
         if (recenterBtn) {
             recenterBtn.classList.remove('sim-highlight-pulse');
         }
+        if (currentSimStep === 4 && descEl && !simWasPickupCentered) {
+            descEl.innerHTML = '✅ <strong>¡Excelente! El puntero coincide con Av. Colón 1450.</strong> Ahora toque el botón negro <strong>"Confirmar punto de partida"</strong>.';
+        }
+        simWasPickupCentered = true;
     } else {
         if (marker) {
             marker.classList.remove('pickup-marker-confirmed');
@@ -1478,14 +1723,19 @@ function applyPickupMapTransform(animate) {
             subStatus.style.color = '#B45309';
         }
         if (confirmBtn) {
-            confirmBtn.disabled = true;
+            confirmBtn.setAttribute('aria-disabled', 'true');
             confirmBtn.classList.remove('sim-highlight-pulse');
         }
+        if (currentSimStep === 4 && descEl && simWasPickupCentered && simStepData[4]) {
+            descEl.innerHTML = simStepData[4].desc;
+        }
+        simWasPickupCentered = false;
     }
 }
 
 function resetPickupMarker() {
     pickupDragPointerId = null;
+    simWasPickupCentered = false;
     pickupMarkerPos = { left: 68, top: 50 };
     applyPickupMapTransform(false);
 }
@@ -1504,17 +1754,6 @@ function updatePickupMarkerFromPointer(clientX, clientY, animate) {
         top: Math.max(22, Math.min(82, rawTop))
     };
     applyPickupMapTransform(Boolean(animate));
-
-    const dist = Math.hypot(
-        pickupMarkerPos.left - PICKUP_TARGET_POS.left,
-        pickupMarkerPos.top - PICKUP_TARGET_POS.top
-    );
-    if (dist <= 13) {
-        const descEl = document.getElementById('sim-guide-desc');
-        if (descEl) {
-            descEl.innerHTML = '✅ <strong>¡Excelente! El puntero coincide con Av. Colón 1450.</strong> Ahora toque el botón negro <strong>"Confirmar punto de partida"</strong>.';
-        }
-    }
 }
 
 function startPickupDrag(event) {
@@ -1528,7 +1767,7 @@ function startPickupDrag(event) {
 }
 
 function startPickupMapPan(event) {
-    if (event.target.closest('.uber-floating-back-circle') || event.target.closest('#btn-pickup-recenter')) return;
+    if (event.target.closest('.uber-floating-back-circle, #btn-pickup-recenter, .uber-streetview-thumb, #pickup-marker')) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     event.preventDefault();
     event.stopPropagation();
@@ -1546,6 +1785,17 @@ function finishPickupDrag(event) {
     if (event.pointerId !== pickupDragPointerId) return;
     pickupDragPointerId = null;
     applyPickupMapTransform(true);
+    const dist = Math.hypot(
+        pickupMarkerPos.left - PICKUP_TARGET_POS.left,
+        pickupMarkerPos.top - PICKUP_TARGET_POS.top
+    );
+    if (currentSimStep === 4) {
+        if (dist > 13) {
+            triggerPhoneError('Ese no es el lugar de partida. Acerque el puntero al punto azul de Av. Colón 1450 o toque ⌖.', true);
+        } else {
+            clearPhoneError();
+        }
+    }
 }
 
 document.addEventListener('pointermove', movePickupMarker);
@@ -1563,28 +1813,46 @@ function handlePhoneMisclick(event) {
     triggerPhoneError();
 }
 
-function triggerPhoneError() {
-    simErrorsCount++;
+function clearPhoneError() {
+    if (simErrorTimeout) {
+        clearTimeout(simErrorTimeout);
+        simErrorTimeout = null;
+    }
+    const phone = document.getElementById('sim-phone-device');
+    const screen = document.querySelector('.phone-screen');
+    const errorBadge = document.getElementById('sim-error-badge');
+    if (phone) phone.classList.remove('shake-error');
+    if (screen) screen.classList.remove('screen-error-flash');
+    if (errorBadge) {
+        errorBadge.style.display = 'none';
+        errorBadge.classList.remove('soft');
+    }
+}
+
+function triggerPhoneError(message, soft) {
+    if (!soft) simErrorsCount++;
     if (!simStartTime) simStartTime = Date.now();
 
     const phone = document.getElementById('sim-phone-device');
     const screen = document.querySelector('.phone-screen');
     const errorBadge = document.getElementById('sim-error-badge');
 
-    if (phone) {
+    if (phone && !soft) {
         phone.classList.remove('shake-error');
         void phone.offsetWidth;
         phone.classList.add('shake-error');
     }
 
-    if (screen) {
+    if (screen && !soft) {
         screen.classList.remove('screen-error-flash');
         void screen.offsetWidth;
         screen.classList.add('screen-error-flash');
     }
 
     if (errorBadge) {
-        errorBadge.textContent = '💡 Toque el botón con borde azul';
+        const rule = SIM_STEP_RULES[currentSimStep];
+        errorBadge.textContent = (soft ? 'ℹ️ ' : '⚠️ ') + (message || (rule && rule.hint) || 'Toque el botón con borde azul');
+        errorBadge.classList.toggle('soft', Boolean(soft));
         errorBadge.style.display = 'block';
     }
 
@@ -1593,14 +1861,24 @@ function triggerPhoneError() {
         if (phone) phone.classList.remove('shake-error');
         if (screen) screen.classList.remove('screen-error-flash');
         if (errorBadge) errorBadge.style.display = 'none';
-    }, 1600);
+    }, soft ? 2800 : 3400);
 }
 
 // Cambio de paso principal (Pasos 1 a 6)
 function simTriggerStep(step, event) {
     if (event) event.stopPropagation();
 
+    if (simCertTimer) {
+        clearTimeout(simCertTimer);
+        simCertTimer = null;
+    }
+    if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        updateTtsButtonState(false);
+    }
+
     if (!simStartTime) simStartTime = Date.now();
+    clearPhoneError();
     closePaymentSheet();
     currentSimStep = step;
     syncSimTripLabels();
@@ -1647,20 +1925,22 @@ function simTriggerStep(step, event) {
         prevBtn.style.display = (step > 1) ? 'inline-block' : 'none';
     }
 
-    if (step === 4) {
-        resetPickupMarker();
+    if (step === 2) {
+        const destinationInput = document.getElementById('sim-destination-input');
+        simLastValidDestText = destinationInput ? destinationInput.value : '';
+        updateDestinationSearch();
     }
 
     if (step === 3) {
         updateCarConfirmButton();
     }
 
-    if (step === 6 && !simCompleted) {
-        simCompleted = true;
-        const tiempoSeg = Math.round((Date.now() - (simStartTime || Date.now())) / 1000);
-        if (typeof guardarResultadoSimulador === 'function') {
-            guardarResultadoSimulador(simErrorsCount, tiempoSeg);
-        }
+    if (step === 4) {
+        resetPickupMarker();
+    }
+
+    if (step === 5) {
+        updateBoardCarButtonState();
     }
 }
 
@@ -1679,8 +1959,13 @@ function restartSimulator() {
     simErrorsCount = 0;
     simStartTime = Date.now();
     simCompleted = false;
+    simResultSaved = false;
 
-    document.querySelectorAll('.sim-check-item').forEach(item => item.classList.remove('checked'));
+    document.querySelectorAll('.sim-check-item').forEach(item => {
+        item.classList.remove('checked');
+        item.setAttribute('aria-checked', 'false');
+    });
+    updateBoardCarButtonState();
     const userReply = document.getElementById('sim-chat-user-reply');
     if (userReply) userReply.style.display = 'none';
 
@@ -1689,16 +1974,18 @@ function restartSimulator() {
 
     const destinationInput = document.getElementById('sim-destination-input');
     if (destinationInput) destinationInput.value = '';
+    simLastValidDestText = '';
     updateDestinationSearch();
     resetPickupMarker();
     selectCarOption('uberx');
     choosePayment('cash', '💵', 'Efectivo');
-    rateSimTrip(5);
+    resetSimRating();
     simTriggerStep(1);
 }
 
 function selectCarOption(type, event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     simSelectedCar = simCarCatalog[type] ? type : 'uberx';
 
     const ids = {
@@ -1720,18 +2007,21 @@ function selectCarOption(type, event) {
 
 function openPaymentSheet(event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     const sheet = document.getElementById('sim-payment-sheet');
     if (sheet) sheet.style.display = 'block';
 }
 
 function closePaymentSheet(event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     const sheet = document.getElementById('sim-payment-sheet');
     if (sheet) sheet.style.display = 'none';
 }
 
 function choosePayment(method, icon, text, event) {
     if (event) event.stopPropagation();
+    clearPhoneError();
     simSelectedPayment = method;
     simSelectedPaymentLabel = text;
 
@@ -2939,3 +3229,306 @@ function clearAdminResults() {
 
 }
 
+
+
+// ========================================================
+// REGLAS DE INTERACCIÓN DEL SIMULADOR: qué se puede tocar en cada paso
+// ========================================================
+const SIM_BACK_MSG = 'El botón "volver" no está disponible en la práctica. Use "← Paso anterior" del panel.';
+
+// Acciones no disponibles en ningún paso (mensaje específico)
+const SIM_COMMON_BLOCKED = [
+    ['.sim-screen-back:not(.sheet-close-btn), .sim-back-btn, .uber-floating-back-circle', SIM_BACK_MSG],
+    ['.uber-gps-btn:not(#btn-pickup-recenter)', 'El botón de centrar mapa no se usa en este paso.'],
+    ['.uber-later-chip', 'Programar un viaje para más tarde no es parte de esta práctica. Toque la barra "¿A dónde vas?".'],
+    ['.uber-schedule-square-btn', 'Programar el viaje para más tarde no está disponible. Toque el botón negro para confirmar.'],
+    ['.uber-add-stop-btn', 'Agregar paradas no es parte de esta práctica. Escriba o seleccione el destino.'],
+    ['.uber-streetview-thumb', 'La vista de calle no está disponible en la práctica.']
+];
+
+const SIM_STEP_RULES = {
+    1: {
+        allowed: ['.uber-search-pill-bar'],
+        hint: 'En el inicio solo debe tocar la barra "¿A dónde vas?" (borde azul).'
+    },
+    2: {
+        allowed: ['#sim-destination-input', '.uber-place-row', '.uber-suggestion-card'],
+        hint: 'Solo puede escribir "Hospital Privado" o seleccionar "Hospital Privado Universitario".'
+    },
+    3: {
+        allowed: ['.uber-car-option', '.uber-payment-row', '#sim-choose-car-btn'],
+        hint: 'Aquí solo puede elegir el tipo de viaje, el método de pago y confirmar con el botón negro.'
+    },
+    4: {
+        allowed: ['#pickup-marker', '#btn-pickup-recenter', '#confirm-pickup-btn', '#pickup-map'],
+        hint: 'Mueva el puntero sobre el mapa hasta Av. Colón 1450 (o toque ⌖) y confirme el punto de partida.'
+    },
+    5: {
+        allowed: ['.uber-safety-pill-btn', '.uber-msg-pill-btn', '.uber-call-round-btn', '.sim-check-item',
+                  '.uber-grey-pill-btn', '#sim-board-car-btn'],
+        hint: 'Revise los datos del chofer, marque las 2 verificaciones y toque "Subir al auto e iniciar el viaje".'
+    },
+    6: {
+        allowed: ['.uber-safety-pill-btn', '.uber-grey-pill-btn', '.uber-intrip-sheet > .uber-confirm-btn',
+                  '.uber-star-btn', '.uber-skip-pill', '.sim-cert-btn'],
+        hint: 'Toque "Llegar a destino y calificar viaje"; luego elija estrellas o toque "Omitir".'
+    }
+};
+
+function simPaymentSheetOpen() {
+    const sheet = document.getElementById('sim-payment-sheet');
+    return Boolean(sheet && sheet.style.display !== 'none');
+}
+
+function simIsRatingSubscreenVisible() {
+    const ratingView = document.getElementById('sim-subscreen-rating');
+    return Boolean(ratingView && ratingView.style.display !== 'none');
+}
+
+function getBlockedStepMessage(step, target) {
+    if (step === 1) {
+        if (target.closest('.uber-loc-pill')) {
+            return 'La ubicación actual ya está fijada en Av. Colón 1450. Para comenzar, toque "¿A dónde vas?".';
+        }
+        if (target.closest('.uber-cart-icon-btn')) {
+            return 'El carrito no corresponde a un viaje. Toque la barra "¿A dónde vas?" (borde azul).';
+        }
+        const tab = target.closest('.uber-top-tab');
+        if (tab) {
+            const label = tab.textContent || '';
+            if (label.includes('Eats')) return 'Uber Eats es para pedir comida, no viajes. Toque "¿A dónde vas?".';
+            if (label.includes('Envíos')) return 'Envíos es para paquetes, no para pedir un auto. Toque "¿A dónde vas?".';
+            return 'Ya está en la pestaña de viajes Uber. Ahora toque la barra "¿A dónde vas?".';
+        }
+        if (target.closest('.uber-promo-dest-card')) {
+            return 'Ese es un acceso rápido del historial. En este paso primero debe abrir el buscador tocando "¿A dónde vas?".';
+        }
+        if (target.closest('.uber-section-header')) {
+            return 'La sección "Para ti" no se utiliza aquí. Toque la barra "¿A dónde vas?".';
+        }
+        const serviceCard = target.closest('.uber-service-card');
+        if (serviceCard) {
+            const label = serviceCard.textContent || '';
+            if (label.includes('Envíos')) {
+                return 'Envíos es para mandar paquetes. Para pedir un viaje, toque "¿A dónde vas?".';
+            }
+            return 'El tipo de viaje se elige en el Paso 3. Primero abra el buscador tocando "¿A dónde vas?".';
+        }
+        if (target.closest('.uber-recent-item')) {
+            return 'Esa es su dirección guardada de origen (Casa). Para ingresar el destino, toque "¿A dónde vas?".';
+        }
+        const navItem = target.closest('.uber-nav-item');
+        if (navItem) {
+            const label = (navItem.textContent || '').trim();
+            if (label.includes('Inicio')) return 'Ya se encuentra en Inicio. Toque la barra "¿A dónde vas?".';
+            return 'La sección "' + label + '" no está disponible en esta práctica. Toque "¿A dónde vas?".';
+        }
+        if (target.closest('.uber-bottom-nav-pill')) {
+            return 'La barra inferior no está disponible en esta práctica. Toque "¿A dónde vas?".';
+        }
+    }
+
+    if (step === 2) {
+        if (target.closest('#sim-origin-input, .origin-row, .uber-route-timeline')) {
+            return 'El origen ya está fijado en Av. Colón 1450. Escriba o seleccione el destino.';
+        }
+        if (target.closest('.uber-plan-pill')) {
+            return 'Esa opción ya está configurada para la práctica. Escriba "Hospital Privado" o tóquelo debajo.';
+        }
+        if (target.closest('.uber-specific-route-helper')) {
+            return 'Escriba "Hospital Privado" en el campo de arriba o toque "Hospital Privado Universitario".';
+        }
+    }
+
+    if (step === 3) {
+        if (target.closest('.uber-map-route-pill')) {
+            return 'La ruta ya está confirmada (Av. Colón 1450 ➔ Hospital Privado). Elija auto, pago y confirme.';
+        }
+        if (target.closest('.sim-map-route')) {
+            return 'El mapa solo muestra la ruta. Elija un tipo de viaje, el método de pago y toque el botón negro.';
+        }
+        if (target.closest('.uber-sheet-heading-compact, .sheet-drag-handle')) {
+            return 'Elija un tipo de viaje (Essential, Comfort o Uber Mujeres), el pago y toque el botón negro.';
+        }
+    }
+
+    if (step === 4) {
+        if (target.closest('.uber-pickup-sheet')) {
+            return 'Primero ubique el puntero en el mapa sobre Av. Colón 1450 (o toque ⌖) y luego toque el botón negro.';
+        }
+    }
+
+    if (step === 5) {
+        if (target.closest('.sim-map-driver')) {
+            return 'El mapa solo muestra la llegada del auto. Verifique los datos abajo, marque las 2 casillas y suba.';
+        }
+        if (target.closest('.uber-trip-countdown-row')) {
+            return 'Ese es el tiempo estimado de llegada (4 min). Marque las 2 verificaciones antes de subir.';
+        }
+        if (target.closest('.uber-driver-hero-card')) {
+            return 'Estos son los datos para comparar. Para confirmarlos, marque las 2 casillas azules de abajo.';
+        }
+        if (target.closest('.sim-safety-title')) {
+            return 'Toque las 2 casillas debajo de este título para marcar patente/auto y conductor.';
+        }
+        if (target.closest('.uber-trip-details-list, .uber-detail-row')) {
+            return 'Ese es el resumen del viaje. Puede tocar "Compartir" o confirmar las 2 casillas para subir.';
+        }
+    }
+
+    if (step === 6) {
+        if (simIsRatingSubscreenVisible()) {
+            if (target.closest('.uber-receipt-mini')) {
+                return 'Ese es el comprobante del viaje. Califique con las estrellas o toque "Omitir" para ver su certificado.';
+            }
+            if (target.closest('.sim-success-card')) {
+                return '¡Práctica completada! Toque el botón verde "Ver mi Certificado de Práctica" para abrirlo.';
+            }
+            return simCompleted
+                ? '¡Simulación finalizada! Puede abrir su certificado con el botón verde o presionar "Reiniciar".'
+                : 'Toque de 1 a 5 estrellas para calificar el viaje, o toque "Omitir" para abrir su certificado.';
+        } else {
+            if (target.closest('.sim-map-intrip')) {
+                return 'Está en viaje al Hospital Privado. Toque el botón negro "Llegar a destino y calificar viaje".';
+            }
+            return 'Cuando termine el recorrido, toque el botón negro "Llegar a destino y calificar viaje".';
+        }
+    }
+
+    const rule = SIM_STEP_RULES[step];
+    return (rule && rule.hint) || 'Toque el elemento resaltado para continuar.';
+}
+
+// Devuelve { ok: true } o { ok: false, message, soft }
+function evaluateSimClick(rawTarget) {
+    const step = currentSimStep;
+    const rule = SIM_STEP_RULES[step];
+    const target = (rawTarget && typeof rawTarget.closest === 'function') ? rawTarget : (rawTarget && rawTarget.parentElement);
+    if (!rule || !target || !target.closest) return { ok: true };
+
+    // Hoja de pago abierta en Paso 3: solo se puede elegir pago o cerrar con ✕
+    if (step === 3 && simPaymentSheetOpen()) {
+        if (target.closest('.payment-modal-option') || target.closest('.sheet-close-btn')) {
+            return { ok: true };
+        }
+        if (target.closest('#sim-payment-sheet')) {
+            return { ok: false, soft: true, message: 'Toque Efectivo, Mastercard o Visa Débito (o cierre con la ✕).' };
+        }
+        return { ok: false, message: 'Primero elija una forma de pago o cierre la ventana con la ✕.' };
+    }
+
+    for (const [selector, message] of SIM_COMMON_BLOCKED) {
+        if (target.closest(selector)) return { ok: false, message };
+    }
+
+    // En Paso 6, separar estrictamente acciones de 6A (en viaje) vs 6B (calificación)
+    let allowedSelectors = rule.allowed;
+    if (step === 6) {
+        allowedSelectors = simIsRatingSubscreenVisible()
+            ? ['.uber-star-btn', '.uber-skip-pill', '.sim-cert-btn']
+            : ['.uber-safety-pill-btn', '.uber-grey-pill-btn', '.uber-intrip-sheet > .uber-confirm-btn'];
+    }
+
+    if (!allowedSelectors.some(sel => target.closest(sel))) {
+        return { ok: false, message: getBlockedStepMessage(step, target) };
+    }
+
+    // Condiciones previas de botones permitidos
+    if (step === 4 && target.closest('#confirm-pickup-btn')) {
+        const btn = document.getElementById('confirm-pickup-btn');
+        if (btn && btn.getAttribute('aria-disabled') === 'true') {
+            return { ok: false, soft: true, message: 'Primero ubique el puntero sobre el punto azul de Av. Colón 1450 (o toque ⌖).' };
+        }
+    }
+    if (step === 5 && target.closest('#sim-board-car-btn')) {
+        const checks = Array.from(document.querySelectorAll('#sim-screen-5 .sim-check-item'));
+        const done = checks.filter(c => c.classList.contains('checked'));
+        if (done.length === 0) {
+            return { ok: false, message: 'Antes de subir al auto, toque y marque las 2 verificaciones: patente/auto y conductor.' };
+        }
+        if (done.length < checks.length) {
+            if (checks[0] && !checks[0].classList.contains('checked')) {
+                return { ok: false, message: 'Falta marcar la verificación 1: Patente AE 842 KQ y auto.' };
+            }
+            return { ok: false, message: 'Falta marcar la verificación 2: Conductor Carlos Alberto Pereyra.' };
+        }
+    }
+    return { ok: true };
+}
+
+function simGuardClick(event) {
+    const result = evaluateSimClick(event.target);
+    if (result.ok) return;
+    event.stopPropagation();
+    event.preventDefault();
+    triggerPhoneError(result.message, result.soft);
+}
+
+// Navegación por los círculos de pasos: solo hacia atrás
+function simStepperClick(step, event) {
+    if (event) event.stopPropagation();
+    if (step === currentSimStep) return;
+    if (step < currentSimStep) {
+        simTriggerStep(step);
+        return;
+    }
+    triggerPhoneError('Complete el paso ' + currentSimStep + ' antes de avanzar al paso ' + step + '.');
+}
+
+let simGuardsInitialized = false;
+function initSimulatorGuards() {
+    if (simGuardsInitialized) return;
+    const phoneScreen = document.querySelector('.phone-screen');
+    if (!phoneScreen) return;
+    simGuardsInitialized = true;
+
+    phoneScreen.addEventListener('click', simGuardClick, true);
+    phoneScreen.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            const target = (event.target && typeof event.target.closest === 'function') ? event.target : (event.target && event.target.parentElement);
+            const interactive = target && target.closest ? target.closest('[role="button"], [role="checkbox"]') : null;
+            if (interactive && interactive.tagName !== 'BUTTON' && interactive.tagName !== 'INPUT') {
+                event.preventDefault();
+                interactive.click();
+            }
+        }
+    });
+
+    const pickupMarker = document.getElementById('pickup-marker');
+    if (pickupMarker) {
+        pickupMarker.addEventListener('keydown', (event) => {
+            if (currentSimStep !== 4) return;
+            const deltas = {
+                ArrowLeft: [-5, 0],
+                ArrowRight: [5, 0],
+                ArrowUp: [0, -5],
+                ArrowDown: [0, 5]
+            };
+            const d = deltas[event.key];
+            if (!d) return;
+            event.preventDefault();
+            pickupMarkerPos = {
+                left: Math.max(15, Math.min(85, pickupMarkerPos.left + d[0])),
+                top: Math.max(22, Math.min(82, pickupMarkerPos.top + d[1]))
+            };
+            applyPickupMapTransform(true);
+            const dist = Math.hypot(
+                pickupMarkerPos.left - PICKUP_TARGET_POS.left,
+                pickupMarkerPos.top - PICKUP_TARGET_POS.top
+            );
+            if (dist > 13) {
+                triggerPhoneError('Ese no es el lugar de partida. Acerque el puntero al punto azul de Av. Colón 1450 o toque ⌖.', true);
+            } else {
+                clearPhoneError();
+            }
+        });
+    }
+    const originInput = document.getElementById('sim-origin-input');
+    if (originInput) originInput.setAttribute('readonly', 'readonly');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSimulatorGuards);
+} else {
+    initSimulatorGuards();
+}

@@ -184,104 +184,261 @@ body.high-contrast .license-plate-banner {
 
 
 body.high-contrast a,
-
-
 body.high-contrast button,
-
-
 body.high-contrast input,
-
-
 body.high-contrast textarea,
-
-
 body.high-contrast select {
-
-
     color: var(--text-color);
-
-
 }
 
-
-
-
-body.high-contrast .header {
-
-    background-color: #000000;
-
-    color: #FFFFFF;
-
+/* Navbar en Alto Contraste */
+body.high-contrast .navbar {
+    background-color: #000000 !important;
+    border-bottom: 2px solid #FFD000 !important;
+    box-shadow: none !important;
 }
 
+body.high-contrast .logo {
+    color: #FFFFFF !important;
+}
 
+body.high-contrast .nav-links a {
+    color: #FFFFFF !important;
+    background-color: #000000 !important;
+    border: 1px solid #555555 !important;
+}
+
+body.high-contrast .nav-links a:hover,
+body.high-contrast .nav-links a:focus-visible {
+    background-color: #111111 !important;
+    color: #FFD000 !important;
+    border-color: #FFD000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .nav-links a.active {
+    background-color: #FFD000 !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
+    border-color: #FFD000 !important;
+}
+
+/* Header de todas las pestañas en Alto Contraste */
+body.high-contrast .header,
+body.dark-mode.high-contrast .header {
+    background-color: #000000 !important;
+    border-bottom: 6px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
 
 body.high-contrast .header h1,
-
-body.high-contrast .header .subtitle {
-
-    color: #FFFFFF;
-
+body.dark-mode.high-contrast .header h1 {
+    color: #FFD000 !important;
 }
 
+body.high-contrast .header .subtitle,
+body.dark-mode.high-contrast .header .subtitle {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
 
+/* Hero en Alto Contraste */
+body.high-contrast .hero-text h2 {
+    color: #FFD000 !important;
+}
 
 body.high-contrast .hero-text p {
+    color: #FFFFFF !important;
+}
 
-    color: #FFFFFF;
+body.high-contrast .hero-logo-container {
+    border: 2px solid #FFD000 !important;
+    background-color: #000000 !important;
+}
 
+body.high-contrast .hero-image img {
+    border: 2px solid #FFD000 !important;
+    border-radius: var(--border-radius) !important;
+}
+
+/* Botones de cierre en Alto Contraste */
+body.high-contrast .close-btn,
+body.high-contrast .close-sidebar-btn {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .close-btn:hover,
+body.high-contrast .close-sidebar-btn:hover {
+    color: #FFFFFF !important;
 }
 
 
 
-body.high-contrast .modules-section {
-
-    border: 2px solid #FFD000;
-
-    background-color: #000000;
-
-    color: #FFFFFF;
-
+/* Sección de Módulos en Alto Contraste */
+body.high-contrast .modules-section,
+body.dark-mode.high-contrast .modules-section {
+    border: 2px solid #FFD000 !important;
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
 }
 
-
+body.high-contrast .modules-section h2,
+body.dark-mode.high-contrast .modules-section h2 {
+    color: #FFD000 !important;
+}
 
 body.high-contrast .modules-progress-summary,
+body.dark-mode.high-contrast .modules-progress-summary {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast #modules-progress-text,
+body.dark-mode.high-contrast #modules-progress-text {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast #modules-progress-percent,
+body.dark-mode.high-contrast #modules-progress-percent {
+    color: #FFD000 !important;
+    font-weight: 900 !important;
+}
+
+body.high-contrast .modules-progress-track,
+body.dark-mode.high-contrast .modules-progress-track {
+    border: 2px solid #FFD000 !important;
+    background-color: #000000 !important;
+}
+
+body.high-contrast #modules-progress-fill,
+body.dark-mode.high-contrast #modules-progress-fill {
+    background-color: #FFD000 !important;
+}
 
 body.high-contrast .module-lock-message,
-
-body.high-contrast .module-card p {
-
-    color: #FFFFFF;
-
+body.high-contrast #module-lock-message,
+body.dark-mode.high-contrast .module-lock-message,
+body.dark-mode.high-contrast #module-lock-message {
+    color: #FFFFFF !important;
 }
 
-
-
-body.high-contrast .modules-progress-track {
-
-    border: 1px solid #FFD000;
-
-    background-color: #222222;
-
+body.high-contrast .module-card,
+body.dark-mode.high-contrast .module-card {
+    border: 2px solid #FFD000 !important;
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
 }
 
-
-
-body.high-contrast #modules-progress-fill {
-
-    background-color: #FFD000;
-
+body.high-contrast .module-card h3,
+body.dark-mode.high-contrast .module-card h3 {
+    color: #FFD000 !important;
 }
 
+body.high-contrast .module-card p,
+body.dark-mode.high-contrast .module-card p {
+    color: #FFFFFF !important;
+}
 
+body.high-contrast .module-contents,
+body.dark-mode.high-contrast .module-contents {
+    border-top: 1px solid #FFD000 !important;
+}
 
-body.high-contrast .module-number {
+body.high-contrast .module-contents-title,
+body.dark-mode.high-contrast .module-contents-title {
+    color: #FFD000 !important;
+}
 
-    background-color: #FFD000;
+body.high-contrast .module-contents-list li,
+body.dark-mode.high-contrast .module-contents-list li {
+    color: #FFFFFF !important;
+}
 
-    color: #000000;
+body.high-contrast .module-contents-list li::before,
+body.dark-mode.high-contrast .module-contents-list li::before {
+    color: #FFD000 !important;
+}
 
+body.high-contrast .module-card ul li a,
+body.dark-mode.high-contrast .module-card ul li a {
+    color: #FFD000 !important;
+    text-decoration: underline !important;
+}
+
+body.high-contrast .module-card ul li a:hover,
+body.high-contrast .module-card ul li a:focus-visible,
+body.dark-mode.high-contrast .module-card ul li a:hover,
+body.dark-mode.high-contrast .module-card ul li a:focus-visible {
+    color: #FFFFFF !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .module-number,
+body.dark-mode.high-contrast .module-number {
+    background-color: #FFD000 !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+/* Sección App Preview en Alto Contraste */
+body.high-contrast .app-preview,
+body.dark-mode.high-contrast .app-preview {
+    border: 2px solid #FFD000 !important;
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .app-text h2,
+body.dark-mode.high-contrast .app-text h2 {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .app-text > p,
+body.dark-mode.high-contrast .app-text > p {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .feature-list li,
+body.dark-mode.high-contrast .feature-list li {
+    background: #111111 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .feature-list li strong,
+body.dark-mode.high-contrast .feature-list li strong {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .app-image img,
+body.dark-mode.high-contrast .app-image img {
+    border: 2px solid #FFD000 !important;
+}
+
+/* Botones y FAQ en Alto Contraste */
+body.high-contrast .btn-primary,
+body.dark-mode.high-contrast .btn-primary {
+    background-color: #FFD000 !important;
+    color: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    font-weight: 800 !important;
+}
+
+body.high-contrast .btn-primary:hover,
+body.high-contrast .btn-primary:focus-visible,
+body.dark-mode.high-contrast .btn-primary:hover,
+body.dark-mode.high-contrast .btn-primary:focus-visible {
+    background-color: #FFE033 !important;
+    outline: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast .faq-answer,
+body.dark-mode.high-contrast .faq-answer {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-guide-panel strong,
+body.dark-mode.high-contrast .sim-guide-panel strong {
+    color: #FFD000 !important;
 }
 
 
@@ -494,16 +651,12 @@ body.high-contrast .phone-screen .uber-confirm-btn:not(:disabled) {
 
 
 
-body.high-contrast .phone-screen .uber-confirm-btn:disabled {
-
+body.high-contrast .phone-screen .uber-confirm-btn:disabled,
+body.high-contrast .phone-screen .uber-confirm-btn[aria-disabled="true"] {
     border: 2px dashed #A3A3A3;
-
     background-color: #404040;
-
     color: #FFFFFF;
-
     opacity: 1;
-
 }
 
 
@@ -1707,148 +1860,228 @@ h3 { font-size: 1.5rem; }
 
 
 
-body.high-contrast .accessibility-menu {
-
-    background: #000000;
-
-    border-color: #FFD000;
-
-    color: #FFFFFF;
-
-}
-
-
-
+/* --- BARRA Y MENÚ DE PREFERENCIAS EN ALTO CONTRASTE (WCAG AAA) --- */
 body.high-contrast .accessibility-toggle {
-
-    border-color: #FFD000;
-
-    background: #000000;
-
-    color: #FFFFFF;
-
+    border: 2px solid #FFD000 !important;
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
 }
 
-
+body.high-contrast .accessibility-toggle:hover,
+body.high-contrast .accessibility-toggle:focus-visible {
+    background: #111111 !important;
+    border-color: #FFD000 !important;
+    color: #FFD000 !important;
+    outline: 3px solid #FFD000 !important;
+    outline-offset: 2px !important;
+}
 
 body.high-contrast .accessibility-toggle[aria-expanded="true"] {
-
-    background: #111111;
-
-    color: #FFD000;
-
+    background: #FFD000 !important;
+    border-color: #FFD000 !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0 3px rgba(255, 208, 0, 0.4) !important;
 }
-
-
 
 body.high-contrast .accessibility-toggle .a11y-chevron {
-
-    color: #FFD000;
-
+    color: #FFD000 !important;
 }
 
-
-
-body.high-contrast .a11y-menu-title,
-
-body.high-contrast .a11y-section-label,
-
-body.high-contrast .a11y-toggle-text,
-
-body.high-contrast .a11y-font-indicator,
-
-body.high-contrast .a11y-reset-btn {
-
-    color: #FFFFFF;
-
+body.high-contrast .accessibility-toggle[aria-expanded="true"] .a11y-chevron {
+    color: #000000 !important;
 }
 
-
-
-body.high-contrast .a11y-menu-header,
-
-body.high-contrast .a11y-footer {
-
-    border-color: #FFD000;
-
+body.high-contrast .accessibility-menu {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 0 0 2px #FFD000, 0 20px 45px rgba(0, 0, 0, 0.95) !important;
 }
 
+body.high-contrast .accessibility-menu::-webkit-scrollbar-thumb {
+    background: #FFD000 !important;
+}
 
+body.high-contrast .a11y-menu-header {
+    border-bottom: 2px solid #FFD000 !important;
+}
 
-body.high-contrast .a11y-font-controls,
+body.high-contrast .a11y-menu-title {
+    color: #FFD000 !important;
+    font-weight: 800 !important;
+}
 
+body.high-contrast .a11y-section-label {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+/* Zoom y Tamaño */
+body.high-contrast .a11y-zoom-controls {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .a11y-zoom-btn {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .a11y-zoom-btn:hover:not(:disabled),
+body.high-contrast .a11y-zoom-btn:focus-visible:not(:disabled) {
+    background: #FFD000 !important;
+    border-color: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .a11y-zoom-btn:disabled {
+    background: #111111 !important;
+    border-color: #555555 !important;
+    color: #777777 !important;
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+}
+
+body.high-contrast .a11y-zoom-indicator {
+    color: #FFD000 !important;
+    font-weight: 800 !important;
+}
+
+body.high-contrast .a11y-zoom-reset {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+body.high-contrast .a11y-zoom-reset:hover,
+body.high-contrast .a11y-zoom-reset:focus-visible {
+    background: #FFD000 !important;
+    border-color: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+/* Modo de Color (Claro / Oscuro) */
+body.high-contrast .a11y-theme-selector {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .a11y-theme-btn {
+    background: #000000 !important;
+    border: 1px solid #555555 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+body.high-contrast .a11y-theme-btn:hover,
+body.high-contrast .a11y-theme-btn:focus-visible {
+    background: #222222 !important;
+    border-color: #FFD000 !important;
+    color: #FFD000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .a11y-theme-btn.active {
+    background: #FFD000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+/* Toggles: Alto Contraste y Dislexia */
 body.high-contrast .a11y-toggle-row {
-
-    border-color: #FFD000;
-
-    background: #111111;
-
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
 }
 
-
-
-body.high-contrast .a11y-font-toggle {
-
-    border-color: #FFD000;
-
-    background: #000000;
-
-    color: #FFD000;
-
+body.high-contrast .a11y-toggle-row:hover,
+body.high-contrast .a11y-toggle-row:focus-visible {
+    background: #111111 !important;
+    border-color: #FFD000 !important;
+    outline: 2px solid #FFD000 !important;
 }
 
-
-
-body.high-contrast .a11y-font-toggle:hover,
-
-body.high-contrast .a11y-font-toggle[aria-pressed="true"] {
-
-    background: #FFD000;
-
-    color: #000000;
-
+body.high-contrast .a11y-toggle-text {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
 }
 
-
-
-body.high-contrast .a11y-font-toggle[aria-pressed="true"] .a11y-font-indicator {
-
-    color: #000000;
-
+body.high-contrast .a11y-toggle-icon {
+    color: #FFD000 !important;
 }
 
-
-
-body.high-contrast .a11y-toggle-row {
-
-    color: #FFFFFF;
-
+/* Switch en Alto Contraste */
+body.high-contrast .a11y-switch {
+    background: #000000 !important;
+    border: 2px solid #FFFFFF !important;
 }
 
+body.high-contrast .a11y-switch-thumb {
+    background: #FFFFFF !important;
+}
 
+body.high-contrast .a11y-toggle-row[aria-pressed="true"] {
+    background: #111111 !important;
+    border-color: #FFD000 !important;
+}
 
 body.high-contrast .a11y-toggle-row[aria-pressed="true"] .a11y-switch {
-
-    background: #FFD000;
-
+    background: #FFD000 !important;
+    border-color: #FFD000 !important;
 }
-
-
 
 body.high-contrast .a11y-toggle-row[aria-pressed="true"] .a11y-switch-thumb {
-
-    background: #000000;
-
+    background: #000000 !important;
 }
 
+/* Filtro para Daltonismo */
+body.high-contrast .a11y-select-wrapper {
+    background: #000000 !important;
+}
 
+body.high-contrast .a11y-select {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
 
-body.high-contrast .a11y-reset-btn:hover {
+body.high-contrast .a11y-select:focus {
+    border-color: #FFD000 !important;
+    outline: 3px solid #FFD000 !important;
+    outline-offset: 2px !important;
+}
 
-    background: #222222;
+body.high-contrast .a11y-select option {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+}
 
-    color: #FFD000;
+/* Footer y Restablecer */
+body.high-contrast .a11y-footer {
+    border-top: 2px solid #FFD000 !important;
+}
 
+body.high-contrast .a11y-reset-btn {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+}
+
+body.high-contrast .a11y-reset-btn:hover,
+body.high-contrast .a11y-reset-btn:focus-visible {
+    background: #FFD000 !important;
+    border-color: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
 }
 
 
@@ -6627,6 +6860,11 @@ body.dark-mode .sim-mode-selector {
     background: #1E293B;
 }
 
+body.high-contrast .sim-mode-selector {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
 .sim-mode-btn {
     flex: 1;
     border: none;
@@ -6649,6 +6887,16 @@ body.dark-mode .sim-mode-btn {
     color: #94A3B8;
 }
 
+body.high-contrast .sim-mode-btn {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-mode-btn:hover,
+body.high-contrast .sim-mode-btn:focus-visible {
+    color: #FFD000 !important;
+    background: #111111 !important;
+}
+
 .sim-mode-btn.active {
     background: #FFFFFF;
     color: var(--secondary-color);
@@ -6661,9 +6909,10 @@ body.dark-mode .sim-mode-btn.active {
 }
 
 body.high-contrast .sim-mode-btn.active {
-    background: #FFD000;
-    color: #000000;
-    border: 2px solid #FFFFFF;
+    background: #FFD000 !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+    border: 2px solid #FFD000 !important;
 }
 
 /* Stepper visual interactivo con los 5 pasos */
@@ -6737,6 +6986,23 @@ body.high-contrast .sim-mode-btn.active {
     font-weight: 700;
 }
 
+body.dark-mode .sim-step-label {
+    color: #94A3B8;
+}
+
+body.dark-mode .sim-step-item.active .sim-step-label {
+    color: #38BDF8;
+}
+
+body.high-contrast .sim-step-label {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-step-item.active .sim-step-label {
+    color: #FFD000 !important;
+    font-weight: 800 !important;
+}
+
 body.dark-mode .sim-step-circle {
     background: #334155;
     color: #CBD5E1;
@@ -6778,6 +7044,11 @@ body.dark-mode .sim-a11y-bar {
     border-color: #334155;
 }
 
+body.high-contrast .sim-a11y-bar {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
 .sim-tts-btn {
     display: flex;
     align-items: center;
@@ -6814,6 +7085,25 @@ body.dark-mode .sim-tts-btn:hover {
     background: #1E293B;
 }
 
+body.high-contrast .sim-tts-btn {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-tts-btn:hover,
+body.high-contrast .sim-tts-btn:focus-visible {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-tts-btn.tts-active {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
 .sim-font-controls {
     display: flex;
     align-items: center;
@@ -6841,6 +7131,19 @@ body.dark-mode .sim-font-btn {
     background: #334155;
     border-color: #475569;
     color: #F1F5F9;
+}
+
+body.high-contrast .sim-font-btn {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-font-btn:hover,
+body.high-contrast .sim-font-btn:focus-visible {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
 }
 
 /* Modificadores de tamaño de texto del panel */
@@ -9980,6 +10283,256 @@ body.dark-mode .a11y-reset-btn:hover {
     color: #F8FAFC;
 }
 
+/* Cabeceras de todas las pestañas en Modo Oscuro */
+body.dark-mode .header {
+    background-color: #0F172A !important;
+    border-bottom: 6px solid #38BDF8 !important;
+    color: #F8FAFC !important;
+}
+body.dark-mode .header h1 {
+    color: #FFFFFF !important;
+}
+body.dark-mode .header .subtitle {
+    color: #CBD5E1 !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode .hero-text h2 {
+    color: #FFFFFF !important;
+}
+body.dark-mode .hero-text p {
+    color: #CBD5E1 !important;
+}
+body.dark-mode .hero-logo-container {
+    border: 1px solid #334155;
+    background-color: #000000;
+}
+
+/* Sección de Módulos de Aprendizaje en Modo Oscuro */
+body.dark-mode .modules-section {
+    background-color: #1E293B !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4) !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .modules-section h2 {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .modules-progress-summary {
+    color: #CBD5E1 !important;
+}
+
+body.dark-mode #modules-progress-text {
+    color: #CBD5E1 !important;
+}
+
+body.dark-mode #modules-progress-percent {
+    color: #38BDF8 !important;
+    font-weight: 800 !important;
+}
+
+body.dark-mode .modules-progress-track {
+    background-color: #0F172A !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode #modules-progress-fill {
+    background: linear-gradient(90deg, #2563EB, #38BDF8) !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4) !important;
+}
+
+body.dark-mode .module-lock-message,
+body.dark-mode #module-lock-message {
+    color: #94A3B8 !important;
+}
+
+body.dark-mode .module-number {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border: 1px solid #38BDF8 !important;
+}
+
+/* Tarjetas y módulos en Modo Oscuro */
+body.dark-mode .module-card {
+    background: #0F172A !important;
+    border: 1.5px solid #334155 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .module-card h3 {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .module-card p {
+    color: #CBD5E1 !important;
+}
+
+body.dark-mode .module-contents {
+    border-top: 1px solid #334155 !important;
+}
+
+body.dark-mode .module-contents-title {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .module-contents-list li {
+    color: #CBD5E1 !important;
+}
+
+body.dark-mode .module-contents-list li::before {
+    color: #38BDF8 !important;
+}
+
+body.dark-mode .module-card ul li a {
+    color: #93C5FD !important;
+}
+
+body.dark-mode .module-card ul li a:hover {
+    color: #BFDBFE !important;
+}
+
+/* Sección App Preview (Objetivos) en Modo Oscuro */
+body.dark-mode .app-preview {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4) !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .app-text h2 {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .app-text > p {
+    color: #CBD5E1 !important;
+}
+
+body.dark-mode .feature-list li {
+    background: #0F172A !important;
+    border: 1px solid #334155 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .feature-list li strong {
+    color: #38BDF8 !important;
+}
+
+body.dark-mode .app-image img {
+    border: 2px solid #334155 !important;
+}
+
+/* Panel Guía del Simulador en Modo Oscuro */
+body.dark-mode .sim-guide-panel {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-guide-panel h3 {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .sim-guide-panel p {
+    color: #E2E8F0 !important;
+}
+
+body.dark-mode .sim-guide-panel strong {
+    color: #38BDF8 !important;
+}
+
+/* Preguntas Frecuentes (FAQ) en Modo Oscuro */
+body.dark-mode .faq-answer {
+    color: #CBD5E1 !important;
+}
+
+/* Botones en Modo Oscuro */
+body.dark-mode .btn-primary {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+}
+
+body.dark-mode .btn-primary:hover,
+body.dark-mode .btn-primary:focus-visible {
+    background-color: #1D4ED8 !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5) !important;
+}
+
+body.dark-mode .btn-secondary {
+    background: #1E293B !important;
+    border-color: #475569 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #334155 !important;
+}
+
+/* Actividades interactivas en Modo Oscuro */
+body.dark-mode .actividad-card {
+    background: #0F172A !important;
+    border: 1.5px solid #334155 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .actividad-card-text {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .actividad-secciones {
+    border-color: #334155 !important;
+}
+
+body.dark-mode .actividad-seccion-toggle {
+    background: #1E293B !important;
+    color: #F8FAFC !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .actividad-seccion-toggle.active {
+    background: #0F172A !important;
+    border-color: #38BDF8 !important;
+}
+
+body.dark-mode .modal-view-btn {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+    color: #94A3B8 !important;
+}
+
+body.dark-mode .modal-view-btn.active {
+    background: #1E293B !important;
+    border-color: #38BDF8 !important;
+    color: #38BDF8 !important;
+}
+
+/* Botones de cierre en Modo Oscuro */
+body.dark-mode .close-btn,
+body.dark-mode .close-sidebar-btn {
+    color: #94A3B8;
+}
+body.dark-mode .close-btn:hover,
+body.dark-mode .close-sidebar-btn:hover {
+    color: #FFFFFF;
+}
+
+/* Modales en Modo Oscuro */
+body.dark-mode .modal-content {
+    background: #1E293B !important;
+    color: #F8FAFC !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .modal-content h2 {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .modal-content p {
+    color: #CBD5E1 !important;
+}
+
 /* Componentes generales en Modo Oscuro */
 body.dark-mode .hero {
     background: radial-gradient(ellipse at top, #1E293B, #0F172A);
@@ -10031,6 +10584,28 @@ body.dark-mode .sim-success-card {
     background: #1E293B;
     border-color: #334155;
     color: #F8FAFC;
+}
+
+/* Preferencias adicionales en Modo Oscuro */
+body.dark-mode .accessibility-menu::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+body.dark-mode .a11y-select option {
+    background-color: #0F172A !important;
+    color: #F8FAFC !important;
+}
+body.dark-mode .a11y-toggle-row[aria-pressed="true"] {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: #38BDF8;
+}
+body.dark-mode .a11y-toggle-row[aria-pressed="true"] .a11y-switch {
+    background: #38BDF8;
+}
+body.dark-mode .a11y-toggle-row[aria-pressed="true"] .a11y-switch-thumb {
+    background: #0F172A;
+}
+body.dark-mode .a11y-reset-btn {
+    border: 1px solid #334155;
 }
 
 
@@ -10336,6 +10911,61 @@ body.high-contrast .project-quote-text {
 body.high-contrast .project-tag-pill {
     background: #FFD000 !important;
     color: #000000 !important;
+    font-weight: 800 !important;
+}
+
+body.high-contrast .project-card h3 {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .project-intro-text {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .project-academic-table {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .field-label {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .field-value {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .academic-full-span {
+    border-top: 1px solid #FFD000 !important;
+}
+
+body.high-contrast .project-members-wrapper {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .project-members-wrapper h4 {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .project-members-list li {
+    color: #FFFFFF !important;
+    border-bottom: 1px dashed #555555 !important;
+}
+
+body.high-contrast .project-members-list li strong {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .project-pdf-viewer {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .project-pdf-header {
+    background: #000000 !important;
+    border-bottom: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
 }
 
 body.dark-mode .module-contents {
@@ -10484,6 +11114,13 @@ body.dark-mode .sim-fixed-trip-card {
     color: #F8FAFC;
 }
 
+body.high-contrast .sim-fixed-trip-card,
+body.dark-mode.high-contrast .sim-fixed-trip-card {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
 .sim-fixed-trip-heading {
     font-size: 0.85rem;
     font-weight: 800;
@@ -10496,11 +11133,32 @@ body.dark-mode .sim-fixed-trip-heading {
     color: #38BDF8;
 }
 
+body.high-contrast .sim-fixed-trip-heading,
+body.dark-mode.high-contrast .sim-fixed-trip-heading {
+    color: #FFD000 !important;
+    font-weight: 800 !important;
+}
+
 .sim-fixed-trip-row {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 0.98rem;
+}
+
+body.high-contrast .sim-fixed-trip-row,
+body.dark-mode.high-contrast .sim-fixed-trip-row {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-fixed-trip-row strong,
+body.dark-mode.high-contrast .sim-fixed-trip-row strong {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-fixed-trip-row span,
+body.dark-mode.high-contrast .sim-fixed-trip-row span {
+    color: #FFFFFF !important;
 }
 
 .sim-fixed-dot {
@@ -10519,6 +11177,16 @@ body.dark-mode .sim-fixed-trip-heading {
 
 body.dark-mode .sim-fixed-dot.dest {
     color: #F8FAFC;
+}
+
+body.high-contrast .sim-fixed-dot.origin,
+body.dark-mode.high-contrast .sim-fixed-dot.origin {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-fixed-dot.dest,
+body.dark-mode.high-contrast .sim-fixed-dot.dest {
+    color: #FFFFFF !important;
 }
 
 .sim-clean-actions {
@@ -12734,5 +13402,458 @@ body.dark-mode .sim-fixed-dot.dest {
     }
 }
 
+/* ==========================================================================
+   MODALES DEL SIMULADOR EN MODO OSCURO
+   ========================================================================== */
+body.dark-mode .sim-modal-content-pad {
+    background: #1E293B !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-wa-body-clean {
+    background: #0B141A !important;
+}
+
+body.dark-mode .sim-wa-bubble-clean {
+    background: #111B21 !important;
+    color: #E9EDEF !important;
+    border-left-color: #00A884 !important;
+}
+
+body.dark-mode .sim-wa-main-line,
+body.dark-mode .sim-wa-main-line strong {
+    color: #E9EDEF !important;
+}
+
+body.dark-mode .sim-wa-info-box {
+    background: #202C33 !important;
+    border-color: #2A3942 !important;
+    color: #E9EDEF !important;
+}
+
+body.dark-mode .sim-wa-info-box div,
+body.dark-mode .sim-wa-info-box strong {
+    color: #E9EDEF !important;
+}
+
+body.dark-mode .sim-wa-link-line,
+body.dark-mode .sim-wa-link-line span {
+    color: #53BDEB !important;
+}
+
+body.dark-mode .sim-wa-time-stamp {
+    color: #8696A0 !important;
+}
+
+body.dark-mode .sim-call-driver-badge {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .sim-call-driver-name {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-call-driver-car {
+    color: #94A3B8 !important;
+}
+
+body.dark-mode .sim-call-speech-card {
+    background: #1E293B !important;
+    border-color: #EAB308 !important;
+}
+
+body.dark-mode .sim-call-speech-label {
+    color: #FDE047 !important;
+}
+
+body.dark-mode .sim-call-speech-card p,
+body.dark-mode .sim-call-speech-card strong {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-uber-chat-body {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .sim-chat-msg.driver {
+    background: #1E293B !important;
+    border-color: #334155 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-chat-msg.driver strong {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-chat-quick-label {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-chat-reply-btn {
+    background: #1E293B !important;
+    color: #38BDF8 !important;
+    border-color: #0284C7 !important;
+}
+
+body.dark-mode .sim-chat-reply-btn:hover {
+    background: #334155 !important;
+    color: #7DD3FC !important;
+}
+
+body.dark-mode .sim-sec-intro,
+body.dark-mode .sim-sec-intro strong {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .uber-sec-item-btn {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .uber-sec-texts strong {
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .uber-sec-texts span {
+    color: #94A3B8 !important;
+}
+
+body.dark-mode .sim-modal-footer-clean {
+    background: #1E293B !important;
+    border-top-color: #334155 !important;
+}
+
+body.dark-mode .sim-modal-primary-btn {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .sim-modal-primary-btn:hover {
+    background: #1D4ED8 !important;
+}
+
+body.dark-mode .sim-modal-secondary-btn {
+    background: #0F172A !important;
+    border-color: #475569 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode .sim-modal-secondary-btn:hover {
+    background: #1E293B !important;
+}
+
+body.dark-mode #sim-modal-certificate .sim-cert-box {
+    background: #0F172A !important;
+    border-color: #38BDF8 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode #sim-modal-certificate .sim-cert-title {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode #sim-modal-certificate .sim-cert-desc,
+body.dark-mode #sim-modal-certificate .sim-cert-desc strong {
+    color: #CBD5E1 !important;
+}
+
+body.dark-mode #sim-modal-certificate .sim-cert-checklist {
+    background: #1E293B !important;
+    border-color: #334155 !important;
+    color: #F8FAFC !important;
+}
+
+body.dark-mode #sim-modal-certificate .sim-cert-list-heading {
+    color: #38BDF8 !important;
+}
+
+body.dark-mode #sim-modal-certificate .sim-cert-checklist li,
+body.dark-mode #sim-modal-certificate .sim-cert-checklist li span,
+body.dark-mode #sim-modal-certificate .sim-cert-checklist li strong {
+    color: #F8FAFC !important;
+}
+
+/* ==========================================================================
+   MODALES DEL SIMULADOR EN ALTO CONTRASTE (WCAG AAA)
+   ========================================================================== */
+body.high-contrast .sim-modal-card {
+    border: 2px solid #FFD000 !important;
+    box-shadow: 0 0 0 2px #FFD000, 0 25px 60px rgba(0, 0, 0, 0.95) !important;
+}
+
+body.high-contrast .sim-modal-header {
+    border-bottom: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-modal-close-x {
+    border: 2px solid #FFD000 !important;
+    background: #000000 !important;
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-modal-close-x:hover,
+body.high-contrast .sim-modal-close-x:focus-visible {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-modal-content-pad {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-wa-body-clean {
+    background: #000000 !important;
+}
+
+body.high-contrast .sim-wa-bubble-clean {
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFD000 !important;
+    border-left: 6px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-wa-main-line,
+body.high-contrast .sim-wa-main-line strong {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-wa-info-box {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-wa-info-box div,
+body.high-contrast .sim-wa-info-box strong {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-wa-link-line,
+body.high-contrast .sim-wa-link-line span {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-wa-time-stamp {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-call-driver-badge {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-call-driver-name {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-call-driver-car {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-call-speech-card {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-call-speech-label {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-call-speech-card p,
+body.high-contrast .sim-call-speech-card strong {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-call-hangup-full-btn {
+    background: #DC2626 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-uber-chat-body {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-chat-msg.driver {
+    background: #111111 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-chat-msg.driver strong {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-chat-msg.user {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFD000 !important;
+}
+
+body.high-contrast .sim-chat-msg.user strong {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-chat-quick-label {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-chat-reply-btn {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-chat-reply-btn:hover,
+body.high-contrast .sim-chat-reply-btn:focus-visible {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-sec-intro,
+body.high-contrast .sim-sec-intro strong {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .uber-sec-item-btn {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .uber-sec-item-btn:hover,
+body.high-contrast .uber-sec-item-btn:focus-visible {
+    background: #111111 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .uber-sec-texts strong {
+    color: #FFD000 !important;
+}
+
+body.high-contrast .uber-sec-texts span {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast .sim-modal-footer-clean {
+    background: #000000 !important;
+    border-top: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-modal-primary-btn {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    font-weight: 900 !important;
+}
+
+body.high-contrast .sim-modal-primary-btn:hover,
+body.high-contrast .sim-modal-primary-btn:focus-visible {
+    background: #FFE033 !important;
+    outline: 2px solid #FFFFFF !important;
+}
+
+body.high-contrast .sim-modal-secondary-btn {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFD000 !important;
+}
+
+body.high-contrast .sim-modal-secondary-btn:hover,
+body.high-contrast .sim-modal-secondary-btn:focus-visible {
+    background: #FFD000 !important;
+    color: #000000 !important;
+    outline: 2px solid #FFD000 !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-box {
+    background: #000000 !important;
+    border: 3px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-title {
+    color: #FFD000 !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-badge {
+    background: #FFD000 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-desc,
+body.high-contrast #sim-modal-certificate .sim-cert-desc strong {
+    color: #FFFFFF !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-checklist {
+    background: #000000 !important;
+    border: 2px solid #FFD000 !important;
+    color: #FFFFFF !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-list-heading {
+    color: #FFD000 !important;
+}
+
+body.high-contrast #sim-modal-certificate .sim-cert-checklist li,
+body.high-contrast #sim-modal-certificate .sim-cert-checklist li span,
+body.high-contrast #sim-modal-certificate .sim-cert-checklist li strong {
+    color: #FFFFFF !important;
+}
 
 
+
+
+
+/* Avisos del simulador: error y aviso suave */
+.sim-error-badge {
+    top: 12px;
+    width: max-content;
+    max-width: 92%;
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+    line-height: 1.35;
+    padding: 8px 14px;
+    border-radius: 14px;
+    border: 1.5px solid #991B1B;
+    pointer-events: none;
+}
+.sim-error-badge.soft {
+    background: #EFF6FF !important;
+    color: #1E3A8A !important;
+    border: 1.5px solid #93C5FD !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
+}
+body.high-contrast .sim-error-badge {
+    background: #991B1B !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFD000 !important;
+}
+body.high-contrast .sim-error-badge.soft {
+    background: #0F172A !important;
+    color: #FFD000 !important;
+    border: 2px solid #FFD000 !important;
+}
+#confirm-pickup-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+.uber-route-fields .route-field.input-error {
+    background: #FEF2F2 !important;
+    outline: 2px solid #DC2626 !important;
+}
+#sim-destination-prompt.prompt-error {
+    color: #B91C1C !important;
+    font-weight: 700;
+}
+#sim-destination-prompt.prompt-ok {
+    color: #15803D !important;
+    font-weight: 700;
+}
+#sim-board-car-btn[aria-disabled="true"] {
+    opacity: 0.72;
+}
